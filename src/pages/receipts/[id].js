@@ -53,7 +53,7 @@ export default function Receipt({ post }) {
     if (navigator.share) {
       setNativeShare(true);
     }
-  }, []);
+  }, [ingredientsRef]);
 
   function handleServingsChange(e) {
     setServings(e.target.value);
