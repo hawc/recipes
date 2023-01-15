@@ -133,29 +133,66 @@ export default function Receipt({ post }) {
   };
 
   return (
-    <div>
-      <h2>{postdata.fields.name}</h2>
-      <ul className={styles.categories}>{categories}</ul>
-      <div className={styles.servings}>
-        <label htmlFor="servings">Portionen&nbsp;</label>
-        <input
-          type="number"
-          value={servings}
-          min="1"
-          onChange={handleServingsChange}
-        />
+    <section className="section">
+      <div className="container">
+        <h2 className="title is-4">{postdata.fields.name}</h2>
+        <ul className={styles.categories}>{categories}</ul>
+        <div className="block">
+          <div className={styles.servings}>
+            <div className="field has-addons is-half">
+              <div className="control">
+                <button
+                  className="button is-primary"
+                  type="button"
+                  disabled={servings <= 1}
+                  onClick={() => {
+                    if (servings > 1) {
+                      setServings(servings - 1);
+                    }
+                  }}
+                >
+                  -
+                </button>
+              </div>
+              <div className="control">
+                <input
+                  className="input"
+                  type="number"
+                  value={servings}
+                  min="1"
+                  placeholder="Portionen"
+                  onChange={handleServingsChange}
+                />
+              </div>
+              <div className="control">
+                <button
+                  className="button is-primary"
+                  type="button"
+                  onClick={() => setServings(servings + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h3 className="title is-5">Zutaten</h3>
+        <ul className="block" ref={ingredientsRef}>
+          {ingredients}
+        </ul>
+        <div className="block">
+          <button className="button is-primary" type="button" onClick={share}>
+            Zutaten speichern
+          </button>
+        </div>
+        <h3 className="title is-5">Zubereitung</h3>
+        <div className="content">
+          {documentToReactComponents(
+            postdata.fields.description,
+            renderOptions,
+          )}
+        </div>
       </div>
-      <h3>Zutaten</h3>
-      <ul className={styles.ingredients} ref={ingredientsRef}>
-        {ingredients}
-      </ul>
-      <button type="button" onClick={share}>
-        Zutaten speichern
-      </button>
-      <h3>Zubereitung</h3>
-      <div>
-        {documentToReactComponents(postdata.fields.description, renderOptions)}
-      </div>
-    </div>
+    </section>
   );
 }

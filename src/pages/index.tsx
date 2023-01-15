@@ -65,10 +65,14 @@ export default function Home({ posts, categories }) {
 
   return (
     <div>
-      <select onChange={optionsChangeHandler}>
-        <option value="">Alle</option>
-        {options}
-      </select>
+      <div className="control">
+        <div className="select">
+          <select onChange={optionsChangeHandler}>
+            <option value="">Alle</option>
+            {options}
+          </select>
+        </div>
+      </div>
       <ul>{postListItems}</ul>
     </div>
   );

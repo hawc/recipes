@@ -1,3 +1,5 @@
+@import '~bulma/bulma';
+
 html,
 body {
   padding: 0;
@@ -14,21 +16,6 @@ a {
 }
 a:hover {
   text-decoration: underline;
-}
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
 }
 .container {
   padding: 0 2rem;
