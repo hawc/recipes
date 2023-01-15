@@ -1,7 +1,7 @@
 import { loadPost, loadPosts } from '@/lib/contentful';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import styles from '@/styles/Detail.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 
 // Create a bespoke renderOptions object to target BLOCKS.EMBEDDED_ENTRY (linked block entries e.g. code blocks)
@@ -47,13 +47,20 @@ export default function Receipt({ post }) {
     <li key={category.fields.name}>{category.fields.name}</li>
   ));
 
+  const [isNativeShare, setNativeShare] = useState(false);
+  useEffect(() => {
+    if (navigator.share) {
+      setNativeShare(true);
+    }
+  }, []);
+
   function handleServingsChange(e) {
     setServings(e.target.value);
   }
 
   function share(event) {
     console.log(navigator);
-    if (!navigator || typeof navigator.canShare !== 'function') {
+    if (!isNativeShare) {
       return;
     }
     navigator
@@ -138,9 +145,12 @@ export default function Receipt({ post }) {
         />
       </div>
       <h3>Zutaten</h3>
-      <ul className={styles.ingredients} onClick={share}>
+      <ul className={styles.ingredients}>
         {ingredients}
       </ul>
+      <button type="button" onClick={share}>
+        Zutaten speichern
+      </button>
       <h3>Zubereitung</h3>
       <div>
         {documentToReactComponents(postdata.fields.description, renderOptions)}
