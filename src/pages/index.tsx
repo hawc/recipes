@@ -1,73 +1,75 @@
-import Head from 'next/head';
-import Image from 'next/image';
+import Link from 'next/link';
+import { loadPosts } from '@/lib/contentful';
+import { ChangeEvent, useState } from 'react';
 
-import styles from '@/styles/Home.module.css';
+export async function getStaticProps() {
+  const posts = await loadPosts(`receipt`);
+  const categories = await loadPosts(`category`);
+  return {
+    props: {
+      posts: JSON.stringify(posts),
+      categories: JSON.stringify(categories),
+    },
+  };
+}
 
-export default function Home() {
+interface Receipt {
+  readonly fields: ReceiptFields;
+  readonly metadata: any;
+  readonly sys: any;
+}
+interface ReceiptFields {
+  readonly name: string;
+  readonly description: string;
+  readonly category: string;
+  readonly ingredients: string[];
+}
+
+export default function Home({ posts, categories }) {
+  const postdata = JSON.parse(posts);
+  const categorydata = JSON.parse(categories);
+  const [filteredPosts, setFilteredPosts] = useState(postdata);
+
+  const postListItems = postdata.map((post: Receipt) => {
+    const isFiltered = filteredPosts
+      .map((filteredPost) => filteredPost.sys.id)
+      .includes(post.sys.id);
+    const opacityClass = isFiltered ? `` : `opacity-50`;
+    return (
+      <li key={post.fields.name} className={opacityClass}>
+        <Link href={`/receipts/${post.sys.id}`}>{post.fields.name}</Link>
+      </li>
+    );
+  });
+
+  const options = categorydata.map((category: any) => (
+    <option key={category.fields.name} value={category.fields.name}>
+      {category.fields.name}
+    </option>
+  ));
+
+  function optionsChangeHandler(event: ChangeEvent<HTMLSelectElement>): void {
+    if (event.currentTarget) {
+      let f = postdata;
+      if (event.currentTarget.value !== ``) {
+        f = postdata.filter((post) => {
+          return post.fields.category
+            .map((category) => category.fields.name)
+            .includes(event.currentTarget.value);
+        });
+      }
+
+      setFilteredPosts(f);
+    }
+  }
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>TypeScript starter for Next.js</title>
-        <meta
-          name="description"
-          content="TypeScript starter for Next.js that includes all you need to build amazing apps"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{` `}
-          <code className={styles.code}>src/pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=typescript-nextjs-starter"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=typescript-nextjs-starter"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{` `}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+    <div>
+      <select onChange={optionsChangeHandler}>
+        <option value="">Alle</option>
+        {options}
+      </select>
+      <ul>{postListItems}</ul>
     </div>
   );
 }
