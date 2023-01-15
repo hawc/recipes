@@ -61,7 +61,6 @@ export default function Receipt({ post }) {
 
   function share() {
     if (!isNativeShare) {
-      console.log(ingredientsRef.current.outerHTML)
       return;
     }
     navigator
