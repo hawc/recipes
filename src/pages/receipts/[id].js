@@ -53,7 +53,7 @@ export default function Receipt({ post }) {
     if (navigator.share) {
       setNativeShare(true);
     }
-  }, [ingredientsRef]);
+  }, []);
 
   function handleServingsChange(e) {
     setServings(e.target.value);
@@ -61,10 +61,11 @@ export default function Receipt({ post }) {
 
   function share() {
     if (!isNativeShare) {
+      console.log(ingredientsRef.current.outerHTML)
       return;
     }
     navigator
-      .share({ text: ingredientsRef.current.innerHTML })
+      .share({ text: ingredientsRef.current.outerHTML })
       .then(() => {
         console.log('Successful share');
       })
@@ -147,11 +148,9 @@ export default function Receipt({ post }) {
       <ul className={styles.ingredients} ref={ingredientsRef}>
         {ingredients}
       </ul>
-      {isNativeShare ?? (
-        <button type="button" onClick={share}>
-          Zutaten speichern
-        </button>
-      )}
+      <button type="button" onClick={share}>
+        Zutaten speichern
+      </button>
       <h3>Zubereitung</h3>
       <div>
         {documentToReactComponents(postdata.fields.description, renderOptions)}
