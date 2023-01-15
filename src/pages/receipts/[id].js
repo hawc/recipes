@@ -1,7 +1,7 @@
 import { loadPost, loadPosts } from '@/lib/contentful';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import styles from '@/styles/Detail.module.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 
 // Create a bespoke renderOptions object to target BLOCKS.EMBEDDED_ENTRY (linked block entries e.g. code blocks)
@@ -34,6 +34,7 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Receipt({ post }) {
+  const ingredientsRef = useRef(null);
   const postdata = JSON.parse(post);
   const [servings, setServings] = useState(1);
   console.log(postdata.fields);
@@ -58,18 +59,16 @@ export default function Receipt({ post }) {
     setServings(e.target.value);
   }
 
-  function share(event) {
-    console.log(navigator);
+  function share() {
     if (!isNativeShare) {
       return;
     }
     navigator
-      .share({ text: 'event.currentTarget.innerHTML' })
+      .share({ text: ingredientsRef.current.innerHTML })
       .then(() => {
         console.log('Successful share');
       })
       .catch((error) => {
-        console.log(navigator);
         if (error.name === 'AbortError') {
           console.log('Share card was probably just dismissed');
           return;
@@ -145,10 +144,12 @@ export default function Receipt({ post }) {
         />
       </div>
       <h3>Zutaten</h3>
-      <ul className={styles.ingredients}>{ingredients}</ul>
-      <button type="button" onClick={share}>
-        Zutaten speichern
-      </button>
+      <ul className={styles.ingredients} ref={ingredientsRef}>{ingredients}</ul>
+      {isNativeShare ?? (
+        <button type="button" onClick={share}>
+          Zutaten speichern
+        </button>
+      ) }
       <h3>Zubereitung</h3>
       <div>
         {documentToReactComponents(postdata.fields.description, renderOptions)}
