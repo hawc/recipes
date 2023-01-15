@@ -145,9 +145,7 @@ export default function Receipt({ post }) {
         />
       </div>
       <h3>Zutaten</h3>
-      <ul className={styles.ingredients}>
-        {ingredients}
-      </ul>
+      <ul className={styles.ingredients}>{ingredients}</ul>
       <button type="button" onClick={share}>
         Zutaten speichern
       </button>
