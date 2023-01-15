@@ -157,11 +157,11 @@ export default function Receipt({ post }) {
         </h3>
         <div className="block">
           <div className={styles.servings}>
-            <div className="field has-addons is-half">
-              <div className="field-label is-normal is-flex-grow-0 mr-3">
+            <div className="field has-addons is-flex is-align-items-center">
+              <div className="field-label is-normal is-flex-grow-0 mr-3 mb-0">
                 <div className="control">Portionen:</div>
               </div>
-              <div className="field-body">
+              <div className="field-body is-flex">
                 <div className="control">
                   <button
                     className="button is-ghost px-2"
@@ -212,7 +212,6 @@ export default function Receipt({ post }) {
           </thead>
           <tbody>{ingredients}</tbody>
         </table>
-        <div className="block"></div>
         <h3 className="title is-3">Zubereitung</h3>
         <div className="content">
           {documentToReactComponents(
@@ -220,6 +219,17 @@ export default function Receipt({ post }) {
             renderOptions,
           )}
         </div>
+        {postdata.fields.source?.length ? (
+          <div className="block">
+            Quelle:{' '}
+            <a className="link" href={postdata.fields.source}>
+              {' '}
+              {postdata.fields.source}
+            </a>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     </section>
   );

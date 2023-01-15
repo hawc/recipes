@@ -34,7 +34,7 @@ export default function Home({ posts, categories }) {
     const isFiltered = filteredPosts
       .map((filteredPost) => filteredPost.sys.id)
       .includes(post.sys.id);
-    const opacityClass = isFiltered ? `` : `opacity-50`;
+    const opacityClass = isFiltered ? `is-size-5` : `is-size-5 opacity-50`;
     return (
       <li key={post.fields.name} className={opacityClass}>
         <Link href={`/receipts/${post.sys.id}`}>{post.fields.name}</Link>
@@ -64,16 +64,23 @@ export default function Home({ posts, categories }) {
   }
 
   return (
-    <div>
-      <div className="control">
-        <div className="select">
-          <select onChange={optionsChangeHandler}>
-            <option value="">Alle</option>
-            {options}
-          </select>
+    <section className="section">
+      <div className="container">
+        <div>
+          <div>
+            <h2 className="title is-3 is-flex mb-3">
+              <div className="mr-3">Rezepte</div>
+              <div className="select is-inline-block is-size-6 is-rounded">
+                <select onChange={optionsChangeHandler}>
+                  <option value="">Alle</option>
+                  {options}
+                </select>
+              </div>
+            </h2>
+          </div>
+          <ul>{postListItems}</ul>
         </div>
       </div>
-      <ul>{postListItems}</ul>
-    </div>
+    </section>
   );
 }

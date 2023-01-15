@@ -11,10 +11,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <title>Rezepte</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <h1 className="title is-4">
-        <Link href="/">Rezepte</Link>
-      </h1>
-      <hr></hr>
+      <section className="section py-5">
+        <h1 className="title is-4">
+          <Link href="/">Rezepte</Link>
+        </h1>
+      </section>
+      <hr className="my-0"></hr>
       <Component {...pageProps} />
     </div>
   );
