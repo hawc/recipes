@@ -64,7 +64,7 @@ export default function Receipt({ post }) {
       return;
     }
     navigator
-      .share({ text: ingredientsRef.current.outerHTML })
+      .share({ text: ingredientsRef.current.textContent })
       .then(() => {
         console.log('Successful share');
       })
