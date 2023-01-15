@@ -35,3 +35,8 @@ a:hover {
 .button.is-ghost[disabled] {
   border-color: transparent;
 }
+// for safari
+.icon svg {
+  height: 100%;
+  width: 100%;
+}

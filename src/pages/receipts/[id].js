@@ -158,7 +158,7 @@ export default function Receipt({ post }) {
         <div className="block">
           <div className={styles.servings}>
             <div className="field has-addons is-flex is-align-items-center">
-              <div className="field-label is-normal is-flex-grow-0 mr-3 mb-0">
+              <div className="field-label is-normal is-flex-grow-0 mr-3 mb-0 pt-0">
                 <div className="control">Portionen:</div>
               </div>
               <div className="field-body is-flex">
@@ -222,7 +222,12 @@ export default function Receipt({ post }) {
         {postdata.fields.source?.length ? (
           <div className="block">
             Quelle:{' '}
-            <a className="link" href={postdata.fields.source}>
+            <a
+              className="link"
+              target="_blank"
+              rel="noopener"
+              href={postdata.fields.source}
+            >
               {' '}
               {postdata.fields.source}
             </a>
