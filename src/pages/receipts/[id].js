@@ -225,7 +225,7 @@ export default function Receipt({ post }) {
             <a
               className="link"
               target="_blank"
-              rel="noopener"
+              rel="noreferrer noopener"
               href={postdata.fields.source}
             >
               {' '}
