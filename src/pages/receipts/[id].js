@@ -65,7 +65,7 @@ export default function Receipt({ post }) {
     }
     navigator
       .share({
-        text: ingredientsRef.current.innerHTML.replace(/<[^>]+>/g, '&#13;'),
+        text: ingredientsRef.current.innerHTML.replace(/<[^>]+>/g, '%0A'),
       })
       .then(() => {
         console.log('Successful share');
