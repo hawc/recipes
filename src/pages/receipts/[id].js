@@ -1,8 +1,13 @@
 import { loadPost, loadPosts } from '@/lib/contentful';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import styles from '@/styles/Detail.module.css';
+import styles from '@/styles/Detail.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import {
+  ArrowUpOnSquareIcon,
+  PlusIcon,
+  MinusIcon,
+} from '@heroicons/react/24/solid';
 
 // Create a bespoke renderOptions object to target BLOCKS.EMBEDDED_ENTRY (linked block entries e.g. code blocks)
 // INLINES.EMBEDDED_ENTRY (linked inline entries e.g. a reference to another blog post)
@@ -36,13 +41,15 @@ export async function getStaticProps({ params }) {
 export default function Receipt({ post }) {
   const ingredientsRef = useRef(null);
   const postdata = JSON.parse(post);
-  const [servings, setServings] = useState(1);
-  console.log(postdata.fields);
+  const [servings, setServings] = useState(postdata.fields.servings);
   const ingredients = postdata.fields.ingredients?.map((ingredient) => (
-    <li key={ingredient.fields.name}>
-      {ingredient.fields.amount * servings}&nbsp;
-      {ingredient.fields.measurement} {ingredient.fields.name}
-    </li>
+    <tr key={ingredient.fields.name}>
+      <td>
+        {(ingredient.fields.amount / postdata.fields.servings) * servings}{' '}
+        {ingredient.fields.measurement}
+      </td>
+      <td>{ingredient.fields.name}</td>
+    </tr>
   ));
   const categories = postdata.fields.category.map((category) => (
     <li key={category.fields.name}>{category.fields.name}</li>
@@ -83,18 +90,18 @@ export default function Receipt({ post }) {
   const renderOptions = {
     renderNode: {
       [INLINES.EMBEDDED_ENTRY]: (node, children) => {
-        // target the contentType of the EMBEDDED_ENTRY to display as you need
         if (node.data.target.sys.contentType.sys.id === 'ingredient') {
           return (
             <span>
-              {node.data.target.fields.amount * servings}{' '}
+              {(node.data.target.fields.amount / postdata.fields.servings) *
+                servings}{' '}
+              {node.data.target.fields.measurement}{' '}
               {node.data.target.fields.name}
             </span>
           );
         }
       },
       [BLOCKS.EMBEDDED_ENTRY]: (node, children) => {
-        // target the contentType of the EMBEDDED_ENTRY to display as you need
         if (node.data.target.sys.contentType.sys.id === 'codeBlock') {
           return (
             <pre>
@@ -119,7 +126,6 @@ export default function Receipt({ post }) {
       },
 
       [BLOCKS.EMBEDDED_ASSET]: (node, children) => {
-        // render the EMBEDDED_ASSET as you need
         return (
           <img
             src={`https://${node.data.target.fields.file.url}`}
@@ -135,57 +141,79 @@ export default function Receipt({ post }) {
   return (
     <section className="section">
       <div className="container">
-        <h2 className="title is-4">{postdata.fields.name}</h2>
+        <h2 className="title is-2 mb-1">{postdata.fields.name}</h2>
         <ul className={styles.categories}>{categories}</ul>
+        <h3 className="title is-3">
+          Zutaten
+          <button
+            className="button is-white ml-1 is-va-baseline"
+            type="button"
+            onClick={share}
+          >
+            <span className="icon is-medium">
+              <ArrowUpOnSquareIcon />
+            </span>
+          </button>
+        </h3>
         <div className="block">
           <div className={styles.servings}>
             <div className="field has-addons is-half">
-              <div className="control">
-                <button
-                  className="button is-primary"
-                  type="button"
-                  disabled={servings <= 1}
-                  onClick={() => {
-                    if (servings > 1) {
-                      setServings(servings - 1);
-                    }
-                  }}
-                >
-                  -
-                </button>
+              <div className="field-label is-normal is-flex-grow-0 mr-3">
+                <div className="control">Portionen:</div>
               </div>
-              <div className="control">
-                <input
-                  className="input"
-                  type="number"
-                  value={servings}
-                  min="1"
-                  placeholder="Portionen"
-                  onChange={handleServingsChange}
-                />
-              </div>
-              <div className="control">
-                <button
-                  className="button is-primary"
-                  type="button"
-                  onClick={() => setServings(servings + 1)}
-                >
-                  +
-                </button>
+              <div className="field-body">
+                <div className="control">
+                  <button
+                    className="button is-ghost px-2"
+                    type="button"
+                    disabled={servings <= 1}
+                    onClick={() => {
+                      if (servings > 1) {
+                        setServings(servings - 1);
+                      }
+                    }}
+                  >
+                    <span className="icon">
+                      <MinusIcon />
+                    </span>
+                  </button>
+                </div>
+                <div className="control">
+                  <input
+                    className="input is-static is-width-40px has-text-centered has-text-weight-bold	hide-spin-buttons"
+                    type="number"
+                    value={servings}
+                    min="1"
+                    placeholder="Portionen"
+                    onChange={handleServingsChange}
+                  />
+                </div>
+                <div className="control">
+                  <button
+                    className="button is-ghost px-2"
+                    type="button"
+                    onClick={() => setServings(servings + 1)}
+                  >
+                    <span className="icon">
+                      <PlusIcon />
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <h3 className="title is-5">Zutaten</h3>
-        <ul className="block" ref={ingredientsRef}>
-          {ingredients}
-        </ul>
-        <div className="block">
-          <button className="button is-primary" type="button" onClick={share}>
-            Zutaten speichern
-          </button>
-        </div>
-        <h3 className="title is-5">Zubereitung</h3>
+        <table className="table" ref={ingredientsRef}>
+          <thead>
+            <tr>
+              <th>Menge</th>
+              <th>Zutat</th>
+            </tr>
+          </thead>
+          <tbody>{ingredients}</tbody>
+        </table>
+        <div className="block"></div>
+        <h3 className="title is-3">Zubereitung</h3>
         <div className="content">
           {documentToReactComponents(
             postdata.fields.description,

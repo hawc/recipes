@@ -1,3 +1,4 @@
+$primary: rgb(203, 0, 92);
 @import '~bulma/bulma';
 
 html,
@@ -17,4 +18,20 @@ a:hover {
 }
 .opacity-50 {
   opacity: 0.5;
+}
+.content ul {
+  margin-left: .9em;
+}
+.is-va-baseline {
+  vertical-align: baseline;
+}
+.is-width-40px {
+  width: 40px;
+}
+.hide-spin-buttons::-webkit-outer-spin-button,
+.hide-spin-buttons::-webkit-inner-spin-button {
+  display: none;
+}
+.button.is-ghost[disabled] {
+  border-color: transparent;
 }
