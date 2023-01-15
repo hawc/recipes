@@ -144,12 +144,14 @@ export default function Receipt({ post }) {
         />
       </div>
       <h3>Zutaten</h3>
-      <ul className={styles.ingredients} ref={ingredientsRef}>{ingredients}</ul>
+      <ul className={styles.ingredients} ref={ingredientsRef}>
+        {ingredients}
+      </ul>
       {isNativeShare ?? (
         <button type="button" onClick={share}>
           Zutaten speichern
         </button>
-      ) }
+      )}
       <h3>Zubereitung</h3>
       <div>
         {documentToReactComponents(postdata.fields.description, renderOptions)}
