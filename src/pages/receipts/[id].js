@@ -1,17 +1,16 @@
 import { loadPost, loadPosts } from '@/lib/contentful';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import styles from '@/styles/Detail.module.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, mounted } from 'react';
 import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import { useMediaQuery } from 'react-responsive';
+
 import {
   ArrowUpOnSquareIcon,
   PlusIcon,
   MinusIcon,
 } from '@heroicons/react/24/solid';
-
-// Create a bespoke renderOptions object to target BLOCKS.EMBEDDED_ENTRY (linked block entries e.g. code blocks)
-// INLINES.EMBEDDED_ENTRY (linked inline entries e.g. a reference to another blog post)
-// and BLOCKS.EMBEDDED_ASSET (linked assets e.g. images)
+import Image from 'next/image';
 
 export async function getStaticPaths() {
   if (process.env.SKIP_BUILD_STATIC_GENERATION) {
@@ -39,6 +38,7 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Receipt({ post }) {
+  const [mounted, setMounted] = useState(false);
   const ingredientsRef = useRef(null);
   const postdata = JSON.parse(post);
   const [servings, setServings] = useState(postdata.fields.servings);
@@ -64,6 +64,28 @@ export default function Receipt({ post }) {
 
   function handleServingsChange(e) {
     setServings(e.target.value);
+  }
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  function Desktop({ children }) {
+    const useDesktopMediaQuery = () =>
+      useMediaQuery({
+        minWidth: 769,
+      });
+
+    return <>{useDesktopMediaQuery() ? children : null}</>;
+  }
+
+  function Mobile({ children }) {
+    const useDesktopMediaQuery = () =>
+      useMediaQuery({
+        minWidth: 769,
+      });
+
+    return <>{useDesktopMediaQuery() ? null : children}</>;
   }
 
   function share() {
@@ -140,9 +162,26 @@ export default function Receipt({ post }) {
 
   return (
     <section className="section">
-      <div className="container">
+      <div className="container is-max-desktop">
         <h2 className="title is-2 mb-1">{postdata.fields.name}</h2>
         <ul className={styles.categories}>{categories}</ul>
+        {mounted && (
+          <Mobile>
+            <div className="block px-0">
+              <Image
+                className="box p-0"
+                src={'https:' + postdata.fields.images[0].fields.file.url}
+                alt="Rezeptbild"
+                width={
+                  postdata.fields.images[0].fields.file.details.image.width
+                }
+                height={
+                  postdata.fields.images[0].fields.file.details.image.height
+                }
+              />
+            </div>
+          </Mobile>
+        )}
         <h3 className="title is-3">
           Zutaten
           <button
@@ -155,16 +194,16 @@ export default function Receipt({ post }) {
             </span>
           </button>
         </h3>
-        <div className="block">
-          <div className={styles.servings}>
-            <div className="field has-addons is-flex is-align-items-center">
+        <div className="columns">
+          <div className="column is-4">
+            <div className="field is-flex is-align-items-center">
               <div className="field-label is-normal is-flex-grow-0 mr-3 mb-0 pt-0">
                 <div className="control">Portionen:</div>
               </div>
               <div className="field-body is-flex">
                 <div className="control">
                   <button
-                    className="button is-ghost px-2"
+                    className="button is-white px-2"
                     type="button"
                     disabled={servings <= 1}
                     onClick={() => {
@@ -190,7 +229,7 @@ export default function Receipt({ post }) {
                 </div>
                 <div className="control">
                   <button
-                    className="button is-ghost px-2"
+                    className="button is-white px-2"
                     type="button"
                     onClick={() => setServings(servings + 1)}
                   >
@@ -201,17 +240,34 @@ export default function Receipt({ post }) {
                 </div>
               </div>
             </div>
+            <table className="table is-fullwidth" ref={ingredientsRef}>
+              <thead>
+                <tr>
+                  <th>Menge</th>
+                  <th>Zutat</th>
+                </tr>
+              </thead>
+              <tbody>{ingredients}</tbody>
+            </table>
           </div>
+          {mounted && (
+            <Desktop>
+              <div className="column pl-5 is-relative">
+                <Image
+                  className="box p-0 is-sticky is-top-1rem"
+                  src={'https:' + postdata.fields.images[0].fields.file.url}
+                  alt="Rezeptbild"
+                  width={
+                    postdata.fields.images[0].fields.file.details.image.width
+                  }
+                  height={
+                    postdata.fields.images[0].fields.file.details.image.height
+                  }
+                />
+              </div>
+            </Desktop>
+          )}
         </div>
-        <table className="table" ref={ingredientsRef}>
-          <thead>
-            <tr>
-              <th>Menge</th>
-              <th>Zutat</th>
-            </tr>
-          </thead>
-          <tbody>{ingredients}</tbody>
-        </table>
         <h3 className="title is-3">Zubereitung</h3>
         <div className="content">
           {documentToReactComponents(
@@ -220,7 +276,7 @@ export default function Receipt({ post }) {
           )}
         </div>
         {postdata.fields.source?.length ? (
-          <div className="block">
+          <div className="block pt-2">
             Quelle:{' '}
             <a
               className="link"

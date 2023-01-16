@@ -28,12 +28,21 @@ a:hover {
 .is-width-40px {
   width: 40px;
 }
+.is-sticky {
+  position: sticky;
+}
+.is-top-1rem {
+  top: 1rem;
+}
 .hide-spin-buttons::-webkit-outer-spin-button,
 .hide-spin-buttons::-webkit-inner-spin-button {
   display: none;
 }
 .button.is-ghost[disabled] {
   border-color: transparent;
+}
+.content li + li {
+  margin-top: 0.5em;
 }
 // for safari
 .icon svg {

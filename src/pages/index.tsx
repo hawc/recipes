@@ -65,21 +65,19 @@ export default function Home({ posts, categories }) {
 
   return (
     <section className="section">
-      <div className="container">
+      <div className="container is-max-desktop">
         <div>
-          <div>
-            <h2 className="title is-3 is-flex mb-3">
-              <div className="mr-3">Rezepte</div>
-              <div className="select is-inline-block is-size-6 is-rounded">
-                <select onChange={optionsChangeHandler}>
-                  <option value="">Alle</option>
-                  {options}
-                </select>
-              </div>
-            </h2>
-          </div>
-          <ul>{postListItems}</ul>
+          <h2 className="title is-3 is-flex mb-3">
+            <div className="mr-3">Rezepte</div>
+            <div className="select is-inline-block is-size-6 is-rounded">
+              <select onChange={optionsChangeHandler}>
+                <option value="">Alle</option>
+                {options}
+              </select>
+            </div>
+          </h2>
         </div>
+        <ul>{postListItems}</ul>
       </div>
     </section>
   );
