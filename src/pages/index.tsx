@@ -20,9 +20,11 @@ interface Receipt {
 }
 interface ReceiptFields {
   readonly name: string;
+  readonly slug: string;
   readonly description: string;
   readonly category: string;
   readonly ingredients: string[];
+  readonly source: string;
 }
 
 export default function Home({ posts, categories }) {
@@ -37,18 +39,12 @@ export default function Home({ posts, categories }) {
     const opacityClass = isFiltered ? `is-size-5` : `is-size-5 opacity-50`;
     return (
       <li key={post.fields.name} className={opacityClass}>
-        <Link className="has-text-primary" href={`/receipts/${post.sys.id}`}>
+        <Link className="has-text-primary" href={`/rezept/${post.fields.slug}`}>
           {post.fields.name}
         </Link>
       </li>
     );
   });
-
-  const options = categorydata.map((category: any) => (
-    <option key={category.fields.name} value={category.fields.name}>
-      {category.fields.name}
-    </option>
-  ));
 
   function optionsChangeHandler(event: ChangeEvent<HTMLSelectElement>): void {
     if (event.currentTarget) {
@@ -73,7 +69,11 @@ export default function Home({ posts, categories }) {
           <div className="select is-inline-block is-size-5 is-size-6-mobile is-rounded">
             <select onChange={optionsChangeHandler}>
               <option value="">Alle</option>
-              {options}
+              {categorydata.map((category: any) => (
+                <option key={category.fields.name} value={category.fields.name}>
+                  {category.fields.name}
+                </option>
+              ))}
             </select>
           </div>
         </h2>
