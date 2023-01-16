@@ -161,13 +161,13 @@ export default function Receipt({ post }) {
   };
 
   return (
-    <section className="section">
+    <section className="section pt-5">
       <div className="container is-max-desktop">
-        <h2 className="title is-2 mb-1">{postdata.fields.name}</h2>
+        <h2 className="title is-2 mb-1 mt-2">{postdata.fields.name}</h2>
         <ul className={styles.categories}>{categories}</ul>
         {mounted && (
           <Mobile>
-            <div className="block px-0">
+            <div className="block px-0 pb-2">
               <Image
                 className="box p-0"
                 src={'https:' + postdata.fields.images[0].fields.file.url}
@@ -182,7 +182,7 @@ export default function Receipt({ post }) {
             </div>
           </Mobile>
         )}
-        <h3 className="title is-3">
+        <h3 className="title is-3 mb-3">
           Zutaten
           <button
             className="button is-white ml-1 is-va-baseline"
@@ -194,79 +194,81 @@ export default function Receipt({ post }) {
             </span>
           </button>
         </h3>
-        <div className="columns">
-          <div className="column is-4">
-            <div className="field is-flex is-align-items-center">
-              <div className="field-label is-normal is-flex-grow-0 mr-3 mb-0 pt-0">
-                <div className="control">Portionen:</div>
-              </div>
-              <div className="field-body is-flex">
-                <div className="control">
-                  <button
-                    className="button is-white px-2"
-                    type="button"
-                    disabled={servings <= 1}
-                    onClick={() => {
-                      if (servings > 1) {
-                        setServings(servings - 1);
-                      }
-                    }}
-                  >
-                    <span className="icon">
-                      <MinusIcon />
-                    </span>
-                  </button>
+        <div className="block mb-5 pb-2">
+          <div className="columns">
+            <div className="column is-4">
+              <div className="field is-flex is-align-items-center">
+                <div className="field-label is-normal is-flex-grow-0 mr-3 mb-0 pt-0">
+                  <div className="control">Portionen:</div>
                 </div>
-                <div className="control">
-                  <input
-                    className="input is-static is-width-40px has-text-centered has-text-weight-bold	hide-spin-buttons"
-                    type="number"
-                    value={servings}
-                    min="1"
-                    placeholder="Portionen"
-                    onChange={handleServingsChange}
+                <div className="field-body is-flex">
+                  <div className="control">
+                    <button
+                      className="button is-white px-2"
+                      type="button"
+                      disabled={servings <= 1}
+                      onClick={() => {
+                        if (servings > 1) {
+                          setServings(servings - 1);
+                        }
+                      }}
+                    >
+                      <span className="icon">
+                        <MinusIcon />
+                      </span>
+                    </button>
+                  </div>
+                  <div className="control">
+                    <input
+                      className="input is-static is-width-40px has-text-centered has-text-weight-bold	hide-spin-buttons"
+                      type="number"
+                      value={servings}
+                      min="1"
+                      placeholder="Portionen"
+                      onChange={handleServingsChange}
+                    />
+                  </div>
+                  <div className="control">
+                    <button
+                      className="button is-white px-2"
+                      type="button"
+                      onClick={() => setServings(servings + 1)}
+                    >
+                      <span className="icon">
+                        <PlusIcon />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <table className="table is-fullwidth" ref={ingredientsRef}>
+                <thead>
+                  <tr>
+                    <th>Menge</th>
+                    <th>Zutat</th>
+                  </tr>
+                </thead>
+                <tbody>{ingredients}</tbody>
+              </table>
+            </div>
+            {mounted && (
+              <Desktop>
+                <div className="column pl-5 is-relative">
+                  <Image
+                    className="box p-0 t-5 mb-2 is-sticky"
+                    src={'https:' + postdata.fields.images[0].fields.file.url}
+                    alt="Rezeptbild"
+                    width={
+                      postdata.fields.images[0].fields.file.details.image.width
+                    }
+                    height={
+                      postdata.fields.images[0].fields.file.details.image.height
+                    }
                   />
                 </div>
-                <div className="control">
-                  <button
-                    className="button is-white px-2"
-                    type="button"
-                    onClick={() => setServings(servings + 1)}
-                  >
-                    <span className="icon">
-                      <PlusIcon />
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <table className="table is-fullwidth" ref={ingredientsRef}>
-              <thead>
-                <tr>
-                  <th>Menge</th>
-                  <th>Zutat</th>
-                </tr>
-              </thead>
-              <tbody>{ingredients}</tbody>
-            </table>
+              </Desktop>
+            )}
           </div>
-          {mounted && (
-            <Desktop>
-              <div className="column pl-5 is-relative">
-                <Image
-                  className="box p-0 is-sticky is-top-1rem"
-                  src={'https:' + postdata.fields.images[0].fields.file.url}
-                  alt="Rezeptbild"
-                  width={
-                    postdata.fields.images[0].fields.file.details.image.width
-                  }
-                  height={
-                    postdata.fields.images[0].fields.file.details.image.height
-                  }
-                />
-              </div>
-            </Desktop>
-          )}
         </div>
         <h3 className="title is-3">Zubereitung</h3>
         <div className="content">
@@ -279,7 +281,7 @@ export default function Receipt({ post }) {
           <div className="block pt-2">
             Quelle:{' '}
             <a
-              className="link"
+              className="has-text-primary"
               target="_blank"
               rel="noreferrer noopener"
               href={postdata.fields.source}
