@@ -1,10 +1,10 @@
 import { loadPost, loadPosts } from '@/lib/contentful';
+import { getRenderOptions } from '@/lib/contentfulConfig';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import styles from '@/styles/Detail.module.scss';
-import { useState, useEffect, useRef, mounted } from 'react';
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import { useState, useEffect, useRef } from 'react';
 import { useMediaQuery } from 'react-responsive';
-
+import { share } from '@/lib/browserApi';
 import {
   ArrowUpOnSquareIcon,
   PlusIcon,
@@ -37,11 +37,43 @@ export async function getStaticProps({ params }) {
   };
 }
 
+function useDesktopMediaQuery() {
+  return useMediaQuery({
+    minWidth: 769,
+  });
+}
+
 export default function Receipt({ post }) {
   const [mounted, setMounted] = useState(false);
   const ingredientsRef = useRef(null);
   const postdata = JSON.parse(post);
   const [servings, setServings] = useState(postdata.fields.servings);
+
+  const [isNativeShare, setNativeShare] = useState(false);
+  useEffect(() => {
+    if (navigator.share) {
+      setNativeShare(true);
+    }
+  }, []);
+
+  function handleServingsChange(event) {
+    setServings(event.target.value);
+  }
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  function Desktop({ children }) {
+    return <>{useDesktopMediaQuery() ? children : null}</>;
+  }
+
+  function Mobile({ children }) {
+    return <>{useDesktopMediaQuery() ? null : children}</>;
+  }
+
+  const renderOptions = getRenderOptions(postdata, servings);
+
   const ingredients = postdata.fields.ingredients?.map((ingredient) => (
     <tr key={ingredient.fields.name}>
       <td>
@@ -51,114 +83,10 @@ export default function Receipt({ post }) {
       <td>{ingredient.fields.name}</td>
     </tr>
   ));
+
   const categories = postdata.fields.category.map((category) => (
     <li key={category.fields.name}>{category.fields.name}</li>
   ));
-
-  const [isNativeShare, setNativeShare] = useState(false);
-  useEffect(() => {
-    if (navigator.share) {
-      setNativeShare(true);
-    }
-  }, []);
-
-  function handleServingsChange(e) {
-    setServings(e.target.value);
-  }
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  function Desktop({ children }) {
-    const useDesktopMediaQuery = () =>
-      useMediaQuery({
-        minWidth: 769,
-      });
-
-    return <>{useDesktopMediaQuery() ? children : null}</>;
-  }
-
-  function Mobile({ children }) {
-    const useDesktopMediaQuery = () =>
-      useMediaQuery({
-        minWidth: 769,
-      });
-
-    return <>{useDesktopMediaQuery() ? null : children}</>;
-  }
-
-  function share() {
-    if (!isNativeShare) {
-      return;
-    }
-    navigator
-      .share({
-        text: ingredientsRef.current.innerText,
-      })
-      .then(() => {
-        console.log('Successful share');
-      })
-      .catch((error) => {
-        if (error.name === 'AbortError') {
-          console.log('Share card was probably just dismissed');
-          return;
-        }
-
-        console.warn(error);
-      });
-  }
-
-  const renderOptions = {
-    renderNode: {
-      [INLINES.EMBEDDED_ENTRY]: (node, children) => {
-        if (node.data.target.sys.contentType.sys.id === 'ingredient') {
-          return (
-            <span>
-              {(node.data.target.fields.amount / postdata.fields.servings) *
-                servings}{' '}
-              {node.data.target.fields.measurement}{' '}
-              {node.data.target.fields.name}
-            </span>
-          );
-        }
-      },
-      [BLOCKS.EMBEDDED_ENTRY]: (node, children) => {
-        if (node.data.target.sys.contentType.sys.id === 'codeBlock') {
-          return (
-            <pre>
-              <code>{node.data.target.fields.code}</code>
-            </pre>
-          );
-        }
-
-        if (node.data.target.sys.contentType.sys.id === 'videoEmbed') {
-          return (
-            <iframe
-              src={node.data.target.fields.embedUrl}
-              height="100%"
-              width="100%"
-              frameBorder="0"
-              scrolling="no"
-              title={node.data.target.fields.title}
-              allowFullScreen={true}
-            />
-          );
-        }
-      },
-
-      [BLOCKS.EMBEDDED_ASSET]: (node, children) => {
-        return (
-          <Image
-            src={`https://${node.data.target.fields.file.url}`}
-            height={node.data.target.fields.file.details.image.height}
-            width={node.data.target.fields.file.details.image.width}
-            alt={node.data.target.fields.description}
-          />
-        );
-      },
-    },
-  };
 
   return (
     <section className="section pt-5">
@@ -172,7 +100,7 @@ export default function Receipt({ post }) {
             <div className="block px-0 pb-2">
               <Image
                 className="box p-0"
-                src={'https:' + postdata.fields.images[0].fields.file.url}
+                src={`https:${postdata.fields.images[0].fields.file.url}`}
                 alt="Rezeptbild"
                 width={
                   postdata.fields.images[0].fields.file.details.image.width
@@ -187,9 +115,9 @@ export default function Receipt({ post }) {
         <h3 className="title is-3 is-size-4-mobile mb-3">
           Zutaten
           <button
-            className="button is-white ml-1 is-va-baseline"
             type="button"
-            onClick={share}
+            className="button is-white ml-1 is-va-baseline"
+            onClick={share(isNativeShare, ingredientsRef.current?.innerText)}
           >
             <span className="icon is-medium">
               <ArrowUpOnSquareIcon />

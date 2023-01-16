@@ -1,5 +1,6 @@
 $primary: rgb(203, 0, 92);
 $title-color: rgb(0, 0, 0);
+$title-weight: 400;
 $link: $primary;
 
 $size-1: 4.5rem;
@@ -20,7 +21,8 @@ body {
 * {
   box-sizing: border-box;
 }
-h2, h3, h4, h5, h6 {
+.title {
+  letter-spacing: -1px;
   font-family: 'BakbakOne';
 }
 .opacity-50 {
