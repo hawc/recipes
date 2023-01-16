@@ -1,7 +1,4 @@
-export function share(isNativeShare, content) {
-  if (!isNativeShare) {
-    return;
-  }
+export function share(content) {
   navigator
     .share({
       text: content,
