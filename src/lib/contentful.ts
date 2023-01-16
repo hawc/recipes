@@ -1,4 +1,7 @@
 import * as contentful from 'contentful';
+if (process.env.NODE_ENV !== `production`) {
+  require(`dotenv`).config();
+}
 
 let clientConnection: contentful.ContentfulClientApi | null = null;
 
@@ -6,9 +9,9 @@ function client(): contentful.ContentfulClientApi {
   clientConnection =
     clientConnection ??
     contentful.createClient({
-      space: `lu1rn6wobx9z`,
+      space: process.env.contentfulSpace,
       environment: `master`,
-      accessToken: `EMlrNYbv6CW8020fYIJmSR2c6ZG1Vfja9vJGYTozITw`,
+      accessToken: process.env.contentfulAccessToken,
     });
 
   return clientConnection;
