@@ -114,15 +114,19 @@ export default function Receipt({ post }) {
         )}
         <h3 className="title is-3 is-size-4-mobile mb-3">
           Zutaten
-          <button
-            type="button"
-            className="button is-white ml-1 is-va-baseline"
-            onClick={share(isNativeShare, ingredientsRef.current?.innerText)}
-          >
-            <span className="icon is-medium">
-              <ArrowUpOnSquareIcon />
-            </span>
-          </button>
+          {mounted && isNativeShare && (
+            <button
+              type="button"
+              className="button is-white ml-1 is-va-baseline"
+              onClick={() =>
+                share(isNativeShare, ingredientsRef.current?.innerText)
+              }
+            >
+              <span className="icon is-medium">
+                <ArrowUpOnSquareIcon />
+              </span>
+            </button>
+          )}
         </h3>
         <div className="block mb-5 pb-2">
           <div className="columns">
