@@ -176,9 +176,11 @@ export default function Receipt({ post }) {
                       {postdata.fields.ingredients?.map((ingredient) => (
                         <tr key={ingredient.fields.name}>
                           <td>
-                            {(ingredient.fields.amount /
-                              postdata.fields.servings) *
-                              servings}{' '}
+                            {ingredient.fields.absolute
+                              ? ingredient.fields.amount
+                              : (ingredient.fields.amount /
+                                  postdata.fields.servings) *
+                                servings}{' '}
                             {ingredient.fields.measurement}
                           </td>
                           <td>{ingredient.fields.name}</td>
