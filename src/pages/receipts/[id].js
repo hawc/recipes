@@ -149,7 +149,7 @@ export default function Receipt({ post }) {
 
       [BLOCKS.EMBEDDED_ASSET]: (node, children) => {
         return (
-          <img
+          <Image
             src={`https://${node.data.target.fields.file.url}`}
             height={node.data.target.fields.file.details.image.height}
             width={node.data.target.fields.file.details.image.width}
@@ -243,14 +243,14 @@ export default function Receipt({ post }) {
                   </div>
                 </div>
               </div>
-              <table className="table is-fullwidth" ref={ingredientsRef}>
+              <table className="table is-fullwidth">
                 <thead>
                   <tr>
                     <th>Menge</th>
                     <th>Zutat</th>
                   </tr>
                 </thead>
-                <tbody>{ingredients}</tbody>
+                <tbody ref={ingredientsRef}>{ingredients}</tbody>
               </table>
             </div>
             {mounted && (
@@ -258,7 +258,7 @@ export default function Receipt({ post }) {
                 <div className="column pl-5 is-relative">
                   <Image
                     className="box p-0 t-5 mb-2 is-sticky"
-                    src={'https:' + postdata.fields.images[0].fields.file.url}
+                    src={`https:${postdata.fields.images[0].fields.file.url}`}
                     alt="Rezeptbild"
                     width={
                       postdata.fields.images[0].fields.file.details.image.width
