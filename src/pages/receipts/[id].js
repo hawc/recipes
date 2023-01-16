@@ -163,7 +163,9 @@ export default function Receipt({ post }) {
   return (
     <section className="section pt-5">
       <div className="container is-max-desktop">
-        <h2 className="title is-2 mb-1 mt-2">{postdata.fields.name}</h2>
+        <h2 className="title is-2 is-size-3-mobile mb-1 mt-2">
+          {postdata.fields.name}
+        </h2>
         <ul className={styles.categories}>{categories}</ul>
         {mounted && (
           <Mobile>
@@ -182,7 +184,7 @@ export default function Receipt({ post }) {
             </div>
           </Mobile>
         )}
-        <h3 className="title is-3 mb-3">
+        <h3 className="title is-3 is-size-4-mobile mb-3">
           Zutaten
           <button
             className="button is-white ml-1 is-va-baseline"
@@ -270,7 +272,7 @@ export default function Receipt({ post }) {
             )}
           </div>
         </div>
-        <h3 className="title is-3">Zubereitung</h3>
+        <h3 className="title is-3 is-size-4-mobile">Zubereitung</h3>
         <div className="content">
           {documentToReactComponents(
             postdata.fields.description,
