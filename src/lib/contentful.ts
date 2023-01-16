@@ -32,7 +32,7 @@ export async function loadPost(slug: string) {
     return null;
   }
   const data = await client().getEntries({
-    content_type: 'receipt',
+    content_type: `receipt`,
     'fields.slug[match]': slug,
   });
 
