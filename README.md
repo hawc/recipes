@@ -4,7 +4,7 @@ Ein persönliches Kochbuch mit Lieblingsrezepten. Der Fokus liegt auf einer übe
 
 ## Technologie
 
-Die folgenden Technologien sind der Hauptbestandteil dieser Anwendung.
+Die folgenden Technologien sind der Hauptbestandteil dieser Anwendung:
 
 - React
 - Next.js
