@@ -68,8 +68,7 @@ export default function Home({ posts, categories }) {
     const previewImageObject = postdata.find(
       (receipt) => receipt.sys.id === id,
     );
-    const previewImageSrc = previewImageObject?.fields.images[0]?.fields.file;
-    setPreviewImage(previewImageSrc);
+    setPreviewImage(previewImageObject);
   }
 
   function addToList(id) {
@@ -192,13 +191,21 @@ export default function Home({ posts, categories }) {
           <div className="column">
             {previewImage && (
               <div>
-                <Image
-                  src={`https://${previewImage.url}`}
-                  className="box p-0"
-                  alt="Rezeptvorschau"
-                  width={previewImage.details.image.width}
-                  height={previewImage.details.image.height}
-                ></Image>
+                <Link href={`/rezept/${previewImage?.fields.slug}`}>
+                  <Image
+                    src={`https://${previewImage?.fields.images[0]?.fields.file.url}`}
+                    className="box p-0"
+                    alt="Rezeptvorschau"
+                    width={
+                      previewImage?.fields.images[0]?.fields.file.details.image
+                        .width
+                    }
+                    height={
+                      previewImage?.fields.images[0]?.fields.file.details.image
+                        .height
+                    }
+                  ></Image>
+                </Link>
               </div>
             )}
           </div>
