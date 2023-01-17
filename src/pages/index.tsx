@@ -94,14 +94,10 @@ export default function Home({ posts, categories }) {
         <Mobile>
           <div
             ref={postRefs[post.sys.id]}
-            className={isFiltered ? `is-size-5` : `is-size-5 opacity-50`}
+            className={
+              isFiltered ? `is-size-5 is-flex` : `is-size-5 is-flex opacity-40`
+            }
           >
-            <Link
-              className="has-text-primary pr-1"
-              href={`/rezept/${post.fields.slug}`}
-            >
-              {post.fields.name}
-            </Link>
             <button
               type="button"
               className="button is-white is-small"
@@ -112,6 +108,12 @@ export default function Home({ posts, categories }) {
                 <EyeIcon />
               </span>
             </button>
+            <Link
+              className="has-text-primary pr-1"
+              href={`/rezept/${post.fields.slug}`}
+            >
+              {post.fields.name}
+            </Link>
           </div>
         </Mobile>
       </div>
