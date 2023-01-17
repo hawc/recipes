@@ -47,6 +47,10 @@ export default function Home({ posts, categories }) {
     return <>{useDesktopMediaQuery() ? null : children}</>;
   }
 
+  function Desktop({ children }) {
+    return <>{useDesktopMediaQuery() ? children : null}</>;
+  }
+
   function handleReceiptHover(id) {
     if (!id) {
       setPreviewImage(null);
@@ -66,7 +70,6 @@ export default function Home({ posts, categories }) {
     const isFiltered = filteredPosts
       .map((filteredPost) => filteredPost.sys.id)
       .includes(post.sys.id);
-    const opacityClass = isFiltered ? `is-size-5` : `is-size-5 opacity-50`;
     postRefs[post.sys.id] = createRef();
     return (
       <li
@@ -75,20 +78,28 @@ export default function Home({ posts, categories }) {
         onBlur={() => handleReceiptHover(null)}
         key={post.sys.id}
         ref={postRefs[post.sys.id]}
-        className={opacityClass}
+        className={isFiltered ? `is-size-5` : `is-size-5 opacity-50`}
       >
-        <Link
-          onFocus={() => handleReceiptHover(post.sys.id)}
-          onBlur={() => handleReceiptHover(null)}
-          className="has-text-primary"
-          href={`/rezept/${post.fields.slug}`}
-        >
-          {post.fields.name}
-        </Link>
+        <Desktop>
+          <Link
+            onFocus={() => handleReceiptHover(post.sys.id)}
+            onBlur={() => handleReceiptHover(null)}
+            className="has-text-primary"
+            href={`/rezept/${post.fields.slug}`}
+          >
+            {post.fields.name}
+          </Link>
+        </Desktop>
         <Mobile>
+          <Link
+            className="has-text-primary pr-1"
+            href={`/rezept/${post.fields.slug}`}
+          >
+            {post.fields.name}
+          </Link>
           <button
             type="button"
-            className="button is-white is-small ml-1"
+            className="button is-white is-small"
             onFocus={() => handleReceiptHover(post.sys.id)}
             onClick={() => handleReceiptHover(post.sys.id)}
           >
