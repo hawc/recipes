@@ -90,12 +90,7 @@ export default function Home({ posts, categories }) {
             type="button"
             className="button is-white is-small ml-1"
             onFocus={() => handleReceiptHover(post.sys.id)}
-            onClick={() => {
-              const relatedLink = postRefs[post.sys.id].current.children[0];
-              if (relatedLink && !relatedLink.hasFocus) {
-                relatedLink.focus();
-              }
-            }}
+            onClick={() => handleReceiptHover(post.sys.id)}
           >
             <span className="icon is-medium">
               <EyeIcon />
