@@ -72,6 +72,7 @@ export default function Home({ posts, categories }) {
       <li
         onMouseEnter={() => handleReceiptHover(post.sys.id)}
         onMouseLeave={() => handleReceiptHover(null)}
+        onBlur={() => handleReceiptHover(null)}
         key={post.sys.id}
         ref={postRefs[post.sys.id]}
         className={opacityClass}
@@ -90,7 +91,10 @@ export default function Home({ posts, categories }) {
             className="button is-white is-small ml-1"
             onFocus={() => handleReceiptHover(post.sys.id)}
             onClick={() => {
-              postRefs[post.sys.id].current.children[0]?.focus();
+              const relatedLink = postRefs[post.sys.id].current.children[0];
+              if (relatedLink && !relatedLink.hasFocus) {
+                relatedLink.focus();
+              }
             }}
           >
             <span className="icon is-medium">
