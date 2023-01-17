@@ -89,7 +89,6 @@ export default function Home({ posts, categories }) {
             type="button"
             className="button is-white is-small ml-1"
             onFocus={() => handleReceiptHover(post.sys.id)}
-            onBlur={() => handleReceiptHover(null)}
             onClick={() => {
               postRefs[post.sys.id].current.children[0]?.focus();
             }}
