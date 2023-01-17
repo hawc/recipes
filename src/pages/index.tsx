@@ -72,43 +72,51 @@ export default function Home({ posts, categories }) {
       .includes(post.sys.id);
     postRefs[post.sys.id] = createRef();
     return (
-      <li
-        onMouseEnter={() => handleReceiptHover(post.sys.id)}
-        onMouseLeave={() => handleReceiptHover(null)}
-        onBlur={() => handleReceiptHover(null)}
-        key={post.sys.id}
-        ref={postRefs[post.sys.id]}
-        className={isFiltered ? `is-size-5` : `is-size-5 opacity-50`}
-      >
+      <>
         <Desktop>
-          <Link
-            onFocus={() => handleReceiptHover(post.sys.id)}
+          <li
+            onMouseEnter={() => handleReceiptHover(post.sys.id)}
+            onMouseLeave={() => handleReceiptHover(null)}
             onBlur={() => handleReceiptHover(null)}
-            className="has-text-primary"
-            href={`/rezept/${post.fields.slug}`}
+            key={post.sys.id}
+            ref={postRefs[post.sys.id]}
+            className={isFiltered ? `is-size-5` : `is-size-5 opacity-50`}
           >
-            {post.fields.name}
-          </Link>
+            <Link
+              onFocus={() => handleReceiptHover(post.sys.id)}
+              onBlur={() => handleReceiptHover(null)}
+              className="has-text-primary"
+              href={`/rezept/${post.fields.slug}`}
+            >
+              {post.fields.name}
+            </Link>
+          </li>
         </Desktop>
         <Mobile>
-          <Link
-            className="has-text-primary pr-1"
-            href={`/rezept/${post.fields.slug}`}
+          <li
+            key={post.sys.id}
+            ref={postRefs[post.sys.id]}
+            className={isFiltered ? `is-size-5` : `is-size-5 opacity-50`}
           >
-            {post.fields.name}
-          </Link>
-          <button
-            type="button"
-            className="button is-white is-small"
-            onFocus={() => handleReceiptHover(post.sys.id)}
-            onClick={() => handleReceiptHover(post.sys.id)}
-          >
-            <span className="icon is-medium">
-              <EyeIcon />
-            </span>
-          </button>
+            <Link
+              className="has-text-primary pr-1"
+              href={`/rezept/${post.fields.slug}`}
+            >
+              {post.fields.name}
+            </Link>
+            <button
+              type="button"
+              className="button is-white is-small"
+              onFocus={() => handleReceiptHover(post.sys.id)}
+              onClick={() => handleReceiptHover(post.sys.id)}
+            >
+              <span className="icon is-medium">
+                <EyeIcon />
+              </span>
+            </button>
+          </li>
         </Mobile>
-      </li>
+      </>
     );
   });
 
