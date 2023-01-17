@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { loadPosts } from '@/lib/contentful';
-import { ChangeEvent, useState, createRef } from 'react';
+import { ChangeEvent, useState, useEffect, createRef } from 'react';
 import Image from 'next/image';
-import { EyeIcon } from '@heroicons/react/24/solid';
+import { EyeIcon, DocumentPlusIcon } from '@heroicons/react/24/solid';
 import { useMediaQuery } from 'react-responsive';
 
 function useDesktopMediaQuery() {
@@ -37,7 +37,10 @@ interface ReceiptFields {
 }
 
 export default function Home({ posts, categories }) {
+  const [mounted, setMounted] = useState(false);
+
   const [previewImage, setPreviewImage] = useState(null);
+  const [previewImageID, setPreviewImageID] = useState(null);
 
   const postdata = JSON.parse(posts);
   const categorydata = JSON.parse(categories);
@@ -52,6 +55,11 @@ export default function Home({ posts, categories }) {
   }
 
   function handleReceiptHover(id) {
+    if (previewImageID === id) {
+      return;
+    }
+    setPreviewImageID(id);
+
     if (!id) {
       setPreviewImage(null);
       return;
@@ -63,6 +71,14 @@ export default function Home({ posts, categories }) {
     const previewImageSrc = previewImageObject?.fields.images[0]?.fields.file;
     setPreviewImage(previewImageSrc);
   }
+
+  function addToList(id) {
+    let count = 1;
+    count++;
+  }
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const postRefs = {};
 
@@ -79,16 +95,27 @@ export default function Home({ posts, categories }) {
             onMouseLeave={() => handleReceiptHover(null)}
             onBlur={() => handleReceiptHover(null)}
             ref={postRefs[post.sys.id]}
-            className={isFiltered ? `is-size-5` : `is-size-5 opacity-50`}
+            className={
+              isFiltered ? `is-flex is-size-5` : `is-flex is-size-5 opacity-50`
+            }
           >
             <Link
               onFocus={() => handleReceiptHover(post.sys.id)}
               onBlur={() => handleReceiptHover(null)}
-              className="has-text-primary"
+              className="has-text-primary is-flex-basis-100"
               href={`/rezept/${post.fields.slug}`}
             >
               {post.fields.name}
             </Link>
+            <button
+              type="button"
+              className="button is-white is-small"
+              onClick={() => addToList(post.sys.id)}
+            >
+              <span className="icon is-medium">
+                <DocumentPlusIcon />
+              </span>
+            </button>
           </div>
         </Desktop>
         <Mobile>
@@ -98,6 +125,12 @@ export default function Home({ posts, categories }) {
               isFiltered ? `is-size-5 is-flex` : `is-size-5 is-flex opacity-40`
             }
           >
+            <Link
+              className="has-text-primary is-flex-basis-100"
+              href={`/rezept/${post.fields.slug}`}
+            >
+              {post.fields.name}
+            </Link>
             <button
               type="button"
               className="button is-white is-small"
@@ -108,12 +141,15 @@ export default function Home({ posts, categories }) {
                 <EyeIcon />
               </span>
             </button>
-            <Link
-              className="has-text-primary pr-1"
-              href={`/rezept/${post.fields.slug}`}
+            <button
+              type="button"
+              className="button is-white is-small"
+              onClick={() => addToList(post.sys.id)}
             >
-              {post.fields.name}
-            </Link>
+              <span className="icon is-medium">
+                <DocumentPlusIcon />
+              </span>
+            </button>
           </div>
         </Mobile>
       </div>
@@ -152,9 +188,7 @@ export default function Home({ posts, categories }) {
           </div>
         </h2>
         <div className="columns">
-          <div className="column">
-            <div>{postListItems}</div>
-          </div>
+          {mounted && <div className="column">{postListItems}</div>}
           <div className="column">
             {previewImage && (
               <div>
