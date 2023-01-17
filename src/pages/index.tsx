@@ -1,8 +1,12 @@
 import Link from 'next/link';
 import { loadPosts } from '@/lib/contentful';
-import { ChangeEvent, useState, useEffect, createRef } from 'react';
+import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
 import Image from 'next/image';
-import { EyeIcon, DocumentPlusIcon } from '@heroicons/react/24/solid';
+import {
+  EyeIcon,
+  DocumentPlusIcon,
+  DocumentMinusIcon,
+} from '@heroicons/react/24/solid';
 import { useMediaQuery } from 'react-responsive';
 
 function useDesktopMediaQuery() {
@@ -22,12 +26,12 @@ export async function getStaticProps() {
   };
 }
 
-interface Receipt {
-  readonly fields: ReceiptFields;
+interface Receipe {
+  readonly fields: ReceipeFields;
   readonly metadata: any;
   readonly sys: any;
 }
-interface ReceiptFields {
+interface ReceipeFields {
   readonly name: string;
   readonly slug: string;
   readonly description: string;
@@ -38,9 +42,11 @@ interface ReceiptFields {
 
 export default function Home({ posts, categories }) {
   const [mounted, setMounted] = useState(false);
-
+  const ingredientsRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [previewImageID, setPreviewImageID] = useState(null);
+  const [selectedReceipes, setSelectedReceipes] = useState([]);
+  const [buyList, setBuyList] = useState([]);
 
   const postdata = JSON.parse(posts);
   const categorydata = JSON.parse(categories);
@@ -54,7 +60,7 @@ export default function Home({ posts, categories }) {
     return <>{useDesktopMediaQuery() ? children : null}</>;
   }
 
-  function handleReceiptHover(id) {
+  function handleReceipeHover(id) {
     if (previewImageID === id) {
       return;
     }
@@ -71,17 +77,73 @@ export default function Home({ posts, categories }) {
     setPreviewImage(previewImageObject);
   }
 
-  function addToList(id) {
-    let count = 1;
-    count++;
+  function mergeArrays(ingredientArrays) {
+    let finalList = [];
+
+    if (ingredientArrays.length > 0) {
+      ingredientArrays.forEach((ingredientArray) => {
+        finalList = [...finalList, ...ingredientArray];
+      });
+    }
+    finalList.sort((a, b) => a.name.localeCompare(b.name));
+
+    return finalList;
   }
+
+  function getIngredientList(ingredients) {
+    return ingredients.map(({ fields }) => {
+      return {
+        amount: fields.amount,
+        measurement: fields.measurement,
+        name: fields.name,
+      };
+    });
+  }
+
+  function isInSelectedReceipes(receipe) {
+    const isInSelectedReceipes = selectedReceipes.find(
+      (selectedReceipe) => selectedReceipe.sys.id === receipe.sys.id,
+    );
+    return new Boolean(isInSelectedReceipes).valueOf();
+  }
+
+  function addToList(receipe) {
+    if (isInSelectedReceipes(receipe)) {
+      setSelectedReceipes(
+        selectedReceipes.filter(
+          (selectedReceipe) => selectedReceipe.sys.id !== receipe.sys.id,
+        ),
+      );
+    } else {
+      setSelectedReceipes((selectedReceipes) => [...selectedReceipes, receipe]);
+    }
+  }
+
+  useEffect(() => {
+    const arr = mergeArrays(
+      [...selectedReceipes].map((receipe) =>
+        getIngredientList(receipe.fields.ingredients),
+      ),
+    );
+    const res = Array.from(
+      arr
+        .reduce((acc, { amount, ...r }) => {
+          const key = JSON.stringify(r);
+          const current = acc.get(key) || { ...r, amount: 0 };
+          return acc.set(key, { ...current, amount: current.amount + amount });
+        }, new Map())
+        .values(),
+    );
+    setBuyList(res);
+  }, [selectedReceipes]);
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const postRefs = {};
 
-  const postListItems = postdata.map((post: Receipt) => {
+  const postListItems = postdata.map((post: Receipe) => {
     const isFiltered = filteredPosts
       .map((filteredPost) => filteredPost.sys.id)
       .includes(post.sys.id);
@@ -90,17 +152,17 @@ export default function Home({ posts, categories }) {
       <div key={post.sys.id}>
         <Desktop>
           <div
-            onMouseEnter={() => handleReceiptHover(post.sys.id)}
-            onMouseLeave={() => handleReceiptHover(null)}
-            onBlur={() => handleReceiptHover(null)}
+            onMouseEnter={() => handleReceipeHover(post.sys.id)}
+            onMouseLeave={() => handleReceipeHover(null)}
+            onBlur={() => handleReceipeHover(null)}
             ref={postRefs[post.sys.id]}
             className={
               isFiltered ? `is-flex is-size-5` : `is-flex is-size-5 opacity-50`
             }
           >
             <Link
-              onFocus={() => handleReceiptHover(post.sys.id)}
-              onBlur={() => handleReceiptHover(null)}
+              onFocus={() => handleReceipeHover(post.sys.id)}
+              onBlur={() => handleReceipeHover(null)}
               className="has-text-primary is-flex-basis-100"
               href={`/rezept/${post.fields.slug}`}
             >
@@ -109,10 +171,14 @@ export default function Home({ posts, categories }) {
             <button
               type="button"
               className="button is-white is-small"
-              onClick={() => addToList(post.sys.id)}
+              onClick={() => addToList(post)}
             >
               <span className="icon is-medium">
-                <DocumentPlusIcon />
+                {isInSelectedReceipes(post) ? (
+                  <DocumentMinusIcon />
+                ) : (
+                  <DocumentPlusIcon />
+                )}
               </span>
             </button>
           </div>
@@ -133,8 +199,7 @@ export default function Home({ posts, categories }) {
             <button
               type="button"
               className="button is-white is-small"
-              onFocus={() => handleReceiptHover(post.sys.id)}
-              onClick={() => handleReceiptHover(post.sys.id)}
+              onClick={() => handleReceipeHover(post.sys.id)}
             >
               <span className="icon is-medium">
                 <EyeIcon />
@@ -143,10 +208,14 @@ export default function Home({ posts, categories }) {
             <button
               type="button"
               className="button is-white is-small"
-              onClick={() => addToList(post.sys.id)}
+              onClick={() => addToList(post)}
             >
               <span className="icon is-medium">
-                <DocumentPlusIcon />
+                {isInSelectedReceipes(post) ? (
+                  <DocumentMinusIcon />
+                ) : (
+                  <DocumentPlusIcon />
+                )}
               </span>
             </button>
           </div>
@@ -187,7 +256,42 @@ export default function Home({ posts, categories }) {
           </div>
         </h2>
         <div className="columns">
-          {mounted && <div className="column">{postListItems}</div>}
+          {mounted && (
+            <div className="column">
+              {postListItems}
+              {buyList.length > 0 && (
+                <>
+                  <h2 className="title is-3 is-size-4-mobile is-flex mb-3 mt-5">
+                    <div className="mr-4">Einkaufsliste</div>
+                  </h2>
+                  <div className="block">
+                    <table className="table is-fullwidth">
+                      <thead>
+                        <tr>
+                          <th>Menge</th>
+                          <th>Zutat</th>
+                        </tr>
+                      </thead>
+                      <tbody ref={ingredientsRef}>
+                        {buyList.map((ingredient) => (
+                          <tr
+                            key={`${ingredient.name}-${ingredient.measurement}`}
+                          >
+                            <td>
+                              {ingredient.amount}
+                              {` `}
+                              {ingredient.measurement}
+                            </td>
+                            <td>{ingredient.name}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
           <div className="column">
             {previewImage && (
               <div>
