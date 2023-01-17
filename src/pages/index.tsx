@@ -4,10 +4,12 @@ import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
 import Image from 'next/image';
 import {
   EyeIcon,
-  DocumentPlusIcon,
-  DocumentMinusIcon,
-} from '@heroicons/react/24/solid';
+  ShoppingCartIcon,
+  XMarkIcon,
+  ArrowUpOnSquareIcon,
+} from '@heroicons/react/24/outline';
 import { useMediaQuery } from 'react-responsive';
+import { share } from '@/lib/browserApi';
 
 function useDesktopMediaQuery() {
   return useMediaQuery({
@@ -47,10 +49,16 @@ export default function Home({ posts, categories }) {
   const [previewImageID, setPreviewImageID] = useState(null);
   const [selectedReceipes, setSelectedReceipes] = useState([]);
   const [buyList, setBuyList] = useState([]);
-
   const postdata = JSON.parse(posts);
   const categorydata = JSON.parse(categories);
   const [filteredPosts, setFilteredPosts] = useState(postdata);
+
+  const [isNativeShare, setNativeShare] = useState(false);
+  useEffect(() => {
+    if (navigator.share) {
+      setNativeShare(true);
+    }
+  }, []);
 
   function Mobile({ children }) {
     return <>{useDesktopMediaQuery() ? null : children}</>;
@@ -175,9 +183,9 @@ export default function Home({ posts, categories }) {
             >
               <span className="icon is-medium">
                 {isInSelectedReceipes(post) ? (
-                  <DocumentMinusIcon />
+                  <XMarkIcon />
                 ) : (
-                  <DocumentPlusIcon />
+                  <ShoppingCartIcon />
                 )}
               </span>
             </button>
@@ -212,9 +220,9 @@ export default function Home({ posts, categories }) {
             >
               <span className="icon is-medium">
                 {isInSelectedReceipes(post) ? (
-                  <DocumentMinusIcon />
+                  <XMarkIcon />
                 ) : (
-                  <DocumentPlusIcon />
+                  <ShoppingCartIcon />
                 )}
               </span>
             </button>
@@ -261,8 +269,19 @@ export default function Home({ posts, categories }) {
               {postListItems}
               {buyList.length > 0 && (
                 <>
-                  <h2 className="title is-3 is-size-4-mobile is-flex mb-3 mt-5">
-                    <div className="mr-4">Einkaufsliste</div>
+                  <h2 className="title is-3 is-size-4-mobile mb-3 mt-6">
+                    Einkaufsliste
+                    {isNativeShare && (
+                      <button
+                        type="button"
+                        className="button is-white ml-1 is-va-baseline"
+                        onClick={() => share(ingredientsRef.current?.innerText)}
+                      >
+                        <span className="icon is-medium">
+                          <ArrowUpOnSquareIcon />
+                        </span>
+                      </button>
+                    )}
                   </h2>
                   <div className="block">
                     <table className="table is-fullwidth">

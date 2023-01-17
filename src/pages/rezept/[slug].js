@@ -9,7 +9,7 @@ import {
   ArrowUpOnSquareIcon,
   PlusIcon,
   MinusIcon,
-} from '@heroicons/react/24/solid';
+} from '@heroicons/react/24/outline';
 import Image from 'next/image';
 
 export async function getStaticPaths() {
