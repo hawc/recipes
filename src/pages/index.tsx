@@ -72,13 +72,12 @@ export default function Home({ posts, categories }) {
       .includes(post.sys.id);
     postRefs[post.sys.id] = createRef();
     return (
-      <>
+      <div key={post.sys.id}>
         <Desktop>
-          <li
+          <div
             onMouseEnter={() => handleReceiptHover(post.sys.id)}
             onMouseLeave={() => handleReceiptHover(null)}
             onBlur={() => handleReceiptHover(null)}
-            key={post.sys.id}
             ref={postRefs[post.sys.id]}
             className={isFiltered ? `is-size-5` : `is-size-5 opacity-50`}
           >
@@ -90,11 +89,10 @@ export default function Home({ posts, categories }) {
             >
               {post.fields.name}
             </Link>
-          </li>
+          </div>
         </Desktop>
         <Mobile>
-          <li
-            key={post.sys.id}
+          <div
             ref={postRefs[post.sys.id]}
             className={isFiltered ? `is-size-5` : `is-size-5 opacity-50`}
           >
@@ -114,9 +112,9 @@ export default function Home({ posts, categories }) {
                 <EyeIcon />
               </span>
             </button>
-          </li>
+          </div>
         </Mobile>
-      </>
+      </div>
     );
   });
 
@@ -153,7 +151,7 @@ export default function Home({ posts, categories }) {
         </h2>
         <div className="columns">
           <div className="column">
-            <ul>{postListItems}</ul>
+            <div>{postListItems}</div>
           </div>
           <div className="column">
             {previewImage && (
