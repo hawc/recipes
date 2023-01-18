@@ -2,12 +2,12 @@ import { useRef, forwardRef, useImperativeHandle } from 'react';
 import { share } from '@/lib/browserApi';
 
 const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
+  const ingredients = useRef(null);
   useImperativeHandle(ref, () => ({
-    share(): void {
+    shareList(): void {
       share(ingredients.current?.innerText);
     },
   }));
-  const ingredients = useRef();
   return (
     <table className="table is-fu llwidth">
       <thead>

@@ -251,7 +251,7 @@ export default function Home({ posts, categories }) {
                       <button
                         type="button"
                         className="button is-white ml-1 is-va-baseline"
-                        onClick={() => ingredientsRef.current.share}
+                        onClick={() => ingredientsRef.current.shareList()}
                       >
                         <span className="icon is-medium">
                           <ArrowUpOnSquareIcon />
