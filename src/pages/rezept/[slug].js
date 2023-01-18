@@ -42,23 +42,14 @@ export default function Receipt({ post }) {
   const ingredientsRef = useRef(null);
   const postdata = JSON.parse(post);
   const [servings, setServings] = useState(postdata.fields.servings);
-
   const [isNativeShare, setNativeShare] = useState(false);
+
   useEffect(() => {
     if (navigator.share) {
       setNativeShare(true);
     }
-  }, []);
-
-  function handleServingsChange(event) {
-    setServings(event.target.value);
-  }
-
-  useEffect(() => {
     setMounted(true);
   }, []);
-
-  const renderOptions = getRenderOptions(postdata, servings);
 
   return (
     <section className="section pt-5">
@@ -136,7 +127,9 @@ export default function Receipt({ post }) {
                             value={servings}
                             min="1"
                             placeholder="Portionen"
-                            onChange={handleServingsChange}
+                            onChange={(event) =>
+                              setServings(event.target.value)
+                            }
                           />
                         </div>
                         <div className="control">
@@ -193,7 +186,7 @@ export default function Receipt({ post }) {
         <div className="content">
           {documentToReactComponents(
             postdata.fields.description,
-            renderOptions,
+            getRenderOptions(postdata, servings),
           )}
         </div>
         {postdata.fields.source?.length && (
