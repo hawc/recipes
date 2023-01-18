@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { share } from '@/lib/browserApi';
 import { Desktop, Mobile } from '@/components/responsive';
+import { IngredientList } from '@/components/IngredientList';
 
 export async function getStaticProps() {
   const posts = await loadPosts(`receipt`);
@@ -150,7 +151,7 @@ export default function Home({ posts, categories }) {
             onBlur={() => handleReceipeHover(null)}
             ref={postRefs[post.sys.id]}
             className={
-              isFiltered ? `is-flex is-size-5` : `is-flex is-size-5 opacity-50`
+              isFiltered ? `is-flex is-size-5` : `is-flex is-size-5 opacity-40`
             }
           >
             <Link
@@ -260,28 +261,10 @@ export default function Home({ posts, categories }) {
                     )}
                   </h2>
                   <div className="block">
-                    <table className="table is-fullwidth">
-                      <thead>
-                        <tr>
-                          <th>Menge</th>
-                          <th>Zutat</th>
-                        </tr>
-                      </thead>
-                      <tbody ref={ingredientsRef}>
-                        {buyList.map((ingredient) => (
-                          <tr
-                            key={`${ingredient.name}-${ingredient.measurement}`}
-                          >
-                            <td>
-                              {ingredient.amount}
-                              {` `}
-                              {ingredient.measurement}
-                            </td>
-                            <td>{ingredient.name}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <IngredientList
+                      ref={ingredientsRef}
+                      list={buyList}
+                    ></IngredientList>
                   </div>
                 </>
               )}
