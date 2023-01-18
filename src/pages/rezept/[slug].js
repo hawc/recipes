@@ -3,7 +3,6 @@ import { getRenderOptions } from '@/lib/contentfulConfig';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import styles from '@/styles/Detail.module.scss';
 import { useState, useEffect, useRef } from 'react';
-import { share } from '@/lib/browserApi';
 import {
   ArrowUpOnSquareIcon,
   PlusIcon,
@@ -11,6 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { Desktop, Mobile } from '@/components/responsive';
+import { IngredientList } from '@/components/IngredientList';
 
 export async function getStaticPaths() {
   if (process.env.SKIP_BUILD_STATIC_GENERATION) {
@@ -96,7 +96,7 @@ export default function Receipt({ post }) {
                 <button
                   type="button"
                   className="button is-white ml-1 is-va-baseline"
-                  onClick={() => share(ingredientsRef.current?.innerText)}
+                  onClick={() => ingredientsRef.current.shareList()}
                 >
                   <span className="icon is-medium">
                     <ArrowUpOnSquareIcon />
@@ -152,29 +152,18 @@ export default function Receipt({ post }) {
                         </div>
                       </div>
                     </div>
-                    <table className="table is-fullwidth">
-                      <thead>
-                        <tr>
-                          <th>Menge</th>
-                          <th>Zutat</th>
-                        </tr>
-                      </thead>
-                      <tbody ref={ingredientsRef}>
-                        {postdata.fields.ingredients?.map((ingredient) => (
-                          <tr key={ingredient.fields.name}>
-                            <td>
-                              {ingredient.fields.absolute
-                                ? ingredient.fields.amount
-                                : (ingredient.fields.amount /
-                                    postdata.fields.servings) *
-                                  servings}{' '}
-                              {ingredient.fields.measurement}
-                            </td>
-                            <td>{ingredient.fields.name}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <IngredientList
+                      ref={ingredientsRef}
+                      list={postdata.fields.ingredients?.map((ingredient) => ({
+                        amount: ingredient.fields.absolute
+                          ? ingredient.fields.amount
+                          : (ingredient.fields.amount /
+                              postdata.fields.servings) *
+                            servings,
+                        measurement: ingredient.fields.measurement,
+                        name: ingredient.fields.name,
+                      }))}
+                    ></IngredientList>
                   </div>
                 </div>
                 {mounted && postdata.fields.images?.length > 0 && (

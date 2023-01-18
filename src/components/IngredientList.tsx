@@ -9,7 +9,7 @@ const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
     },
   }));
   return (
-    <table className="table is-fu llwidth">
+    <table className="table is-fullwidth">
       <thead>
         <tr>
           <th>Menge</th>
