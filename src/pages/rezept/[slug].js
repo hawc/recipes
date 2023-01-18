@@ -3,7 +3,6 @@ import { getRenderOptions } from '@/lib/contentfulConfig';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import styles from '@/styles/Detail.module.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { share } from '@/lib/browserApi';
 import {
   ArrowUpOnSquareIcon,
@@ -11,6 +10,7 @@ import {
   MinusIcon,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import { Desktop, Mobile } from '@/components/responsive';
 
 export async function getStaticPaths() {
   if (process.env.SKIP_BUILD_STATIC_GENERATION) {
@@ -37,12 +37,6 @@ export async function getStaticProps({ params }) {
   };
 }
 
-function useDesktopMediaQuery() {
-  return useMediaQuery({
-    minWidth: 769,
-  });
-}
-
 export default function Receipt({ post }) {
   const [mounted, setMounted] = useState(false);
   const ingredientsRef = useRef(null);
@@ -63,14 +57,6 @@ export default function Receipt({ post }) {
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  function Desktop({ children }) {
-    return <>{useDesktopMediaQuery() ? children : null}</>;
-  }
-
-  function Mobile({ children }) {
-    return <>{useDesktopMediaQuery() ? null : children}</>;
-  }
 
   const renderOptions = getRenderOptions(postdata, servings);
 

@@ -3,19 +3,12 @@ import { loadPosts } from '@/lib/contentful';
 import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
 import Image from 'next/image';
 import {
-  EyeIcon,
   ShoppingCartIcon,
   XMarkIcon,
   ArrowUpOnSquareIcon,
 } from '@heroicons/react/24/outline';
-import { useMediaQuery } from 'react-responsive';
 import { share } from '@/lib/browserApi';
-
-function useDesktopMediaQuery() {
-  return useMediaQuery({
-    minWidth: 769,
-  });
-}
+import { Desktop, Mobile } from '@/components/responsive';
 
 export async function getStaticProps() {
   const posts = await loadPosts(`receipt`);
@@ -59,14 +52,6 @@ export default function Home({ posts, categories }) {
       setNativeShare(true);
     }
   }, []);
-
-  function Mobile({ children }) {
-    return <>{useDesktopMediaQuery() ? null : children}</>;
-  }
-
-  function Desktop({ children }) {
-    return <>{useDesktopMediaQuery() ? children : null}</>;
-  }
 
   function handleReceipeHover(id) {
     if (previewImageID === id) {
@@ -207,15 +192,6 @@ export default function Home({ posts, categories }) {
             <button
               type="button"
               className="button is-white is-small"
-              onClick={() => handleReceipeHover(post.sys.id)}
-            >
-              <span className="icon is-medium">
-                <EyeIcon />
-              </span>
-            </button>
-            <button
-              type="button"
-              className="button is-white is-small"
               onClick={() => addToList(post)}
             >
               <span className="icon is-medium">
@@ -263,8 +239,8 @@ export default function Home({ posts, categories }) {
             </select>
           </div>
         </h2>
-        <div className="columns">
-          {mounted && (
+        {mounted && (
+          <div className="columns">
             <div className="column">
               {postListItems}
               {buyList.length > 0 && (
@@ -310,29 +286,31 @@ export default function Home({ posts, categories }) {
                 </>
               )}
             </div>
-          )}
-          <div className="column">
-            {previewImage && (
-              <div>
-                <Link href={`/rezept/${previewImage?.fields.slug}`}>
-                  <Image
-                    src={`https://${previewImage?.fields.images[0]?.fields.file.url}`}
-                    className="box p-0"
-                    alt="Rezeptvorschau"
-                    width={
-                      previewImage?.fields.images[0]?.fields.file.details.image
-                        .width
-                    }
-                    height={
-                      previewImage?.fields.images[0]?.fields.file.details.image
-                        .height
-                    }
-                  ></Image>
-                </Link>
+            <Desktop>
+              <div className="column">
+                {previewImage && (
+                  <div>
+                    <Link href={`/rezept/${previewImage?.fields.slug}`}>
+                      <Image
+                        src={`https://${previewImage?.fields.images[0]?.fields.file.url}`}
+                        className="box p-0"
+                        alt="Rezeptvorschau"
+                        width={
+                          previewImage?.fields.images[0]?.fields.file.details
+                            .image.width
+                        }
+                        height={
+                          previewImage?.fields.images[0]?.fields.file.details
+                            .image.height
+                        }
+                      ></Image>
+                    </Link>
+                  </div>
+                )}
               </div>
-            )}
+            </Desktop>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
