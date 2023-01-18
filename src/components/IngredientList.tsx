@@ -27,8 +27,9 @@ const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
   useEffect(() => {
     const data = Array.from(ingredients.current.children)
       .filter((child: HTMLElement) => !strikedRows.includes(child.dataset.name))
-      .map((child: HTMLElement) => child.innerText);
-    setExportData(data.join(`\n`));
+      .map((child: HTMLElement) => child.innerText.slice(0, -1));
+    const formattedData = data.join(`\n`);
+    setExportData(formattedData);
   }, [strikedRows, list]);
 
   return (
