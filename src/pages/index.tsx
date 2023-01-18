@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { loadPosts } from '@/lib/contentful';
+import { loadPosts } from '@/lib/contentfulClient';
 import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
 import Image from 'next/image';
 import {
@@ -9,6 +9,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
+import { ReceipeFields } from '@/lib/contentfulClient';
+import type { Entry } from 'contentful';
 
 export async function getStaticProps() {
   const posts = await loadPosts(`receipt`);
@@ -19,20 +21,6 @@ export async function getStaticProps() {
       categories: JSON.stringify(categories),
     },
   };
-}
-
-interface Receipe {
-  readonly fields: ReceipeFields;
-  readonly metadata: any;
-  readonly sys: any;
-}
-interface ReceipeFields {
-  readonly name: string;
-  readonly slug: string;
-  readonly description: string;
-  readonly category: string;
-  readonly ingredients: string[];
-  readonly source: string;
 }
 
 export default function Home({ posts, categories }) {
@@ -136,7 +124,7 @@ export default function Home({ posts, categories }) {
 
   const postRefs = {};
 
-  const postListItems = postdata.map((post: Receipe) => {
+  const postListItems = postdata.map((post: Entry<ReceipeFields>) => {
     const isFiltered = filteredPosts
       .map((filteredPost) => filteredPost.sys.id)
       .includes(post.sys.id);

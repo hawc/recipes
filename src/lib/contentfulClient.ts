@@ -4,6 +4,15 @@ if (process.env.NODE_ENV !== `production`) {
   require(`dotenv`).config();
 }
 
+export interface ReceipeFields {
+  readonly name: string;
+  readonly slug: string;
+  readonly description: string;
+  readonly category: string;
+  readonly ingredients: string[];
+  readonly source: string;
+}
+
 let clientConnection: contentful.ContentfulClientApi | null = null;
 
 function client(): contentful.ContentfulClientApi {
