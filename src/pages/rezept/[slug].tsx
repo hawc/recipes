@@ -1,4 +1,4 @@
-import { loadPost, loadPosts } from '@/lib/contentful';
+import { loadPost, loadPosts, ReceipeFields } from '@/lib/contentfulClient';
 import { getRenderOptions } from '@/lib/contentfulConfig';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import styles from '@/styles/Detail.module.scss';
@@ -11,17 +11,18 @@ import {
 import Image from 'next/image';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
+import type { Entry } from 'contentful';
 
 export async function getStaticPaths() {
   if (process.env.SKIP_BUILD_STATIC_GENERATION) {
     return {
       paths: [],
-      fallback: 'blocking',
+      fallback: `blocking`,
     };
   }
 
   const posts = await loadPosts(`receipt`);
-  const paths = posts.map((post) => ({
+  const paths = posts.map((post: Entry<ReceipeFields>) => ({
     params: { slug: post.fields.slug },
   }));
 
@@ -194,14 +195,14 @@ export default function Receipt({ post }) {
         </div>
         {postdata.fields.source?.length && (
           <div className="block pt-2">
-            Quelle:{' '}
+            Quelle:{` `}
             <a
               className="has-text-primary"
               target="_blank"
               rel="noreferrer noopener"
               href={postdata.fields.source}
             >
-              {' '}
+              {` `}
               {postdata.fields.source}
             </a>
           </div>
