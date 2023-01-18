@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
   const [strikedRows, setStrikedRows] = useState([]);
-  const [exportData, setExportData] = useState([]);
+  const [exportData, setExportData] = useState(``);
   const ingredients = useRef(null);
 
   useImperativeHandle(ref, () => ({
