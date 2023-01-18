@@ -3,7 +3,13 @@ import { share } from '@/lib/browserApi';
 import { EyeSlashIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 
-const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
+interface Ingredient {
+  readonly amount: string;
+  readonly measurement: string;
+  readonly name: string;
+}
+
+const IngredientList = forwardRef(({ list }: { list: Ingredient[] }, ref) => {
   const [strikedRows, setStrikedRows] = useState([]);
   const [exportData, setExportData] = useState(``);
   const ingredients = useRef(null);
@@ -14,7 +20,7 @@ const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
     },
   }));
 
-  function strikeRow(ingredientID) {
+  function strikeRow(ingredientID: string): void {
     const rows = [...strikedRows];
     if (!strikedRows.includes(ingredientID)) {
       rows.push(ingredientID);
@@ -57,7 +63,7 @@ const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
             <td>
               {ingredient.amount}
               {` `}
-              {ingredient.measurement}
+              {ingredient.measurement !== `Stück` && ingredient.measurement}
             </td>
             <td>{ingredient.name}</td>
             <td className="is-width-0 py-1">
