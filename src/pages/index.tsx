@@ -45,8 +45,8 @@ export default function Home({ posts, categories }) {
   const postdata = JSON.parse(posts);
   const categorydata = JSON.parse(categories);
   const [filteredPosts, setFilteredPosts] = useState(postdata);
-
   const [isNativeShare, setNativeShare] = useState(false);
+
   useEffect(() => {
     if (navigator.share) {
       setNativeShare(true);
@@ -190,6 +190,7 @@ export default function Home({ posts, categories }) {
               {post.fields.name}
             </Link>
             <button
+              title="zur Einkaufsliste hinzufügen"
               type="button"
               className="button is-white is-small"
               onClick={() => addToList(post)}
@@ -229,7 +230,10 @@ export default function Home({ posts, categories }) {
         <h2 className="title is-3 is-size-4-mobile is-flex mb-3 mt-2">
           <div className="mr-4">Rezepte</div>
           <div className="select is-inline-block is-size-5 is-size-6-mobile is-rounded">
-            <select onChange={optionsChangeHandler}>
+            <select
+              aria-label="Kategorie auswählen"
+              onChange={optionsChangeHandler}
+            >
               <option value="">Alle</option>
               {categorydata.map((category: any) => (
                 <option key={category.fields.name} value={category.fields.name}>
@@ -249,6 +253,7 @@ export default function Home({ posts, categories }) {
                     Einkaufsliste
                     {isNativeShare && (
                       <button
+                        title="Einkaufsliste teilen"
                         type="button"
                         className="button is-white ml-1 is-va-baseline"
                         onClick={() => ingredientsRef.current.shareList()}

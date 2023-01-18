@@ -85,6 +85,7 @@ export default function Receipt({ post }) {
               Zutaten
               {mounted && isNativeShare && postdata.fields.ingredients && (
                 <button
+                  title="Einkaufsliste teilen"
                   type="button"
                   className="button is-white ml-1 is-va-baseline"
                   onClick={() => ingredientsRef.current.shareList()}
@@ -106,6 +107,7 @@ export default function Receipt({ post }) {
                       <div className="field-body is-flex">
                         <div className="control">
                           <button
+                            title="Portion entfernen"
                             className="button is-white px-2"
                             type="button"
                             disabled={servings <= 1}
@@ -134,6 +136,7 @@ export default function Receipt({ post }) {
                         </div>
                         <div className="control">
                           <button
+                            title="Portion hinzufügen"
                             className="button is-white px-2"
                             type="button"
                             onClick={() => setServings(servings + 1)}

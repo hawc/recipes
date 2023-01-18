@@ -40,8 +40,14 @@ body {
 .is-width-40px {
   width: 40px;
 }
+.is-width-0 {
+  width: 0;
+}
 .is-sticky {
   position: sticky;
+}
+.is-line-through {
+  text-decoration: line-through;
 }
 .t-5 {
   top: 1.5rem;
@@ -71,6 +77,16 @@ a {
   transition: color 0.3s ease;
   path {
     transition: fill 0.3s ease, stroke 0.3s ease;
+  }
+}
+@include tablet {
+  .button-strike {
+    opacity: 0;
+    pointer-events: none;
+    tr:hover & {
+      opacity: 1;
+      pointer-events: all;
+    }
   }
 }
 // for safari
