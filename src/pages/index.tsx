@@ -7,7 +7,6 @@ import {
   XMarkIcon,
   ArrowUpOnSquareIcon,
 } from '@heroicons/react/24/outline';
-import { share } from '@/lib/browserApi';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 
@@ -252,7 +251,7 @@ export default function Home({ posts, categories }) {
                       <button
                         type="button"
                         className="button is-white ml-1 is-va-baseline"
-                        onClick={() => share(ingredientsRef.current?.innerText)}
+                        onClick={() => ingredientsRef.current.share}
                       >
                         <span className="icon is-medium">
                           <ArrowUpOnSquareIcon />

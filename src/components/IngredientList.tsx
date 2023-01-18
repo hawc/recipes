@@ -1,12 +1,13 @@
 import { useRef, forwardRef, useImperativeHandle } from 'react';
+import { share } from '@/lib/browserApi';
 
 const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
   useImperativeHandle(ref, () => ({
-    getAlert(): void {
-      alert(`getAlert from Child`);
+    share(): void {
+      share(ingredients.current?.innerText);
     },
   }));
-  const ingredientsRef = useRef();
+  const ingredients = useRef();
   return (
     <table className="table is-fu llwidth">
       <thead>
@@ -15,7 +16,7 @@ const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
           <th>Zutat</th>
         </tr>
       </thead>
-      <tbody ref={ingredientsRef}>
+      <tbody ref={ingredients}>
         {list.map((ingredient) => (
           <tr key={`${ingredient.name}-${ingredient.measurement}`}>
             <td>
