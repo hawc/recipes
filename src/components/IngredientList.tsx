@@ -22,22 +22,12 @@ const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
       rows.splice(strikedRows.indexOf(ingredientID), 1);
     }
     setStrikedRows(rows);
-    // console.log(
-    //   ingredients.current.children[0].classList.contains('is-line-through'),
-    // );
-    // console.log(
-    //   Array.from(ingredients.current.children).filter((element) =>
-    //     element.classList.contains('is-line-through'),
-    //   ),
-    // );
-    // console.log(ingredients.current.innerText);
   }
 
   useEffect(() => {
     const data = Array.from(ingredients.current.children)
       .filter((child: HTMLElement) => !strikedRows.includes(child.dataset.name))
       .map((child: HTMLElement) => child.innerText);
-    console.log(data);
     setExportData(data);
   }, [strikedRows, list]);
 
@@ -51,7 +41,7 @@ const IngredientList = forwardRef(({ list }: { list: any }, ref) => {
         </tr>
       </thead>
       <tbody ref={ingredients}>
-        {list.map((ingredient, index) => (
+        {list.map((ingredient) => (
           <tr
             data-name={`${ingredient.name}-${ingredient.measurement}`}
             key={`${ingredient.name}-${ingredient.measurement}`}

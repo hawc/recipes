@@ -5,7 +5,7 @@ export function share(content) {
     })
     .catch((error) => {
       if (error.name === `AbortError`) {
-        console.log(`Share card was probably just dismissed`);
+        console.log(`Sharing aborted.`);
         return;
       }
 
