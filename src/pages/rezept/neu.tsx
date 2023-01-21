@@ -40,6 +40,7 @@ export default function NewReceipt() {
   const [mounted, setMounted] = useState(false);
   const [servings, setServings] = useState(2);
   const [categories, setCategories] = useState([]);
+  const [images, setImages] = useState([]);
   const [ingredientList, setIngredientList] = useState([]);
   const ingredientsRef = useRef(null);
   const ingrendientInputAmount = useRef(null);
@@ -103,6 +104,37 @@ export default function NewReceipt() {
       ingrendientInputAmount.current.value = ``;
       ingrendientInputUnit.current.value = ``;
       ingrendientInputName.current.value = ``;
+    }
+  }
+  function updateImages(event) {
+    const imageFiles = event.target.files;
+    const filesLength = imageFiles.length;
+
+    for (let i = 0; i < filesLength; i++) {
+      const reader = new FileReader();
+      const file = imageFiles[i];
+
+      reader.onloadend = () => {
+        const image = {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          src: reader.result,
+        };
+        if (
+          reader.result &&
+          !images.map((image) => image.name).includes(image.name)
+        ) {
+          setImages([...images, image]);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+  function removeImage(imageName) {
+    if (imageName) {
+      setImages([...images.filter((image) => image.name !== imageName)]);
     }
   }
 
@@ -289,6 +321,7 @@ export default function NewReceipt() {
                             className="file-input"
                             type="file"
                             name="images"
+                            onInput={updateImages}
                             multiple
                           />
                           <span className="file-cta">
@@ -297,9 +330,31 @@ export default function NewReceipt() {
                             </span>
                             <span className="file-label">Foto auswählen…</span>
                           </span>
-                          <span className="file-name">
-                            Screen Shot 2017-07-29 at 15.54.25.png
-                          </span>
+                          <div className="is-flex is-flex-direction-column">
+                            {images.map((image) => (
+                              <div
+                                key={image.name}
+                                className="file-name is-flex"
+                              >
+                                <div className="is-flex-grow-1">
+                                  {image.name}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    removeImage(image.name);
+                                  }}
+                                  className="button is-white py-0 px-3 is-height-4 is-va-baseline"
+                                >
+                                  <span className="icon is-medium">
+                                    <XMarkIcon />
+                                  </span>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </label>
                       </div>
                     </div>
