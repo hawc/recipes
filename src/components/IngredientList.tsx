@@ -1,6 +1,12 @@
-import { useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import {
+  useRef,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  ReactElement,
+} from 'react';
 import { share } from '@/lib/browserApi';
-import { EyeSlashIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { EyeSlashIcon, EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 
 interface Ingredient {
@@ -10,7 +16,14 @@ interface Ingredient {
 }
 
 const IngredientList = forwardRef(
-  ({ list, children }: { list: Ingredient[] }, ref) => {
+  (
+    {
+      list,
+      removeEvent,
+      children,
+    }: { list: Ingredient[]; removeEvent: any; children: ReactElement },
+    ref,
+  ) => {
     const [strikedRows, setStrikedRows] = useState([]);
     const [exportData, setExportData] = useState(``);
     const ingredients = useRef<Ingredient[]>(null);
@@ -70,23 +83,34 @@ const IngredientList = forwardRef(
               </td>
               <td>{ingredient.name}</td>
               <td className="is-width-0 py-1">
-                <button
-                  title="Zutat streichen"
-                  className="button button-strike is-small is-white"
-                  onClick={() =>
-                    strikeRow(`${ingredient.name}-${ingredient.measurement}`)
-                  }
-                >
-                  <span className="icon is-medium">
-                    {strikedRows.includes(
-                      `${ingredient.name}-${ingredient.measurement}`,
-                    ) ? (
-                      <EyeIcon />
-                    ) : (
-                      <EyeSlashIcon />
-                    )}
-                  </span>
-                </button>
+                {(removeEvent && (
+                  <button
+                    className="button button-strike is-small is-white"
+                    onClick={() => removeEvent(ingredient)}
+                  >
+                    <span className="icon is-medium">
+                      <XMarkIcon />
+                    </span>
+                  </button>
+                )) || (
+                  <button
+                    title="Zutat streichen"
+                    className="button button-strike is-small is-white"
+                    onClick={() =>
+                      strikeRow(`${ingredient.name}-${ingredient.measurement}`)
+                    }
+                  >
+                    <span className="icon is-medium">
+                      {strikedRows.includes(
+                        `${ingredient.name}-${ingredient.measurement}`,
+                      ) ? (
+                        <EyeIcon />
+                      ) : (
+                        <EyeSlashIcon />
+                      )}
+                    </span>
+                  </button>
+                )}
               </td>
             </tr>
           ))}

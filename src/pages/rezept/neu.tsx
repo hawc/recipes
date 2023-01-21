@@ -89,7 +89,7 @@ export default function NewReceipt() {
     }
   }
   function removeCategory(category: string) {
-    if (categories.includes(category)) {
+    if (category) {
       setCategories([...categories.filter((cat) => cat !== category)]);
     }
   }
@@ -99,11 +99,25 @@ export default function NewReceipt() {
       measurement: ingrendientInputUnit.current.value,
       name: ingrendientInputName.current.value,
     };
-    if (!ingredientList.includes(ingredient)) {
+    if (
+      ingredient.amount &&
+      ingredient.measurement &&
+      ingredient.name &&
+      !ingredientList.includes(ingredient)
+    ) {
       setIngredientList([...ingredientList, ingredient]);
       ingrendientInputAmount.current.value = ``;
       ingrendientInputUnit.current.value = ``;
       ingrendientInputName.current.value = ``;
+    }
+  }
+  function removeIngredient(ingredient) {
+    if (ingredient) {
+      setIngredientList([
+        ...ingredientList.filter(
+          (ingredientFromList) => ingredientFromList !== ingredient,
+        ),
+      ]);
     }
   }
   function updateImages(event) {
@@ -176,6 +190,11 @@ export default function NewReceipt() {
               name="category"
               placeholder="Kategorie"
               ref={categoryInput}
+              onKeyUp={(event) => {
+                if (event.key === `Enter`) {
+                  addCategory();
+                }
+              }}
             />
             <button
               type="button"
@@ -267,8 +286,18 @@ export default function NewReceipt() {
                     </div>
                   </div>
                 </div>
-                <IngredientList ref={ingredientsRef} list={ingredientList}>
-                  <tr>
+                <IngredientList
+                  ref={ingredientsRef}
+                  list={ingredientList}
+                  removeEvent={removeIngredient}
+                >
+                  <tr
+                    onKeyUp={(event) => {
+                      if (event.key === `Enter`) {
+                        addIngredient();
+                      }
+                    }}
+                  >
                     <td className="td-input-select">
                       <input
                         className="hide-spin-buttons input input-faux py-0"
@@ -325,9 +354,6 @@ export default function NewReceipt() {
                             multiple
                           />
                           <span className="file-cta">
-                            <span className="file-icon">
-                              <i className="fas fa-upload"></i>
-                            </span>
                             <span className="file-label">Foto auswählen…</span>
                           </span>
                           <div className="is-flex is-flex-direction-column">
@@ -367,11 +393,10 @@ export default function NewReceipt() {
         <h3 className="title is-3 is-size-4-mobile">Zubereitung</h3>
         <div className="content">
           <div className="field">
-            <label className="label">Beschreibung</label>
             <div className="control">
               <textarea
                 name="description"
-                className="textarea"
+                className="textarea input-faux"
                 placeholder="Beschreibung"
               ></textarea>
             </div>
@@ -382,7 +407,7 @@ export default function NewReceipt() {
           <input
             type="text"
             name="source"
-            className="input-faux is-fullwidth pl-3"
+            className="input input-faux is-fullwidth ml-3"
             placeholder="https://..."
           />
         </div>
