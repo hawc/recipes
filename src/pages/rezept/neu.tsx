@@ -12,11 +12,11 @@ const QUERY = gql`
   mutation addReceipe(
     $name: String!
     $slug: String!
-    $categories: [Int]!
-    $ingredients: [Int]!
+    $categories: [String]!
+    $ingredients: [IngredientInput]!
     $servings: Int!
     $description: String!
-    $images: [Int]!
+    $images: [ImageInput]!
     $source: String!
   ) {
     addReceipe(
@@ -51,16 +51,19 @@ export default function NewReceipt() {
   const categoryInput = createRef<HTMLInputElement>();
   const [slug, setSlug] = useState(``);
 
-  function handleClick(event) {
+  const client = new GraphQLClient(ENDPOINT, { headers: {} });
+
+  function handleSubmit(event) {
     event.preventDefault();
     const receipeFormData = new FormData(event.currentTarget);
     const submitData: any = Object.fromEntries(receipeFormData);
     submitData.servings = parseInt(submitData.servings);
-    submitData.categories = [0];
-    submitData.ingredients = [0];
-    submitData.images = [0];
+    submitData.slug = slug;
+    console.log(categories);
+    submitData.categories = categories;
+    submitData.ingredients = ingredientList;
+    submitData.images = images;
     console.log(submitData);
-    const client = new GraphQLClient(ENDPOINT, { headers: {} });
     client.request(QUERY, submitData).then((data) => console.log(data));
   }
 
@@ -95,7 +98,7 @@ export default function NewReceipt() {
   }
   function addIngredient() {
     const ingredient = {
-      amount: ingrendientInputAmount.current.value,
+      amount: parseInt(ingrendientInputAmount.current.value),
       measurement: ingrendientInputUnit.current.value,
       name: ingrendientInputName.current.value,
     };
@@ -158,7 +161,7 @@ export default function NewReceipt() {
 
   return (
     <section className="section pt-5">
-      <div className="container is-max-desktop">
+      <form onSubmit={handleSubmit} className="container is-max-desktop">
         <input
           placeholder="Rezeptname"
           type="text"
@@ -187,7 +190,6 @@ export default function NewReceipt() {
             <input
               type="text"
               className="input input-faux is-va-baseline is-height-4"
-              name="category"
               placeholder="Kategorie"
               ref={categoryInput}
               onKeyUp={(event) => {
@@ -267,6 +269,7 @@ export default function NewReceipt() {
                         value={servings}
                         min="1"
                         placeholder="Portionen"
+                        name="servings"
                         onChange={(event) =>
                           setServings(parseInt(event.target.value))
                         }
@@ -326,6 +329,7 @@ export default function NewReceipt() {
                     </td>
                     <td>
                       <button
+                        type="button"
                         title="Zutat streichen"
                         className="button is-small is-white"
                         onClick={addIngredient}
@@ -411,7 +415,10 @@ export default function NewReceipt() {
             placeholder="https://..."
           />
         </div>
-      </div>
+        <button type="submit" className="button is-primary">
+          Hochladen
+        </button>
+      </form>
     </section>
   );
 
@@ -419,7 +426,7 @@ export default function NewReceipt() {
     <section className="section pt-5">
       <div className="container is-max-desktop">
         <h2 className="title is-2 is-size-3-mobile mb-1 mt-2">Neues Rezept</h2>
-        <form onSubmit={handleClick}>
+        <form onSubmit={handleSubmit}>
           <div className="field">
             <label className="label">Name</label>
             <div className="control">

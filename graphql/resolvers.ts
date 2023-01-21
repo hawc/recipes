@@ -1,27 +1,46 @@
-import { Receipe, Ingredient } from 'types/receipe';
 import { db } from './db';
+import { writeFile, readFileSync } from 'fs';
+import { v4 as uuid } from 'uuid';
 
 function generateId(type) {
   return db.data[type].length;
 }
+
+// interface UploadImage {
+//   name: string;
+//   type: string;
+//   size: string;
+//   src: string;
+// }
+
+// interface UploadReceipe {
+//   id: string;
+//   name: string;
+//   slug: string;
+//   categories: string;
+//   ingredients: string;
+//   servings: string;
+//   description: string;
+//   images: UploadImage[];
+//   source: string;
+// }
 
 const resolvers = {
   Query: {
     info: () => `Die Kochbuch-API`,
   },
   Mutation: {
-    addIngredient: (parent: unknown, args: Ingredient) => {
-      const ingredient = {
-        id: generateId(`receipes`),
-        name: args.name,
-      };
+    addReceipe: (parent: unknown, args: any) => {
+      const imageNames = [];
+      args.images.forEach((image) => {
+        writeFile(`public/uploads/${image.name}`, image.src, (error) => {
+          if (error) console.log(error);
+          else {
+            imageNames.push(image.name);
+          }
+        });
+      });
 
-      db.data.ingredients.push(ingredient);
-      db.write();
-
-      return db.data.receipes;
-    },
-    addReceipe: (parent: unknown, args: Receipe) => {
       const receipe = {
         id: generateId(`receipes`),
         name: args.name,
@@ -30,9 +49,10 @@ const resolvers = {
         ingredients: args.ingredients,
         servings: args.servings,
         description: args.description,
-        images: args.images,
+        images: imageNames,
         source: args.source,
       };
+
       console.log(receipe);
       db.data.receipes.push(receipe);
       db.write();

@@ -31,7 +31,8 @@
     "react-dom": "18.2.0",
     "react-responsive": "9.0.2",
     "sass": "1.57.1",
-    "slugify": "1.6.5"
+    "slugify": "1.6.5",
+    "uuid": "9.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "17.3.0",

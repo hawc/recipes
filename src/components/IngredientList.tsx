@@ -26,7 +26,7 @@ const IngredientList = forwardRef(
   ) => {
     const [strikedRows, setStrikedRows] = useState([]);
     const [exportData, setExportData] = useState(``);
-    const ingredients = useRef<Ingredient[]>(null);
+    const ingredients = useRef(null);
 
     useImperativeHandle(ref, () => ({
       shareList(): void {

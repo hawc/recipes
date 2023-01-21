@@ -5,6 +5,39 @@ const typeDefinitions = gql`
     info: String!
   }
 
+  type Category {
+    id: ID!
+    name: String!
+  }
+
+  type Ingredient {
+    id: ID!
+    name: String!
+    amount: Int!
+    measurement: String!
+  }
+
+  input IngredientInput {
+    name: String!
+    amount: Int!
+    measurement: String!
+  }
+
+  input ImageInput {
+    name: String!
+    src: String!
+    type: String!
+    size: Int!
+  }
+
+  type Image {
+    id: ID!
+    name: String!
+    src: String!
+    type: String!
+    size: String!
+  }
+
   type Mutation {
     addCategory(name: String!): [Category]!
     addImage(name: String!): [Image]!
@@ -12,31 +45,15 @@ const typeDefinitions = gql`
     addReceipe(
       name: String!
       slug: String!
-      categories: [Int]!
-      ingredients: [Int]!
+      categories: [String]!
+      ingredients: [IngredientInput]!
       servings: Int!
       description: String!
-      images: [Int]!
+      images: [ImageInput]!
       source: String!
     ): [Receipe]!
     addReceipeIngredient(name: String!): [ReceipeIngredient]!
     addUnit(name: String!): [Unit]!
-  }
-
-  type Category {
-    id: ID!
-    name: String!
-  }
-
-  type Image {
-    id: ID!
-    name: String!
-    src: String!
-  }
-
-  type Ingredient {
-    id: ID!
-    name: String!
   }
 
   type Receipe {
