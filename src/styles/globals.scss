@@ -94,3 +94,52 @@ a {
   height: 100%;
   width: 100%;
 }
+
+/* Edit styles */
+.input-faux {
+  display: inline-block;
+  appearance: none;
+  border: none !important;
+  height: auto !important;
+  font-size: 1rem;
+  padding: 0;
+  box-shadow: none;
+  &::placeholder {
+    color: bulmaRgba($text, 0.6);
+  }
+}
+.is-fullwidth {
+  width: 100%;
+}
+.is-alignItems-center {
+  align-items: center;
+}
+.is-height-4 {
+  height: $size-4;
+}
+.flex-basis-full {
+  flex-basis: 100%;
+}
+.file-name {
+  max-width: unset !important;
+}
+.td-input-select {
+  .input {
+    width: 40%;
+    height: $size-4;
+  }
+  .select {
+    width: 60%;
+    height: $size-4;
+    select {
+      height: $size-4;
+      width: 100%;
+    }
+  }
+}
+.td-input {
+  .input {
+    height: $size-4;
+  }
+}
+

@@ -1,6 +1,7 @@
 @import "~bulma/sass/utilities/derived-variables.sass";
 
 .categories {
+  display: flex;
   margin-bottom: 2rem;
 }
 .categories li {
