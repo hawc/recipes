@@ -1,0 +1,55 @@
+{
+  "receipes": [
+    {
+      "id": 0,
+      "name": "sdfsdf",
+      "slug": "sdfsdf",
+      "categories": [
+        0
+      ],
+      "ingredients": [
+        0
+      ],
+      "servings": 7,
+      "description": "sdsdfd",
+      "images": [
+        0
+      ],
+      "source": "sdf"
+    },
+    {
+      "id": 1,
+      "name": "sdfsdf",
+      "slug": "sdfsdf",
+      "categories": [
+        0
+      ],
+      "ingredients": [
+        0
+      ],
+      "servings": 7,
+      "description": "sdsdfd",
+      "images": [
+        0
+      ],
+      "source": "sdf"
+    },
+    {
+      "id": 2,
+      "name": "sdfsdf",
+      "slug": "sdfsdf",
+      "categories": [
+        0
+      ],
+      "ingredients": [
+        0
+      ],
+      "servings": 7,
+      "description": "sdsdfd",
+      "images": [
+        0
+      ],
+      "source": "sdf"
+    }
+  ]
+}
