@@ -157,7 +157,7 @@ export default function Receipt({ post }) {
                           : (ingredient.fields.amount /
                               postdata.fields.servings) *
                             servings,
-                        measurement: ingredient.fields.measurement,
+                        unit: ingredient.fields.measurement,
                         name: ingredient.fields.name,
                       }))}
                     ></IngredientList>

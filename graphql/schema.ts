@@ -14,13 +14,13 @@ const typeDefinitions = gql`
     id: ID!
     name: String!
     amount: Int!
-    measurement: String!
+    unit: String!
   }
 
   input IngredientInput {
     name: String!
     amount: Int!
-    measurement: String!
+    unit: String!
   }
 
   input ImageInput {

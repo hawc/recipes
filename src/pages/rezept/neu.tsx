@@ -36,34 +36,49 @@ const QUERY = gql`
   }
 `;
 
+const UNITS = [`Stück`, `ml`, `l`, `g`, `kg`, `TL`, `EL`, `Prise(n)`];
+
 export default function NewReceipt() {
+  const form = useRef(null);
   const [mounted, setMounted] = useState(false);
+  const [name, setName] = useState(``);
   const [servings, setServings] = useState(2);
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
   const [ingredientList, setIngredientList] = useState([]);
   const ingredientsRef = useRef(null);
-  const ingrendientInputAmount = useRef(null);
-  const ingrendientInputUnit = useRef(null);
-  const ingrendientInputName = useRef(null);
-
+  const [ingredientAmount, setIngredientAmount] = useState(``);
+  const [ingredientUnit, setIngredientUnit] = useState(``);
+  const [ingredientName, setIngredientName] = useState(``);
+  const [submitData, setSubmitData] = useState({});
   const nameInput = createRef<HTMLInputElement>();
   const categoryInput = createRef<HTMLInputElement>();
   const [slug, setSlug] = useState(``);
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+
+  useEffect(() => {
+    const receipeFormData = new FormData(form.current);
+    const submitFormData: any = Object.fromEntries(receipeFormData);
+    submitFormData.servings = parseInt(submitFormData.servings);
+    submitFormData.slug = slug;
+    submitFormData.categories = categories;
+    submitFormData.ingredients = ingredientList;
+    submitFormData.images = images;
+
+    setSubmitData(submitFormData);
+
+    const everythingFilled =
+      Object.values(submitFormData)
+        .map((entry: number | string | Array<any>) =>
+          typeof entry === `number` ? entry : entry.length,
+        )
+        .find((entry) => entry === 0) !== 0;
+    setSubmitDisabled(!everythingFilled);
+  }, [slug, categories, ingredientList, images, name]);
 
   const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const receipeFormData = new FormData(event.currentTarget);
-    const submitData: any = Object.fromEntries(receipeFormData);
-    submitData.servings = parseInt(submitData.servings);
-    submitData.slug = slug;
-    console.log(categories);
-    submitData.categories = categories;
-    submitData.ingredients = ingredientList;
-    submitData.images = images;
-    console.log(submitData);
+  function handleSubmit() {
     client.request(QUERY, submitData).then((data) => console.log(data));
   }
 
@@ -96,22 +111,20 @@ export default function NewReceipt() {
       setCategories([...categories.filter((cat) => cat !== category)]);
     }
   }
-  function addIngredient() {
+  function addIngredient(event) {
+    event.preventDefault();
     const ingredient = {
-      amount: parseInt(ingrendientInputAmount.current.value),
-      measurement: ingrendientInputUnit.current.value,
-      name: ingrendientInputName.current.value,
+      amount: parseInt(ingredientAmount),
+      unit: ingredientUnit,
+      name: ingredientName,
     };
-    if (
-      ingredient.amount &&
-      ingredient.measurement &&
-      ingredient.name &&
-      !ingredientList.includes(ingredient)
-    ) {
-      setIngredientList([...ingredientList, ingredient]);
-      ingrendientInputAmount.current.value = ``;
-      ingrendientInputUnit.current.value = ``;
-      ingrendientInputName.current.value = ``;
+    if (ingredient.amount && ingredient.unit && ingredient.name) {
+      if (!ingredientList.includes(ingredient)) {
+        setIngredientList([...ingredientList, ingredient]);
+        setIngredientAmount(``);
+        setIngredientUnit(``);
+        setIngredientName(``);
+      }
     }
   }
   function removeIngredient(ingredient) {
@@ -161,12 +174,22 @@ export default function NewReceipt() {
 
   return (
     <section className="section pt-5">
-      <form onSubmit={handleSubmit} className="container is-max-desktop">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        ref={form}
+        className="container is-max-desktop"
+      >
         <input
           placeholder="Rezeptname"
           type="text"
           className="input input-faux is-fullwidth title is-2 is-size-3-mobile mb-1 mt-2"
           name="name"
+          ref={nameInput}
+          value={name}
+          onChange={(event) => {
+            updateSlugFromName();
+            setName(event.target.value);
+          }}
         />
         <ul className={styles.categories}>
           {categories.map((category) => (
@@ -296,8 +319,9 @@ export default function NewReceipt() {
                 >
                   <tr
                     onKeyUp={(event) => {
+                      event.preventDefault();
                       if (event.key === `Enter`) {
-                        addIngredient();
+                        addIngredient(event);
                       }
                     }}
                   >
@@ -306,31 +330,43 @@ export default function NewReceipt() {
                         className="hide-spin-buttons input input-faux py-0"
                         type="number"
                         placeholder="1000"
-                        ref={ingrendientInputAmount}
+                        value={ingredientAmount}
+                        onChange={(event) =>
+                          setIngredientAmount(event.currentTarget.value)
+                        }
                       />
                       <div className="input-faux select">
                         <select
                           className="input-faux py-0"
-                          ref={ingrendientInputUnit}
+                          value={ingredientUnit}
+                          onChange={(event) =>
+                            setIngredientUnit(event.currentTarget.value)
+                          }
                         >
                           <option value="">Einheit</option>
-                          <option value="g">g</option>
-                          <option value="ml">ml</option>
+                          {UNITS.map((unit) => (
+                            <option key={unit} value={unit}>
+                              {unit}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </td>
                     <td className="td-input">
                       <input
                         className="input input-faux hide-spin-buttons py-0"
-                        type="string"
+                        type="text"
                         placeholder="Zutat"
-                        ref={ingrendientInputName}
+                        value={ingredientName}
+                        onChange={(event) =>
+                          setIngredientName(event.currentTarget.value)
+                        }
                       />
                     </td>
                     <td>
                       <button
                         type="button"
-                        title="Zutat streichen"
+                        title="Zutat hinzufügen"
                         className="button is-small is-white"
                         onClick={addIngredient}
                       >
@@ -415,7 +451,12 @@ export default function NewReceipt() {
             placeholder="https://..."
           />
         </div>
-        <button type="submit" className="button is-primary">
+        <button
+          type="button"
+          disabled={submitDisabled}
+          onClick={handleSubmit}
+          className="button is-primary"
+        >
           Hochladen
         </button>
       </form>

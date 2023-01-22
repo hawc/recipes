@@ -75,7 +75,7 @@ export default function Home({ posts, categories }) {
     return ingredients.map(({ fields }) => {
       return {
         amount: fields.amount,
-        measurement: fields.measurement,
+        unit: fields.measurement,
         name: fields.name,
       };
     });

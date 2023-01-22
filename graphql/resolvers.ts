@@ -1,5 +1,5 @@
 import { db } from './db';
-import { writeFile, readFileSync } from 'fs';
+import { writeFile, readFileSync, existsSync } from 'fs';
 import { v4 as uuid } from 'uuid';
 
 function generateId(type) {
@@ -33,12 +33,17 @@ const resolvers = {
     addReceipe: (parent: unknown, args: any) => {
       const imageNames = [];
       args.images.forEach((image) => {
-        writeFile(`public/uploads/${image.name}`, image.src, (error) => {
-          if (error) console.log(error);
-          else {
-            imageNames.push(image.name);
-          }
-        });
+        console.log(image);
+        if (!existsSync(`public/uploads/${image.name}`)) {
+          writeFile(`public/uploads/${image.name}`, image.src, (error) => {
+            if (error) console.log(error);
+            else {
+              imageNames.push(image.name);
+            }
+          });
+        } else {
+          imageNames.push(image.name);
+        }
       });
 
       const receipe = {

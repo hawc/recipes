@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 
 interface Ingredient {
   readonly amount: string;
-  readonly measurement: string;
+  readonly unit: string;
   readonly name: string;
 }
 
@@ -66,12 +66,10 @@ const IngredientList = forwardRef(
         <tbody ref={ingredients}>
           {list.map((ingredient) => (
             <tr
-              data-name={`${ingredient.name}-${ingredient.measurement}`}
-              key={`${ingredient.name}-${ingredient.measurement}`}
+              data-name={`${ingredient.name}-${ingredient.unit}`}
+              key={`${ingredient.name}-${ingredient.unit}`}
               className={
-                strikedRows.includes(
-                  `${ingredient.name}-${ingredient.measurement}`,
-                )
+                strikedRows.includes(`${ingredient.name}-${ingredient.unit}`)
                   ? `is-line-through`
                   : ``
               }
@@ -79,12 +77,13 @@ const IngredientList = forwardRef(
               <td>
                 {ingredient.amount}
                 {` `}
-                {ingredient.measurement !== `Stück` && ingredient.measurement}
+                {ingredient.unit !== `Stück` && ingredient.unit}
               </td>
               <td>{ingredient.name}</td>
               <td className="is-width-0 py-1">
                 {(removeEvent && (
                   <button
+                    type="button"
                     className="button button-strike is-small is-white"
                     onClick={() => removeEvent(ingredient)}
                   >
@@ -94,15 +93,16 @@ const IngredientList = forwardRef(
                   </button>
                 )) || (
                   <button
+                    type="button"
                     title="Zutat streichen"
                     className="button button-strike is-small is-white"
                     onClick={() =>
-                      strikeRow(`${ingredient.name}-${ingredient.measurement}`)
+                      strikeRow(`${ingredient.name}-${ingredient.unit}`)
                     }
                   >
                     <span className="icon is-medium">
                       {strikedRows.includes(
-                        `${ingredient.name}-${ingredient.measurement}`,
+                        `${ingredient.name}-${ingredient.unit}`,
                       ) ? (
                         <EyeIcon />
                       ) : (
