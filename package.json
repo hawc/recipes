@@ -14,6 +14,7 @@
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --write"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "2.1.0",
     "@contentful/rich-text-html-renderer": "16.0.2",
     "@contentful/rich-text-react-renderer": "15.16.2",
     "@heroicons/react": "2.0.13",

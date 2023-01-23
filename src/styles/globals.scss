@@ -7,7 +7,7 @@ $size-1: 4.5rem;
 $size-2: 3.25rem;
 $size-3: 2.5rem;
 $size-4: 2rem;
-$size-5: 1.2rem;
+$size-5: 1.5rem;
 $size-6: 1rem;
 @import '~bulma/bulma';
 @import '~bulma/sass/utilities/functions';
@@ -114,8 +114,8 @@ a {
 .is-alignItems-center {
   align-items: center;
 }
-.is-height-4 {
-  height: $size-4;
+.is-height-5 {
+  height: $size-5;
 }
 .flex-basis-full {
   flex-basis: 100%;

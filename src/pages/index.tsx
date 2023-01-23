@@ -215,9 +215,9 @@ export default function Home({ posts, categories }) {
   return (
     <section className="section pt-5">
       <div className="container is-max-desktop">
-        <h2 className="title is-3 is-size-4-mobile is-flex mb-3 mt-2">
+        <h2 className="title is-3 is-size-4-mobile is-flex mb-3 mt-2 is-align-items-center">
           <div className="mr-4">Rezepte</div>
-          <div className="select is-inline-block is-size-5 is-size-6-mobile is-rounded">
+          <div className="select is-inline-block is-size-6 is-rounded">
             <select
               aria-label="Kategorie auswählen"
               onChange={optionsChangeHandler}

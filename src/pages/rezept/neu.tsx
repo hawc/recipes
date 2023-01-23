@@ -253,7 +253,7 @@ export default function NewReceipt() {
             />
             <button
               type="button"
-              className="button is-white ml-1 py-0 is-height-4 is-va-baseline"
+              className="button is-small is-primary ml-1 py-0 is-height-5 is-va-baseline"
             >
               <span className="icon is-medium">
                 <PlusIcon onClick={addCategory} />
@@ -413,7 +413,7 @@ export default function NewReceipt() {
                         <button
                           type="button"
                           title="Zutat hinzufügen"
-                          className="button is-small is-primary"
+                          className="button is-small is-height-5 is-primary"
                           disabled={
                             !ingredientAmount ||
                             !ingredientUnit ||
