@@ -1,4 +1,77 @@
 {
   "receipes": [
+    {
+      "id": 1,
+      "name": "Auberginen-Kokos-Curry",
+      "slug": "Auberginen-Kokos-Curry",
+      "categories": [
+        "Vegetarisch",
+        "Asiatisch",
+        "Hauptgericht"
+      ],
+      "ingredients": [
+        {
+          "name": "Aubergine(n)",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "rote Currypaste",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "stückige Tomaten (Dose)",
+          "amount": 500,
+          "unit": "g"
+        },
+        {
+          "name": "Koriander (frisch)",
+          "amount": 20,
+          "unit": "g"
+        },
+        {
+          "name": "griechischer Joghurt",
+          "amount": 200,
+          "unit": "g"
+        },
+        {
+          "name": "Zwiebel(n)",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "Knoblauchzehe(n)",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "Reis",
+          "amount": 300,
+          "unit": "g"
+        },
+        {
+          "name": "Oliven-Öl",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Salz",
+          "amount": 1,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Kokosmilch",
+          "amount": 400,
+          "unit": "ml"
+        }
+      ],
+      "servings": 4,
+      "description": "Die Aubergine(n) in Scheiben schneiden, auf einem Backblech verteilen und Öl und Salz dazugeben. Bei 200°C backen, bis die Auberginenscheiben braun werden. Den Reis nach Verpackungsanweisung kochen.\n\nWährenddessen die Zwiebel(n) und den Knoblauch würfeln und mit etwas Öl und der Currypaste in einer großen Pfanne andünsten. Die Auberginenscheiben aus dem Ofen nehmen und dazugeben. Die Tomaten ebenfalls in die Pfanne geben und gut verrühren, kochen bis die Masse eine dickflüssige Konsistenz hat. Anschließend die Kokosmilch unterrühren und heiß werden lassen.\n\nDas Curry mit dem Reis und Joghurt servieren und mit den Korianderblättern garnieren.",
+      "images": [
+        "auberginen_curry_94474.jpeg"
+      ],
+      "source": "https://www.eatbetter.de/rezepte/auberginen-curry-saftig-einfach-schnell"
+    }
   ]
 }

@@ -6,7 +6,13 @@ import {
   ReactElement,
 } from 'react';
 import { share } from '@/lib/browserApi';
-import { EyeSlashIcon, EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  EyeSlashIcon,
+  EyeIcon,
+  XMarkIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
+} from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 
 interface Ingredient {
@@ -19,9 +25,17 @@ const IngredientList = forwardRef(
   (
     {
       list,
+      upEvent,
+      downEvent,
       removeEvent,
       children,
-    }: { list: Ingredient[]; removeEvent: any; children: ReactElement },
+    }: {
+      list: Ingredient[];
+      upEvent?: any;
+      downEvent?: any;
+      removeEvent?: any;
+      children?: ReactElement;
+    },
     ref,
   ) => {
     const [strikedRows, setStrikedRows] = useState([]);
@@ -64,7 +78,7 @@ const IngredientList = forwardRef(
           </tr>
         </thead>
         <tbody ref={ingredients}>
-          {list.map((ingredient) => (
+          {list.map((ingredient, index) => (
             <tr
               data-name={`${ingredient.name}-${ingredient.unit}`}
               key={`${ingredient.name}-${ingredient.unit}`}
@@ -81,36 +95,60 @@ const IngredientList = forwardRef(
               </td>
               <td>{ingredient.name}</td>
               <td className="is-width-0 py-1">
-                {(removeEvent && (
-                  <button
-                    type="button"
-                    className="button button-strike is-small is-white"
-                    onClick={() => removeEvent(ingredient)}
-                  >
-                    <span className="icon is-medium">
-                      <XMarkIcon />
-                    </span>
-                  </button>
-                )) || (
-                  <button
-                    type="button"
-                    title="Zutat streichen"
-                    className="button button-strike is-small is-white"
-                    onClick={() =>
-                      strikeRow(`${ingredient.name}-${ingredient.unit}`)
-                    }
-                  >
-                    <span className="icon is-medium">
-                      {strikedRows.includes(
-                        `${ingredient.name}-${ingredient.unit}`,
-                      ) ? (
-                        <EyeIcon />
-                      ) : (
-                        <EyeSlashIcon />
-                      )}
-                    </span>
-                  </button>
-                )}
+                <div className="is-flex is-justify-content-end">
+                  {upEvent && index !== 0 && (
+                    <button
+                      type="button"
+                      className="button button-strike is-small is-white"
+                      onClick={() => upEvent(ingredient)}
+                    >
+                      <span className="icon is-medium">
+                        <ArrowUpIcon />
+                      </span>
+                    </button>
+                  )}
+                  {downEvent && index !== list.length - 1 && (
+                    <button
+                      type="button"
+                      className="button button-strike is-small is-white"
+                      onClick={() => downEvent(ingredient)}
+                    >
+                      <span className="icon is-medium">
+                        <ArrowDownIcon />
+                      </span>
+                    </button>
+                  )}
+                  {(removeEvent && (
+                    <button
+                      type="button"
+                      className="button button-strike is-small is-white"
+                      onClick={() => removeEvent(ingredient)}
+                    >
+                      <span className="icon is-medium">
+                        <XMarkIcon />
+                      </span>
+                    </button>
+                  )) || (
+                    <button
+                      type="button"
+                      title="Zutat streichen"
+                      className="button button-strike is-small is-white"
+                      onClick={() =>
+                        strikeRow(`${ingredient.name}-${ingredient.unit}`)
+                      }
+                    >
+                      <span className="icon is-medium">
+                        {strikedRows.includes(
+                          `${ingredient.name}-${ingredient.unit}`,
+                        ) ? (
+                          <EyeIcon />
+                        ) : (
+                          <EyeSlashIcon />
+                        )}
+                      </span>
+                    </button>
+                  )}
+                </div>
               </td>
             </tr>
           ))}

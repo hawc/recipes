@@ -1,6 +1,5 @@
 import { db } from './db';
-import { writeFile, readFileSync, existsSync } from 'fs';
-import { v4 as uuid } from 'uuid';
+import { writeFileSync, existsSync } from 'fs';
 
 function generateId(type) {
   return db.data[type].length;
@@ -30,21 +29,30 @@ const resolvers = {
     info: () => `Die Kochbuch-API`,
   },
   Mutation: {
-    addReceipe: (parent: unknown, args: any) => {
+    addReceipe: async (_parent: unknown, args: any) => {
       const imageNames = [];
-      args.images.forEach((image) => {
+      for (const image of args.images) {
+        console.log(`image`);
         console.log(image);
-        if (!existsSync(`public/uploads/${image.name}`)) {
-          writeFile(`public/uploads/${image.name}`, image.src, (error) => {
-            if (error) console.log(error);
-            else {
-              imageNames.push(image.name);
-            }
-          });
+        const fileExists = existsSync(`public/uploads/${image.name}`);
+        if (!fileExists) {
+          const ext = image.src.substring(
+            image.src.indexOf(`/`) + 1,
+            image.src.indexOf(`;base64`),
+          );
+          const fileType = image.src.substring(
+            `data:`.length,
+            image.src.indexOf(`/`),
+          );
+          const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, `gi`);
+          const base64Data = image.src.replace(regex, ``);
+
+          writeFileSync(`public/uploads/${image.name}`, base64Data, `base64`);
+          imageNames.push(image.name);
         } else {
           imageNames.push(image.name);
         }
-      });
+      }
 
       const receipe = {
         id: generateId(`receipes`),
@@ -58,7 +66,6 @@ const resolvers = {
         source: args.source,
       };
 
-      console.log(receipe);
       db.data.receipes.push(receipe);
       db.write();
 

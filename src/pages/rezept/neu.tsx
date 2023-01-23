@@ -1,6 +1,7 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import { createRef, useState, useEffect, useRef } from 'react';
 import slugify from 'slugify';
+import { arrayMoveImmutable } from 'array-move';
 import styles from '@/styles/Detail.module.scss';
 import { PlusIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
@@ -42,6 +43,8 @@ export default function NewReceipt() {
   const form = useRef(null);
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState(``);
+  const [description, setDescription] = useState(``);
+  const [source, setSource] = useState(``);
   const [servings, setServings] = useState(2);
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
@@ -74,12 +77,21 @@ export default function NewReceipt() {
         )
         .find((entry) => entry === 0) !== 0;
     setSubmitDisabled(!everythingFilled);
-  }, [slug, categories, ingredientList, images, name]);
+  }, [slug, categories, ingredientList, images, name, description, source]);
 
   const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
   function handleSubmit() {
-    client.request(QUERY, submitData).then((data) => console.log(data));
+    client.request(QUERY, submitData).then((receipeList) => {
+      console.log(receipeList);
+      setName(``);
+      setDescription(``);
+      setSource(``);
+      setServings(2);
+      setCategories([]);
+      setImages([]);
+      setIngredientList([]);
+    });
   }
 
   function updateSlug(slug = null) {
@@ -119,7 +131,10 @@ export default function NewReceipt() {
       name: ingredientName,
     };
     if (ingredient.amount && ingredient.unit && ingredient.name) {
-      if (!ingredientList.includes(ingredient)) {
+      if (
+        !ingredientList.includes(ingredient) &&
+        !ingredientList.map((ing) => ing.name).includes(ingredient.name)
+      ) {
         setIngredientList([...ingredientList, ingredient]);
         setIngredientAmount(``);
         setIngredientUnit(``);
@@ -134,6 +149,20 @@ export default function NewReceipt() {
           (ingredientFromList) => ingredientFromList !== ingredient,
         ),
       ]);
+    }
+  }
+  function moveIngredientUp(ingredient) {
+    if (ingredient) {
+      const pos = ingredientList.indexOf(ingredient);
+      const newList = arrayMoveImmutable(ingredientList, pos, pos - 1);
+      setIngredientList(newList);
+    }
+  }
+  function moveIngredientDown(ingredient) {
+    if (ingredient) {
+      const pos = ingredientList.indexOf(ingredient);
+      const newList = arrayMoveImmutable(ingredientList, pos, pos + 1);
+      setIngredientList(newList);
     }
   }
   function updateImages(event) {
@@ -155,7 +184,8 @@ export default function NewReceipt() {
           reader.result &&
           !images.map((image) => image.name).includes(image.name)
         ) {
-          setImages([...images, image]);
+          // setImages([...images, image]);
+          setImages([image]);
         }
       };
 
@@ -236,22 +266,37 @@ export default function NewReceipt() {
             <div className="block px-0 pb-2">
               <div className="field">
                 <div className="file has-name is-boxed">
-                  <label className="file-label">
+                  <label className="file-label flex-basis-full">
                     <input
                       className="file-input"
                       type="file"
                       name="images"
+                      onInput={updateImages}
                       multiple
                     />
                     <span className="file-cta">
-                      <span className="file-icon">
-                        <i className="fas fa-upload"></i>
-                      </span>
                       <span className="file-label">Foto auswählen…</span>
                     </span>
-                    <span className="file-name">
-                      Screen Shot 2017-07-29 at 15.54.25.png
-                    </span>
+                    <div className="is-flex is-flex-direction-column">
+                      {images.map((image) => (
+                        <div key={image.name} className="file-name is-flex">
+                          <div className="is-flex-grow-1">{image.name}</div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              removeImage(image.name);
+                            }}
+                            className="button is-white py-0 px-3 is-height-4 is-va-baseline"
+                          >
+                            <span className="icon is-medium">
+                              <XMarkIcon />
+                            </span>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </label>
                 </div>
               </div>
@@ -315,6 +360,8 @@ export default function NewReceipt() {
                 <IngredientList
                   ref={ingredientsRef}
                   list={ingredientList}
+                  upEvent={moveIngredientUp}
+                  downEvent={moveIngredientDown}
                   removeEvent={removeIngredient}
                 >
                   <tr
@@ -352,28 +399,36 @@ export default function NewReceipt() {
                         </select>
                       </div>
                     </td>
-                    <td className="td-input">
-                      <input
-                        className="input input-faux hide-spin-buttons py-0"
-                        type="text"
-                        placeholder="Zutat"
-                        value={ingredientName}
-                        onChange={(event) =>
-                          setIngredientName(event.currentTarget.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        title="Zutat hinzufügen"
-                        className="button is-small is-white"
-                        onClick={addIngredient}
-                      >
-                        <span className="icon is-medium">
-                          <PlusIcon></PlusIcon>
-                        </span>
-                      </button>
+                    <td className="td-input" colSpan={2}>
+                      <div className="is-flex">
+                        <input
+                          className="input input-faux hide-spin-buttons py-0"
+                          type="text"
+                          placeholder="Zutat"
+                          value={ingredientName}
+                          onChange={(event) =>
+                            setIngredientName(event.currentTarget.value)
+                          }
+                        />
+                        <button
+                          type="button"
+                          title="Zutat hinzufügen"
+                          className="button is-small is-primary"
+                          disabled={
+                            !ingredientAmount ||
+                            !ingredientUnit ||
+                            !ingredientName ||
+                            ingredientList
+                              .map((ing) => ing.name)
+                              .includes(ingredientName)
+                          }
+                          onClick={addIngredient}
+                        >
+                          <span className="icon is-medium">
+                            <PlusIcon></PlusIcon>
+                          </span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 </IngredientList>
@@ -438,6 +493,8 @@ export default function NewReceipt() {
                 name="description"
                 className="textarea input-faux"
                 placeholder="Beschreibung"
+                value={description}
+                onChange={(event) => setDescription(event.currentTarget.value)}
               ></textarea>
             </div>
           </div>
@@ -449,6 +506,8 @@ export default function NewReceipt() {
             name="source"
             className="input input-faux is-fullwidth ml-3"
             placeholder="https://..."
+            value={source}
+            onChange={(event) => setSource(event.currentTarget.value)}
           />
         </div>
         <button
@@ -459,6 +518,19 @@ export default function NewReceipt() {
         >
           Hochladen
         </button>
+        {(submitDisabled && (
+          <p className="mt-2">
+            <span className="tag is-danger is-light">
+              Es sind noch nicht alle Felder gefüllt.
+            </span>
+          </p>
+        )) || (
+          <p className="mt-2">
+            <span className="tag is-success is-light">
+              Rezept kann hochgeladen werden.
+            </span>
+          </p>
+        )}
       </form>
     </section>
   );
