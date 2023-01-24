@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { loadPosts } from '@/lib/contentfulClient';
 import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
 import Image from 'next/image';
 import {
