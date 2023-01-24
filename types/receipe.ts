@@ -1,11 +1,12 @@
-interface Category {
-  id: number;
-  name: string;
-}
+// interface Category {
+//   id: number;
+//   name: string;
+// }
 
 interface Ingredient {
-  id: number;
   name: string;
+  amount: string;
+  unit: string;
 }
 
 interface Unit {
@@ -43,12 +44,4 @@ interface Receipes {
   receipes: Receipe[];
 }
 
-export type {
-  Category,
-  Ingredient,
-  Image,
-  Receipe,
-  ReceipeIngredient,
-  Receipes,
-  Unit,
-};
+export type { Ingredient, Image, Receipe, ReceipeIngredient, Receipes, Unit };

@@ -1,6 +1,4 @@
-import { loadPost, loadPosts, ReceipeFields } from '@/lib/contentfulClient';
-import { getRenderOptions } from '@/lib/contentfulConfig';
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { ReceipeFields } from '@/lib/contentfulClient';
 import styles from '@/styles/Detail.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import {
@@ -11,8 +9,41 @@ import {
 import Image from 'next/image';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
-import type { Entry } from 'contentful';
+import { gql, GraphQLClient } from 'graphql-request';
 
+const ENDPOINT = `http://localhost:3000/api/receipes`;
+
+const QUERY_RECEIPES = gql`
+  query getReceipes {
+    Receipes {
+      name
+      slug
+    }
+  }
+`;
+
+const QUERY_RECEIPE = gql`
+  query getReceipe($slug: String!) {
+    Receipe(slug: $slug) {
+      name
+      slug
+      categories
+      ingredients {
+        name
+        amount
+        unit
+      }
+      servings
+      description
+      images {
+        name
+        width
+        height
+      }
+      source
+    }
+  }
+`;
 export async function getStaticPaths() {
   if (process.env.SKIP_BUILD_STATIC_GENERATION) {
     return {
@@ -20,20 +51,24 @@ export async function getStaticPaths() {
       fallback: `blocking`,
     };
   }
+  const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
-  const posts = await loadPosts(`receipt`);
-  const paths = posts.map((post: Entry<ReceipeFields>) => ({
-    params: { slug: post.fields.slug },
+  const receipes = await client.request(QUERY_RECEIPES);
+  const paths = receipes.Receipes.map((receipe: ReceipeFields) => ({
+    params: { slug: receipe.slug },
   }));
 
   return { paths, fallback: false };
 }
 
 export async function getStaticProps({ params }) {
-  const post = await loadPost(params.slug);
+  const client = new GraphQLClient(ENDPOINT, { headers: {} });
+
+  const receipe = await client.request(QUERY_RECEIPE, { slug: params.slug });
+
   return {
     props: {
-      post: JSON.stringify(post),
+      post: receipe.Receipe,
     },
   };
 }
@@ -41,8 +76,8 @@ export async function getStaticProps({ params }) {
 export default function Receipt({ post }) {
   const [mounted, setMounted] = useState(false);
   const ingredientsRef = useRef(null);
-  const postdata = JSON.parse(post);
-  const [servings, setServings] = useState(postdata.fields.servings);
+  const postdata = post;
+  const [servings, setServings] = useState(postdata.servings);
   const [isNativeShare, setNativeShare] = useState(false);
 
   useEffect(() => {
@@ -56,35 +91,31 @@ export default function Receipt({ post }) {
     <section className="section pt-5">
       <div className="container is-max-desktop">
         <h2 className="title is-2 is-size-3-mobile mb-1 mt-2">
-          {postdata.fields.name}
+          {postdata.name}
         </h2>
         <ul className={styles.categories}>
-          {postdata.fields.category.map((category) => (
-            <li key={category.fields.name}>{category.fields.name}</li>
+          {postdata.categories.map((category) => (
+            <li key={category}>{category}</li>
           ))}
         </ul>
-        {mounted && postdata.fields.images?.length > 0 && (
+        {mounted && postdata.images?.length > 0 && (
           <Mobile>
             <div className="block px-0 pb-2">
               <Image
                 className="box p-0"
-                src={`https:${postdata.fields.images[0].fields.file.url}`}
+                src={`https:${postdata.images[0].name}`}
                 alt="Rezeptbild"
-                width={
-                  postdata.fields.images[0].fields.file.details.image.width
-                }
-                height={
-                  postdata.fields.images[0].fields.file.details.image.height
-                }
+                width={postdata.images[0].width}
+                height={postdata.images[0].height}
               />
             </div>
           </Mobile>
         )}
-        {postdata.fields.ingredients?.length > 0 && (
+        {postdata.ingredients?.length > 0 && (
           <>
             <h3 className="title is-3 is-size-4-mobile mb-3">
               Zutaten
-              {mounted && isNativeShare && postdata.fields.ingredients && (
+              {mounted && isNativeShare && postdata.ingredients && (
                 <button
                   title="Einkaufsliste teilen"
                   type="button"
@@ -151,33 +182,25 @@ export default function Receipt({ post }) {
                     </div>
                     <IngredientList
                       ref={ingredientsRef}
-                      list={postdata.fields.ingredients?.map((ingredient) => ({
-                        amount: ingredient.fields.absolute
-                          ? ingredient.fields.amount
-                          : (ingredient.fields.amount /
-                              postdata.fields.servings) *
-                            servings,
-                        unit: ingredient.fields.measurement,
-                        name: ingredient.fields.name,
+                      list={postdata.ingredients?.map((ingredient) => ({
+                        amount: ingredient.absolute
+                          ? ingredient.amount
+                          : (ingredient.amount / postdata.servings) * servings,
+                        unit: ingredient.unit,
+                        name: ingredient.name,
                       }))}
                     ></IngredientList>
                   </div>
                 </div>
-                {mounted && postdata.fields.images?.length > 0 && (
+                {mounted && postdata.images?.length > 0 && (
                   <Desktop>
                     <div className="column pl-5 is-relative">
                       <Image
                         className="box p-0 t-5 is-sticky"
-                        src={`https:${postdata.fields.images[0].fields.file.url}`}
+                        src={`/uploads/${postdata.images[0].name}`}
                         alt="Rezeptbild"
-                        width={
-                          postdata.fields.images[0].fields.file.details.image
-                            .width
-                        }
-                        height={
-                          postdata.fields.images[0].fields.file.details.image
-                            .height
-                        }
+                        width={postdata.images[0].width}
+                        height={postdata.images[0].height}
                       />
                     </div>
                   </Desktop>
@@ -187,23 +210,20 @@ export default function Receipt({ post }) {
           </>
         )}
         <h3 className="title is-3 is-size-4-mobile">Zubereitung</h3>
-        <div className="content">
-          {documentToReactComponents(
-            postdata.fields.description,
-            getRenderOptions(postdata, servings),
-          )}
+        <div className="content is-white-space-pre-line">
+          {postdata.description}
         </div>
-        {postdata.fields.source?.length && (
+        {postdata.source?.length && (
           <div className="block pt-2">
             Quelle:{` `}
             <a
               className="has-text-primary"
               target="_blank"
               rel="noreferrer noopener"
-              href={postdata.fields.source}
+              href={postdata.source}
             >
               {` `}
-              {postdata.fields.source}
+              {postdata.source}
             </a>
           </div>
         )}

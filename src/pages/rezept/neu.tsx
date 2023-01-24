@@ -1,6 +1,5 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import { createRef, useState, useEffect, useRef } from 'react';
-import slugify from 'slugify';
 import { arrayMoveImmutable } from 'array-move';
 import styles from '@/styles/Detail.module.scss';
 import { PlusIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -12,7 +11,6 @@ const ENDPOINT = `/api/receipes`;
 const QUERY = gql`
   mutation addReceipe(
     $name: String!
-    $slug: String!
     $categories: [String]!
     $ingredients: [IngredientInput]!
     $servings: Int!
@@ -22,7 +20,6 @@ const QUERY = gql`
   ) {
     addReceipe(
       name: $name
-      slug: $slug
       categories: $categories
       ingredients: $ingredients
       servings: $servings
@@ -56,14 +53,12 @@ export default function NewReceipt() {
   const [submitData, setSubmitData] = useState({});
   const nameInput = createRef<HTMLInputElement>();
   const categoryInput = createRef<HTMLInputElement>();
-  const [slug, setSlug] = useState(``);
   const [submitDisabled, setSubmitDisabled] = useState(true);
 
   useEffect(() => {
     const receipeFormData = new FormData(form.current);
     const submitFormData: any = Object.fromEntries(receipeFormData);
     submitFormData.servings = parseInt(submitFormData.servings);
-    submitFormData.slug = slug;
     submitFormData.categories = categories;
     submitFormData.ingredients = ingredientList;
     submitFormData.images = images;
@@ -77,7 +72,7 @@ export default function NewReceipt() {
         )
         .find((entry) => entry === 0) !== 0;
     setSubmitDisabled(!everythingFilled);
-  }, [slug, categories, ingredientList, images, name, description, source]);
+  }, [categories, ingredientList, images, name, description, source]);
 
   const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
@@ -94,21 +89,6 @@ export default function NewReceipt() {
     });
   }
 
-  function updateSlug(slug = null) {
-    setSlug(
-      slugify(slug ?? nameInput?.current?.value ?? ``, {
-        replacement: `-`,
-        strict: true,
-        locale: `de`,
-      }),
-    );
-  }
-  function updateSlugDirectly(event) {
-    updateSlug(event.currentTarget.value);
-  }
-  function updateSlugFromName() {
-    updateSlug();
-  }
   function addCategory() {
     if (
       categoryInput.current.value &&
@@ -174,21 +154,26 @@ export default function NewReceipt() {
       const file = imageFiles[i];
 
       reader.onloadend = () => {
-        const image = {
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          src: reader.result,
-        };
-        if (
-          reader.result &&
-          !images.map((image) => image.name).includes(image.name)
-        ) {
-          // setImages([...images, image]);
-          setImages([image]);
+        if (reader.result) {
+          const tempImage = new Image();
+          tempImage.src = reader.result as string;
+
+          tempImage.onload = function () {
+            const dbImage = {
+              name: file.name,
+              type: file.type,
+              size: file.size,
+              width: tempImage.width,
+              height: tempImage.height,
+              src: reader.result,
+            };
+            if (!images.map((image) => image.name).includes(dbImage.name)) {
+              // setImages([...images, image]);
+              setImages([dbImage]);
+            }
+          };
         }
       };
-
       reader.readAsDataURL(file);
     }
   }
@@ -217,7 +202,6 @@ export default function NewReceipt() {
           ref={nameInput}
           value={name}
           onChange={(event) => {
-            updateSlugFromName();
             setName(event.target.value);
           }}
         />

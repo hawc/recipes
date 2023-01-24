@@ -1,18 +1,10 @@
-import {
-  Category,
-  Image,
-  Ingredient,
-  Receipe,
-  ReceipeIngredient,
-  Unit,
-} from './receipe';
+import { Ingredient, Receipe, Unit } from './receipe';
 
 interface Data {
-  categories: Category[];
-  images: Image[];
+  categories: string[];
+  images: string[];
   ingredients: Ingredient[];
   receipes: Receipe[];
-  receipeIngredients: ReceipeIngredient[];
   units: Unit[];
 }
 

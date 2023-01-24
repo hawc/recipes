@@ -10,14 +10,28 @@ export default function Profile() {
 
   return (
     (user && (
-      <div>
-        <div>{user.name}</div>
-        <Link href="/api/auth/logout">Logout</Link>
-      </div>
+      <>
+        <Link
+          className="mr-6 is-flex is-flex-direction-column is-justify-content-center"
+          href="/rezept/neu"
+        >
+          Neues Rezept
+        </Link>
+        <div className="is-flex">
+          <span className="is-flex is-flex-direction-column is-justify-content-center mr-1">
+            {user.name}
+          </span>
+          <span className="mr-6 is-flex is-flex-direction-column is-justify-content-center is-white-space-no-wrap">
+            <span>
+              (<Link href="/api/auth/logout">Logout</Link>)
+            </span>
+          </span>
+        </div>
+      </>
     )) || (
-      <div>
+      <span className="is-flex is-flex-direction-column is-justify-content-center">
         <Link href="/api/auth/login">Login</Link>
-      </div>
+      </span>
     )
   );
 }

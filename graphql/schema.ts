@@ -3,15 +3,11 @@ import { gql } from 'graphql-request';
 const typeDefinitions = gql`
   type Query {
     info: String!
-  }
-
-  type Category {
-    id: ID!
-    name: String!
+    Receipe(slug: String): Receipe!
+    Receipes: [Receipe]!
   }
 
   type Ingredient {
-    id: ID!
     name: String!
     amount: Int!
     unit: String!
@@ -28,23 +24,22 @@ const typeDefinitions = gql`
     src: String!
     type: String!
     size: Int!
+    width: Int!
+    height: Int!
   }
 
   type Image {
-    id: ID!
     name: String!
-    src: String!
+    width: Int!
+    height: Int!
     type: String!
-    size: String!
+    size: Int!
   }
 
   type Mutation {
-    addCategory(name: String!): [Category]!
-    addImage(name: String!): [Image]!
     addIngredient(name: String!): [Ingredient]!
     addReceipe(
       name: String!
-      slug: String!
       categories: [String]!
       ingredients: [IngredientInput]!
       servings: Int!
@@ -52,19 +47,17 @@ const typeDefinitions = gql`
       images: [ImageInput]!
       source: String!
     ): [Receipe]!
-    addReceipeIngredient(name: String!): [ReceipeIngredient]!
-    addUnit(name: String!): [Unit]!
   }
 
   type Receipe {
     id: ID!
     name: String!
     slug: String!
-    categories: [Category]!
-    ingredients: [ReceipeIngredient]!
+    categories: [String]!
+    ingredients: [Ingredient]!
     servings: Int!
     description: String
-    images: Image
+    images: [Image]!
     source: String
   }
 

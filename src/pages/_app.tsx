@@ -38,12 +38,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               </Link>
             </h1>
             <div className="is-flex is-flex-direction-row">
-              <Link
-                className="mr-6 is-flex is-flex-direction-column is-justify-content-center"
-                href="/rezept/neu"
-              >
-                Neues Rezept
-              </Link>
               <Profile />
             </div>
           </div>

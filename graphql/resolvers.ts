@@ -1,5 +1,6 @@
 import { db } from './db';
 import { writeFileSync, existsSync } from 'fs';
+import slugify from 'slugify';
 
 function generateId(type) {
   return db.data[type].length;
@@ -27,10 +28,23 @@ function generateId(type) {
 const resolvers = {
   Query: {
     info: () => `Die Kochbuch-API`,
+    Receipes: () => {
+      return db.data.receipes;
+    },
+    Receipe: (_parent: unknown, args: any) => {
+      const receipes = db.data.receipes.filter(
+        (receipe) => receipe.slug.toLowerCase() === args.slug.toLowerCase(),
+      );
+
+      if (receipes.length < 1) {
+        throw new Error(`no matching receipes`);
+      } else {
+        return receipes[0];
+      }
+    },
   },
   Mutation: {
     addReceipe: async (_parent: unknown, args: any) => {
-      const imageNames = [];
       for (const image of args.images) {
         console.log(`image`);
         console.log(image);
@@ -48,21 +62,32 @@ const resolvers = {
           const base64Data = image.src.replace(regex, ``);
 
           writeFileSync(`public/uploads/${image.name}`, base64Data, `base64`);
-          imageNames.push(image.name);
-        } else {
-          imageNames.push(image.name);
         }
       }
+
+      const slug = slugify(args.name, {
+        replacement: `-`,
+        strict: true,
+        locale: `de`,
+      }).toLocaleLowerCase(`de`);
 
       const receipe = {
         id: generateId(`receipes`),
         name: args.name,
-        slug: args.slug,
+        slug: slug,
         categories: args.categories,
         ingredients: args.ingredients,
         servings: args.servings,
         description: args.description,
-        images: imageNames,
+        images: args.images.map((image) => {
+          return {
+            name: image.name,
+            width: image.width,
+            height: image.height,
+            type: image.type,
+            size: image.size,
+          };
+        }),
         source: args.source,
       };
 

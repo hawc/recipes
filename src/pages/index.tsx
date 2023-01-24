@@ -10,15 +10,43 @@ import {
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 import { ReceipeFields } from '@/lib/contentfulClient';
-import type { Entry } from 'contentful';
+import { gql, GraphQLClient } from 'graphql-request';
+
+const ENDPOINT = `http://localhost:3000/api/receipes`;
+
+const QUERY_RECEIPES = gql`
+  query getReceipes {
+    Receipes {
+      id
+      categories
+      name
+      slug
+      ingredients {
+        name
+        amount
+        unit
+      }
+      images {
+        name
+        width
+        height
+      }
+    }
+  }
+`;
 
 export async function getStaticProps() {
-  const posts = await loadPosts(`receipt`);
-  const categories = await loadPosts(`category`);
+  const client = new GraphQLClient(ENDPOINT, { headers: {} });
+
+  const receipes = await client.request(QUERY_RECEIPES);
+  console.log(receipes);
+  const categories = receipes.Receipes.map((receipe) => {
+    return receipe.categories;
+  });
   return {
     props: {
-      posts: JSON.stringify(posts),
-      categories: JSON.stringify(categories),
+      posts: receipes.Receipes,
+      categories,
     },
   };
 }
@@ -30,8 +58,8 @@ export default function Home({ posts, categories }) {
   const [previewImageID, setPreviewImageID] = useState(null);
   const [selectedReceipes, setSelectedReceipes] = useState([]);
   const [buyList, setBuyList] = useState([]);
-  const postdata = JSON.parse(posts);
-  const categorydata = JSON.parse(categories);
+  const postdata = posts;
+  const categorydata = categories;
   const [filteredPosts, setFilteredPosts] = useState(postdata);
   const [isNativeShare, setNativeShare] = useState(false);
 
@@ -52,9 +80,7 @@ export default function Home({ posts, categories }) {
       return;
     }
 
-    const previewImageObject = postdata.find(
-      (receipt) => receipt.sys.id === id,
-    );
+    const previewImageObject = postdata.find((receipe) => receipe.id === id);
     setPreviewImage(previewImageObject);
   }
 
@@ -71,19 +97,9 @@ export default function Home({ posts, categories }) {
     return finalList;
   }
 
-  function getIngredientList(ingredients) {
-    return ingredients.map(({ fields }) => {
-      return {
-        amount: fields.amount,
-        unit: fields.measurement,
-        name: fields.name,
-      };
-    });
-  }
-
   function isInSelectedReceipes(receipe) {
     const isInSelectedReceipes = selectedReceipes.find(
-      (selectedReceipe) => selectedReceipe.sys.id === receipe.sys.id,
+      (selectedReceipe) => selectedReceipe.id === receipe.id,
     );
     return new Boolean(isInSelectedReceipes).valueOf();
   }
@@ -92,7 +108,7 @@ export default function Home({ posts, categories }) {
     if (isInSelectedReceipes(receipe)) {
       setSelectedReceipes(
         selectedReceipes.filter(
-          (selectedReceipe) => selectedReceipe.sys.id !== receipe.sys.id,
+          (selectedReceipe) => selectedReceipe.id !== receipe.id,
         ),
       );
     } else {
@@ -102,9 +118,7 @@ export default function Home({ posts, categories }) {
 
   useEffect(() => {
     const arr = mergeArrays(
-      [...selectedReceipes].map((receipe) =>
-        getIngredientList(receipe.fields.ingredients),
-      ),
+      [...selectedReceipes].map((receipe) => receipe.ingredients),
     );
     const res = Array.from(
       arr
@@ -124,30 +138,30 @@ export default function Home({ posts, categories }) {
 
   const postRefs = {};
 
-  const postListItems = postdata.map((post: Entry<ReceipeFields>) => {
+  const postListItems = postdata.map((post: ReceipeFields) => {
     const isFiltered = filteredPosts
-      .map((filteredPost) => filteredPost.sys.id)
-      .includes(post.sys.id);
-    postRefs[post.sys.id] = createRef();
+      .map((filteredPost) => filteredPost.id)
+      .includes(post.id);
+    postRefs[post.id] = createRef();
     return (
-      <div key={post.sys.id}>
+      <div key={post.id}>
         <Desktop>
           <div
-            onMouseEnter={() => handleReceipeHover(post.sys.id)}
+            onMouseEnter={() => handleReceipeHover(post.id)}
             onMouseLeave={() => handleReceipeHover(null)}
             onBlur={() => handleReceipeHover(null)}
-            ref={postRefs[post.sys.id]}
+            ref={postRefs[post.id]}
             className={
               isFiltered ? `is-flex is-size-5` : `is-flex is-size-5 opacity-40`
             }
           >
             <Link
-              onFocus={() => handleReceipeHover(post.sys.id)}
+              onFocus={() => handleReceipeHover(post.id)}
               onBlur={() => handleReceipeHover(null)}
               className="has-text-primary is-flex-basis-100"
-              href={`/rezept/${post.fields.slug}`}
+              href={`/rezept/${post.slug}`}
             >
-              {post.fields.name}
+              {post.name}
             </Link>
             <button
               type="button"
@@ -166,16 +180,16 @@ export default function Home({ posts, categories }) {
         </Desktop>
         <Mobile>
           <div
-            ref={postRefs[post.sys.id]}
+            ref={postRefs[post.id]}
             className={
               isFiltered ? `is-size-5 is-flex` : `is-size-5 is-flex opacity-40`
             }
           >
             <Link
               className="has-text-primary is-flex-basis-100"
-              href={`/rezept/${post.fields.slug}`}
+              href={`/rezept/${post.slug}`}
             >
-              {post.fields.name}
+              {post.name}
             </Link>
             <button
               title="zur Einkaufsliste hinzufügen"
@@ -202,9 +216,7 @@ export default function Home({ posts, categories }) {
       let f = postdata;
       if (event.currentTarget.value !== ``) {
         f = postdata.filter((post) => {
-          return post.fields.category
-            .map((category) => category.fields.name)
-            .includes(event.currentTarget.value);
+          return post.categories.includes(event.currentTarget.value);
         });
       }
 
@@ -224,8 +236,8 @@ export default function Home({ posts, categories }) {
             >
               <option value="">Alle</option>
               {categorydata.map((category: any) => (
-                <option key={category.fields.name} value={category.fields.name}>
-                  {category.fields.name}
+                <option key={category} value={category}>
+                  {category}
                 </option>
               ))}
             </select>
@@ -265,19 +277,13 @@ export default function Home({ posts, categories }) {
               <div className="column">
                 {previewImage && (
                   <div>
-                    <Link href={`/rezept/${previewImage?.fields.slug}`}>
+                    <Link href={`/rezept/${previewImage?.slug}`}>
                       <Image
-                        src={`https://${previewImage?.fields.images[0]?.fields.file.url}`}
+                        src={`/uploads/${previewImage?.images[0].name}`}
                         className="box p-0"
                         alt="Rezeptvorschau"
-                        width={
-                          previewImage?.fields.images[0]?.fields.file.details
-                            .image.width
-                        }
-                        height={
-                          previewImage?.fields.images[0]?.fields.file.details
-                            .image.height
-                        }
+                        width={previewImage?.images[0].width}
+                        height={previewImage?.images[0].height}
                       ></Image>
                     </Link>
                   </div>
