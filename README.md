@@ -9,13 +9,18 @@ Die folgenden Technologien sind der Hauptbestandteil dieser Anwendung:
 - React
 - Next.js
 - TypeScript
-- Contentful API
+- LowDB
+- Auth0
 
-Da die Templates an die Response-Struktur von Contentful angepasst sind, lässt sich die Anwendung nicht ohne weiteres deployen, solange der Response eben nicht genau dieser Struktur entspricht. Desweiteren wird für die Contentful-API eine .env-Datei mit den folgenden Umgebungsvariablen vorausgesetzt:
+Folgende Umgebungsvariablen müssen für Auth0 gesetzt sein:
 
 ```
-contentfulAccessToken="TOKEN"
-contentfulSpace="SPACE_ID"
+AUTH0_SECRET='X'
+AUTH0_BASE_URL='X'
+AUTH0_ISSUER_BASE_URL='X'
+AUTH0_CLIENT_ID='X'
+AUTH0_CLIENT_SECRET='X'
+
 ```
 
 Die Anwendung lässt sich mit NPM starten:
