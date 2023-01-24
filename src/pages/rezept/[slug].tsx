@@ -1,4 +1,3 @@
-import { ReceipeFields } from '@/lib/contentfulClient';
 import styles from '@/styles/Detail.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import {
@@ -10,6 +9,7 @@ import Image from 'next/image';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 import { gql, GraphQLClient } from 'graphql-request';
+import { Receipe } from 'types/receipe';
 
 const ENDPOINT = `http://localhost:3000/api/receipes`;
 
@@ -54,7 +54,7 @@ export async function getStaticPaths() {
   const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
   const receipes = await client.request(QUERY_RECEIPES);
-  const paths = receipes.Receipes.map((receipe: ReceipeFields) => ({
+  const paths = receipes.Receipes.map((receipe: Receipe) => ({
     params: { slug: receipe.slug },
   }));
 

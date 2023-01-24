@@ -6,9 +6,8 @@ import { Data } from 'types/model';
 
 let db: Low<Data>;
 
-function initDb() {
+function initDb(): void {
   if (!db) {
-    // File path
     const __dirname = dirname(fileURLToPath(import.meta.url));
     const file = join(__dirname, `db.json`);
 
@@ -35,17 +34,5 @@ function initDb() {
     db.data = data;
   }
 }
-
-// async function readData(query) {
-//   // Read data from JSON file, this will set db.data content
-//   await db.read();
-// }
-
-// async function writeData(content) {
-//   const { posts } = db.data;
-//   posts.push(content);
-
-//   await db.write();
-// }
 
 export { initDb, db };

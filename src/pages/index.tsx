@@ -5,13 +5,36 @@ import {
   ShoppingCartIcon,
   XMarkIcon,
   ArrowUpOnSquareIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
-import { ReceipeFields } from '@/lib/contentfulClient';
 import { gql, GraphQLClient } from 'graphql-request';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { Ingredient, Receipe } from 'types/receipe';
 
 const ENDPOINT = `http://localhost:3000/api/receipes`;
+
+const QUERY_DELETE_RECEIPE = gql`
+  mutation deleteReceipe($id: Int!) {
+    deleteReceipe(id: $id) {
+      id
+      categories
+      name
+      slug
+      ingredients {
+        name
+        amount
+        unit
+      }
+      images {
+        name
+        width
+        height
+      }
+    }
+  }
+`;
 
 const QUERY_RECEIPES = gql`
   query getReceipes {
@@ -38,10 +61,11 @@ export async function getStaticProps() {
   const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
   const receipes = await client.request(QUERY_RECEIPES);
-  console.log(receipes);
-  const categories = receipes.Receipes.map((receipe) => {
+  let categories = receipes.Receipes.map((receipe) => {
     return receipe.categories;
   });
+  categories = [...new Set(categories.flat())];
+
   return {
     props: {
       posts: receipes.Receipes,
@@ -54,36 +78,23 @@ export default function Home({ posts, categories }) {
   const [mounted, setMounted] = useState(false);
   const ingredientsRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(null);
-  const [previewImageID, setPreviewImageID] = useState(null);
   const [selectedReceipes, setSelectedReceipes] = useState([]);
   const [buyList, setBuyList] = useState([]);
-  const postdata = posts;
+  const [postdata, setPostdata] = useState(posts);
   const categorydata = categories;
   const [filteredPosts, setFilteredPosts] = useState(postdata);
   const [isNativeShare, setNativeShare] = useState(false);
+
+  const { user, error, isLoading } = useUser();
 
   useEffect(() => {
     if (navigator.share) {
       setNativeShare(true);
     }
+    setMounted(true);
   }, []);
 
-  function handleReceipeHover(id) {
-    if (previewImageID === id) {
-      return;
-    }
-    setPreviewImageID(id);
-
-    if (!id) {
-      setPreviewImage(null);
-      return;
-    }
-
-    const previewImageObject = postdata.find((receipe) => receipe.id === id);
-    setPreviewImage(previewImageObject);
-  }
-
-  function mergeArrays(ingredientArrays) {
+  function mergeArrays(ingredientArrays: Ingredient[][]): Ingredient[] {
     let finalList = [];
 
     if (ingredientArrays.length > 0) {
@@ -96,14 +107,14 @@ export default function Home({ posts, categories }) {
     return finalList;
   }
 
-  function isInSelectedReceipes(receipe) {
+  function isInSelectedReceipes(receipe: Receipe): boolean {
     const isInSelectedReceipes = selectedReceipes.find(
       (selectedReceipe) => selectedReceipe.id === receipe.id,
     );
     return new Boolean(isInSelectedReceipes).valueOf();
   }
 
-  function addToList(receipe) {
+  function addToList(receipe: Receipe): void {
     if (isInSelectedReceipes(receipe)) {
       setSelectedReceipes(
         selectedReceipes.filter(
@@ -131,13 +142,34 @@ export default function Home({ posts, categories }) {
     setBuyList(res);
   }, [selectedReceipes]);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  function optionsChangeHandler(event: ChangeEvent<HTMLSelectElement>): void {
+    if (event.currentTarget) {
+      let f = postdata;
+      if (event.currentTarget.value !== ``) {
+        f = postdata.filter((post) => {
+          return post.categories.includes(event.currentTarget.value);
+        });
+      }
+
+      setFilteredPosts(f);
+    }
+  }
+
+  async function deleteReceipe(id: number): Promise<void> {
+    const client = new GraphQLClient(ENDPOINT, { headers: {} });
+
+    const receipes = await client.request(QUERY_DELETE_RECEIPE, { id });
+    if (receipes) {
+      setPostdata(receipes.deleteReceipe);
+    }
+  }
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
 
   const postRefs = {};
 
-  const postListItems = postdata.map((post: ReceipeFields) => {
+  const postListItems = postdata.map((post: Receipe) => {
     const isFiltered = filteredPosts
       .map((filteredPost) => filteredPost.id)
       .includes(post.id);
@@ -146,22 +178,34 @@ export default function Home({ posts, categories }) {
       <div key={post.id}>
         <Desktop>
           <div
-            onMouseEnter={() => handleReceipeHover(post.id)}
-            onMouseLeave={() => handleReceipeHover(null)}
-            onBlur={() => handleReceipeHover(null)}
+            onMouseEnter={() => post.images.length > 0 && setPreviewImage(post)}
+            onMouseLeave={() => setPreviewImage(null)}
+            onBlur={() => setPreviewImage(null)}
             ref={postRefs[post.id]}
             className={
               isFiltered ? `is-flex is-size-5` : `is-flex is-size-5 opacity-40`
             }
           >
             <Link
-              onFocus={() => handleReceipeHover(post.id)}
-              onBlur={() => handleReceipeHover(null)}
+              onFocus={() => post.images.length > 0 && setPreviewImage(post)}
+              onBlur={() => setPreviewImage(null)}
               className="has-text-primary is-flex-basis-100"
               href={`/rezept/${post.slug}`}
             >
               {post.name}
             </Link>
+            {user && (
+              <button
+                title="Rezept löschen"
+                type="button"
+                className="button is-white is-small"
+                onClick={() => deleteReceipe(post.id)}
+              >
+                <span className="icon is-medium">
+                  <TrashIcon />
+                </span>
+              </button>
+            )}
             <button
               type="button"
               className="button is-white is-small"
@@ -190,6 +234,16 @@ export default function Home({ posts, categories }) {
             >
               {post.name}
             </Link>
+            {user && (
+              <button
+                title="Rezept löschen"
+                type="button"
+                className="button is-white is-small"
+                onClick={() => deleteReceipe(post.id)}
+              >
+                <TrashIcon />
+              </button>
+            )}
             <button
               title="zur Einkaufsliste hinzufügen"
               type="button"
@@ -209,19 +263,6 @@ export default function Home({ posts, categories }) {
       </div>
     );
   });
-
-  function optionsChangeHandler(event: ChangeEvent<HTMLSelectElement>): void {
-    if (event.currentTarget) {
-      let f = postdata;
-      if (event.currentTarget.value !== ``) {
-        f = postdata.filter((post) => {
-          return post.categories.includes(event.currentTarget.value);
-        });
-      }
-
-      setFilteredPosts(f);
-    }
-  }
 
   return (
     <section className="section pt-5">
@@ -274,7 +315,7 @@ export default function Home({ posts, categories }) {
             </div>
             <Desktop>
               <div className="column">
-                {previewImage && (
+                {previewImage?.images.length > 0 && (
                   <div>
                     <Link href={`/rezept/${previewImage?.slug}`}>
                       <Image

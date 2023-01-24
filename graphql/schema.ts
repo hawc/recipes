@@ -38,6 +38,7 @@ const typeDefinitions = gql`
 
   type Mutation {
     addIngredient(name: String!): [Ingredient]!
+    deleteReceipe(id: Int!): [Receipe]!
     addReceipe(
       name: String!
       categories: [String]!
@@ -50,7 +51,7 @@ const typeDefinitions = gql`
   }
 
   type Receipe {
-    id: ID!
+    id: Int!
     name: String!
     slug: String!
     categories: [String]!
@@ -62,7 +63,7 @@ const typeDefinitions = gql`
   }
 
   type ReceipeIngredient {
-    id: ID!
+    id: Int!
     ingredient: Ingredient!
     amount: Int!
     unit: Unit!
@@ -70,7 +71,7 @@ const typeDefinitions = gql`
   }
 
   type Unit {
-    id: ID!
+    id: Int!
     name: String!
   }
 `;

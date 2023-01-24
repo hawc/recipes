@@ -23,20 +23,23 @@ interface ReceipeIngredient {
 }
 
 interface Image {
-  id: number;
   name: string;
-  src: string;
+  type: string;
+  width: string;
+  height: string;
+  src?: string;
 }
 
 interface Receipe {
-  id: string;
+  id: number;
+  deleted: boolean;
   name: string;
   slug: string;
-  categories: number[];
-  ingredients: number[];
+  categories: string[];
+  ingredients: Ingredient[];
   servings: number;
   description: string;
-  images: number[];
+  images: Image[];
   source: string;
 }
 

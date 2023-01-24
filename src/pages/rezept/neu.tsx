@@ -35,6 +35,14 @@ const QUERY = gql`
 `;
 
 const UNITS = [`Stück`, `ml`, `l`, `g`, `kg`, `TL`, `EL`, `Prise(n)`];
+const REQUIRED_FIELDS = [
+  `name`,
+  `servings`,
+  `description`,
+  `source`,
+  `ingredients`,
+  `categories`,
+];
 
 export default function NewReceipt() {
   const form = useRef(null);
@@ -65,20 +73,22 @@ export default function NewReceipt() {
 
     setSubmitData(submitFormData);
 
-    const everythingFilled =
-      Object.values(submitFormData)
-        .map((entry: number | string | Array<any>) =>
-          typeof entry === `number` ? entry : entry.length,
-        )
-        .find((entry) => entry === 0) !== 0;
-    setSubmitDisabled(!everythingFilled);
+    const isValid = REQUIRED_FIELDS.every((fieldName) => {
+      const field = submitFormData[fieldName];
+      const valid = typeof field === `number` ? field : field.length;
+      if (!valid) {
+        return false;
+      }
+      return true;
+    });
+
+    setSubmitDisabled(!isValid);
   }, [categories, ingredientList, images, name, description, source]);
 
   const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
   function handleSubmit() {
     client.request(QUERY, submitData).then((receipeList) => {
-      console.log(receipeList);
       setName(``);
       setDescription(``);
       setSource(``);
@@ -215,7 +225,7 @@ export default function NewReceipt() {
               <button
                 type="button"
                 onClick={() => removeCategory(category)}
-                className="button is-white ml-1 py-0 px-3 mr-3 is-height-4 is-va-baseline"
+                className="button is-white ml-1 py-0 px-3 mr-3 is-height-5 is-va-baseline"
               >
                 <span className="icon is-medium">
                   <XMarkIcon />
@@ -516,120 +526,6 @@ export default function NewReceipt() {
           </p>
         )}
       </form>
-    </section>
-  );
-
-  return (
-    <section className="section pt-5">
-      <div className="container is-max-desktop">
-        <h2 className="title is-2 is-size-3-mobile mb-1 mt-2">Neues Rezept</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <label className="label">Name</label>
-            <div className="control">
-              <input
-                className="input"
-                name="name"
-                type="text"
-                placeholder="Rezeptname"
-                ref={nameInput}
-                onChange={updateSlugFromName}
-              />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">URL-Titel</label>
-            <div className="control">
-              <input
-                className="input"
-                name="slug"
-                type="text"
-                placeholder="URL-Titel"
-                value={slug}
-                onChange={updateSlugDirectly}
-              />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Portionen</label>
-            <div className="control">
-              <input
-                className="input"
-                name="servings"
-                type="number"
-                placeholder="Portionen"
-              />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Kategorie(n)</label>
-            <div className="control">
-              <div className="select is-multiple">
-                <select name="categories" multiple>
-                  <option>Select dropdown</option>
-                  <option>With options</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Zutat(en)</label>
-            <div className="control">
-              <div className="select is-multiple">
-                <select name="ingredients" multiple>
-                  <option>Select dropdown</option>
-                  <option>With options</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Beschreibung</label>
-            <div className="control">
-              <textarea
-                name="description"
-                className="textarea"
-                placeholder="Beschreibung"
-              ></textarea>
-            </div>
-          </div>
-          <div className="field">
-            <div className="file has-name is-boxed">
-              <label className="file-label">
-                <input
-                  className="file-input"
-                  type="file"
-                  name="images"
-                  multiple
-                />
-                <span className="file-cta">
-                  <span className="file-icon">
-                    <i className="fas fa-upload"></i>
-                  </span>
-                  <span className="file-label">Foto auswählen…</span>
-                </span>
-                <span className="file-name">
-                  Screen Shot 2017-07-29 at 15.54.25.png
-                </span>
-              </label>
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Quelle</label>
-            <div className="control">
-              <input
-                className="input"
-                name="source"
-                type="text"
-                placeholder="Quelle (URL)"
-              />
-            </div>
-          </div>
-          <button className="button is-primary" type="submit">
-            Rezept speichern
-          </button>
-        </form>
-      </div>
     </section>
   );
 }

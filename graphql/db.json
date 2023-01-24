@@ -1,7 +1,8 @@
 {
   "receipes": [
     {
-      "id": 1,
+      "id": 0,
+      "deleted": false,
       "name": "Auberginen-Kokos-Curry",
       "slug": "auberginen-kokos-curry",
       "categories": [
