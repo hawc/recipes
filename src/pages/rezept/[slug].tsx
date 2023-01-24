@@ -11,7 +11,7 @@ import { IngredientList } from '@/components/IngredientList';
 import { gql, GraphQLClient } from 'graphql-request';
 import { Receipe } from 'types/receipe';
 
-const ENDPOINT = `http://localhost:3000/api/receipes`;
+const ENDPOINT = `http://localhost:4005/api/receipes`;
 
 const QUERY_RECEIPES = gql`
   query getReceipes {

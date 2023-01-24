@@ -26,14 +26,14 @@ AUTH0_CLIENT_SECRET='X'
 Die Anwendung lässt sich mit NPM starten:
 
 ```
-# run dev environment on localhost:3000
-npm run dev
+# run dev environment on localhost:4005
+npm run dev -- -p 4005
 
 # build live application
 npm run build
 
 # start live application
-npm run start
+npm run start -- -p 4005
 
 # export as static website
 npm run export

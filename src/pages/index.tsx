@@ -13,7 +13,7 @@ import { gql, GraphQLClient } from 'graphql-request';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Ingredient, Receipe } from 'types/receipe';
 
-const ENDPOINT = `http://localhost:3000/api/receipes`;
+const ENDPOINT = `http://localhost:4005/api/receipes`;
 
 const QUERY_DELETE_RECEIPE = gql`
   mutation deleteReceipe($id: Int!) {
