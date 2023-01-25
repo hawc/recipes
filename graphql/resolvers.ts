@@ -47,10 +47,13 @@ function writeFileToDisc(image: UploadImage): void {
 const resolvers = {
   Query: {
     info: () => `Die Kochbuch-API`,
-    Receipes: () => {
+    Receipes: async () => {
+      await db.read();
       return getAllUndeletedReceipes();
     },
-    Receipe: (_parent: unknown, args: { slug: string }) => {
+    Receipe: async (_parent: unknown, args: { slug: string }) => {
+      await db.read();
+
       const receipes = db.data.receipes.filter(
         (receipe) => receipe.slug.toLowerCase() === args.slug.toLowerCase(),
       );

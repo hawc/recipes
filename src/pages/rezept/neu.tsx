@@ -85,10 +85,9 @@ export default function NewReceipt() {
     setSubmitDisabled(!isValid);
   }, [categories, ingredientList, images, name, description, source]);
 
-  const client = new GraphQLClient(ENDPOINT, { headers: {} });
-
   function handleSubmit() {
-    client.request(QUERY, submitData).then((receipeList) => {
+    const client = new GraphQLClient(ENDPOINT, { headers: {} });
+    client.request(QUERY, submitData).then(() => {
       setName(``);
       setDescription(``);
       setSource(``);

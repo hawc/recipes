@@ -10,6 +10,7 @@ import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 import { gql, GraphQLClient } from 'graphql-request';
 import { Receipe } from 'types/receipe';
+import { getStaticData } from 'graphql/build';
 
 const ENDPOINT = `http://localhost:4005/api/receipes`;
 
@@ -22,53 +23,27 @@ const QUERY_RECEIPES = gql`
   }
 `;
 
-const QUERY_RECEIPE = gql`
-  query getReceipe($slug: String!) {
-    Receipe(slug: $slug) {
-      name
-      slug
-      categories
-      ingredients {
-        name
-        amount
-        unit
-      }
-      servings
-      description
-      images {
-        name
-        width
-        height
-      }
-      source
-    }
-  }
-`;
 export async function getStaticPaths() {
-  if (process.env.SKIP_BUILD_STATIC_GENERATION) {
-    return {
-      paths: [],
-      fallback: `blocking`,
-    };
+  let paths = [];
+  try {
+    const client = new GraphQLClient(ENDPOINT, { headers: {} });
+    const receipes = await client.request(QUERY_RECEIPES);
+    paths = receipes.Receipes.map((receipe: Receipe) => ({
+      params: { slug: receipe.slug },
+    }));
+  } catch (error) {
+    console.log(error);
   }
-  const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
-  const receipes = await client.request(QUERY_RECEIPES);
-  const paths = receipes.Receipes.map((receipe: Receipe) => ({
-    params: { slug: receipe.slug },
-  }));
-
-  return { paths, fallback: false };
+  return { paths, fallback: `blocking` };
 }
 
 export async function getStaticProps({ params }) {
-  const client = new GraphQLClient(ENDPOINT, { headers: {} });
-
-  const receipe = await client.request(QUERY_RECEIPE, { slug: params.slug });
-
+  // can't use graphql here, because API doesn't exist when getStaticProps runs
+  const receipe = await getStaticData(`receipe`, { slug: params.slug });
   return {
     props: {
-      post: receipe.Receipe,
+      post: receipe,
     },
   };
 }

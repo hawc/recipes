@@ -12,6 +12,7 @@ import { IngredientList } from '@/components/IngredientList';
 import { gql, GraphQLClient } from 'graphql-request';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Ingredient, Receipe } from 'types/receipe';
+import { getStaticData } from 'graphql/build';
 
 const ENDPOINT = `http://localhost:4005/api/receipes`;
 
@@ -36,41 +37,19 @@ const QUERY_DELETE_RECEIPE = gql`
   }
 `;
 
-const QUERY_RECEIPES = gql`
-  query getReceipes {
-    Receipes {
-      id
-      categories
-      name
-      slug
-      ingredients {
-        name
-        amount
-        unit
-      }
-      images {
-        name
-        width
-        height
-      }
-    }
-  }
-`;
-
 export async function getStaticProps() {
-  const client = new GraphQLClient(ENDPOINT, { headers: {} });
-
-  const receipes = await client.request(QUERY_RECEIPES);
-  let categories = receipes.Receipes.map((receipe) => {
+  // can't use graphql here, because API doesn't exist when getStaticProps runs
+  const receipes = await getStaticData(`receipes`);
+  const categories = (receipes as Receipe[]).map((receipe) => {
     return receipe.categories;
   });
-  categories = [...new Set(categories.flat())];
 
   return {
     props: {
-      posts: receipes.Receipes,
+      posts: receipes,
       categories,
     },
+    revalidate: 10,
   };
 }
 
