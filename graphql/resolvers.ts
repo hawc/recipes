@@ -159,15 +159,13 @@ const resolvers = {
           servings: args.servings,
           description: args.description,
           images: args.images.map((image) => {
-            if (image.src) {
-              return {
-                name: image.name,
-                width: image.width,
-                height: image.height,
-                type: image.type,
-                size: image.size,
-              };
-            }
+            return {
+              name: image.name,
+              width: image.width,
+              height: image.height,
+              type: image.type,
+              size: image.size,
+            };
           }),
           source: args.source,
         };
