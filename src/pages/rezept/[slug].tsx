@@ -12,7 +12,7 @@ import { gql, GraphQLClient } from 'graphql-request';
 import { Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
 
-const ENDPOINT = `http://localhost:4005/api/receipes`;
+const ENDPOINT = `/api/receipes`;
 
 const QUERY_RECEIPES = gql`
   query getReceipes {

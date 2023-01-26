@@ -27,13 +27,13 @@ Die Anwendung lässt sich mit NPM starten:
 
 ```
 # run dev environment on localhost:4005
-npm run dev -- -p 4005
+npm run dev
 
 # build live application
 npm run build
 
 # start live application
-npm run start -- -p 4005
+npm run start
 
 # export as static website
 npm run export
