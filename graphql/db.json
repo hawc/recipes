@@ -142,7 +142,7 @@
     },
     {
       "id": 4,
-      "deleted": false,
+      "deleted": true,
       "name": "ww",
       "slug": "ww",
       "categories": [
@@ -159,6 +159,26 @@
       "description": "ww",
       "images": [],
       "source": "ww"
+    },
+    {
+      "id": 5,
+      "deleted": true,
+      "name": "123",
+      "slug": "123",
+      "categories": [
+        "123"
+      ],
+      "ingredients": [
+        {
+          "name": "asd",
+          "amount": 123,
+          "unit": "g"
+        }
+      ],
+      "servings": 2,
+      "description": "test",
+      "images": [],
+      "source": "test"
     }
   ]
 }
