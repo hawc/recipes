@@ -202,7 +202,7 @@
     },
     {
       "id": 7,
-      "deleted": false,
+      "deleted": true,
       "name": "qqq",
       "slug": "qqq",
       "categories": [
