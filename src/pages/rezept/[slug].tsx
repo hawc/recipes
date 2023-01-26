@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from '@/styles/Detail.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import {
@@ -79,7 +80,7 @@ export default function Receipt({ post }) {
         {mounted && postdata.images?.length > 0 && (
           <Mobile>
             <div className="block px-0 pb-2">
-              <Image
+              <img
                 className="box p-0"
                 src={`/uploads/${postdata.images[0].name}`}
                 alt="Rezeptbild"
@@ -173,7 +174,7 @@ export default function Receipt({ post }) {
                 {mounted && postdata.images?.length > 0 && (
                   <Desktop>
                     <div className="column pl-5 is-relative">
-                      <Image
+                      <img
                         className="box p-0 t-5 is-sticky"
                         src={`/uploads/${postdata.images[0].name}`}
                         alt="Rezeptbild"

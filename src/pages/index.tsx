@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
 import Image from 'next/image';
@@ -300,13 +301,13 @@ export default function Home({ posts, categories }) {
                 {previewImage?.images.length > 0 && (
                   <div>
                     <Link href={`/rezept/${previewImage?.slug}`}>
-                      <Image
+                      <img
                         src={`/uploads/${previewImage?.images[0].name}`}
                         className="box p-0"
                         alt="Rezeptvorschau"
                         width={previewImage?.images[0].width}
                         height={previewImage?.images[0].height}
-                      ></Image>
+                      />
                     </Link>
                   </div>
                 )}
