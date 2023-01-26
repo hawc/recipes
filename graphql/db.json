@@ -3,8 +3,8 @@
     {
       "id": 0,
       "deleted": false,
-      "name": "Auberginen-Kokos-Curry",
-      "slug": "auberginen-kokos-curry",
+      "name": "Auberginen-Kokos-Cur ry",
+      "slug": "auberginen-kokos-cur-ry",
       "categories": [
         "Vegetarisch",
         "Asiatisch",
@@ -70,13 +70,7 @@
       "servings": 4,
       "description": "Die Aubergine(n) in Scheiben schneiden, auf einem Backblech verteilen und Öl und Salz dazugeben. Bei 200°C backen, bis die Auberginenscheiben braun werden. Den Reis nach Verpackungsanweisung kochen.\n\nWährenddessen die Zwiebel(n) und den Knoblauch würfeln und mit etwas Öl und der Currypaste in einer großen Pfanne andünsten. Die Auberginenscheiben aus dem Ofen nehmen und dazugeben. Die Tomaten ebenfalls in die Pfanne geben und gut verrühren, kochen bis die Masse eine dickflüssige Konsistenz hat. Anschließend die Kokosmilch unterrühren und heiß werden lassen.\n\nDas Curry mit dem Reis und Joghurt servieren und mit den Korianderblättern garnieren.",
       "images": [
-        {
-          "name": "auberginen_curry_94474.jpeg",
-          "width": 1500,
-          "height": 1130,
-          "type": "image/jpeg",
-          "size": 451978
-        }
+        null
       ],
       "source": "https://www.eatbetter.de/rezepte/auberginen-curry-saftig-einfach-schnell"
     }
