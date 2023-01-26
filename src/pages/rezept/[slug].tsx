@@ -12,7 +12,10 @@ import { gql, GraphQLClient } from 'graphql-request';
 import { Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
 
-const ENDPOINT = `/api/receipes`;
+const ENDPOINT =
+  process.env.NODE_ENV === `production`
+    ? `https://receipes.hawc.de/api/receipes`
+    : `http://localhost:3000/api/receipes`;
 
 const QUERY_RECEIPES = gql`
   query getReceipes {
@@ -78,7 +81,7 @@ export default function Receipt({ post }) {
             <div className="block px-0 pb-2">
               <Image
                 className="box p-0"
-                src={`https:${postdata.images[0].name}`}
+                src={`/uploads/${postdata.images[0].name}`}
                 alt="Rezeptbild"
                 width={postdata.images[0].width}
                 height={postdata.images[0].height}

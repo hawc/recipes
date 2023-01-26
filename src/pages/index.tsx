@@ -14,7 +14,10 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { Ingredient, Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
 
-const ENDPOINT = `/api/receipes`;
+const ENDPOINT =
+  process.env.NODE_ENV === `production`
+    ? `https://receipes.hawc.de/api/receipes`
+    : `http://localhost:3000/api/receipes`;
 
 const QUERY_DELETE_RECEIPE = gql`
   mutation deleteReceipe($id: Int!) {

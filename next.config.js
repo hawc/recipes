@@ -3,15 +3,15 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
+    domains: ['localhost', 'receipes.hawc.de'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.ctfassets.net',
+        hostname: 'receipes.hawc.de',
         port: '',
         pathname: '/**',
       },
     ],
-    unoptimized: true,
   },
 };
 

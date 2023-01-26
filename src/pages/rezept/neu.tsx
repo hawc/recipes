@@ -6,7 +6,10 @@ import { PlusIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 
-const ENDPOINT = `/api/receipes`;
+const ENDPOINT =
+  process.env.NODE_ENV === `production`
+    ? `https://receipes.hawc.de/api/receipes`
+    : `http://localhost:3000/api/receipes`;
 
 const QUERY = gql`
   mutation addReceipe(
