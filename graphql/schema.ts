@@ -40,7 +40,6 @@ const typeDefinitions = gql`
     addIngredient(name: String!): [Ingredient]!
     deleteReceipe(id: Int!): [Receipe]!
     addReceipe(
-      slug: String!
       name: String!
       categories: [String]!
       ingredients: [IngredientInput]!
