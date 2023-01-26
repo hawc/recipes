@@ -16,7 +16,7 @@ import { getStaticData } from 'graphql/build';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
-    ? `https://receipes.hawc.de/api/receipes`
+    ? `https://kochen.hawc.de/api/receipes`
     : `http://localhost:3000/api/receipes`;
 
 const QUERY_DELETE_RECEIPE = gql`
