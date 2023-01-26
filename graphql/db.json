@@ -82,7 +82,7 @@
     },
     {
       "id": 1,
-      "deleted": false,
+      "deleted": true,
       "name": "jjj",
       "slug": "jjj",
       "categories": [
