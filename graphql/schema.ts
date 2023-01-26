@@ -21,7 +21,7 @@ const typeDefinitions = gql`
 
   input ImageInput {
     name: String!
-    src: String!
+    src: String
     type: String!
     size: Int!
     width: Int!
@@ -40,6 +40,17 @@ const typeDefinitions = gql`
     addIngredient(name: String!): [Ingredient]!
     deleteReceipe(id: Int!): [Receipe]!
     addReceipe(
+      slug: String!
+      name: String!
+      categories: [String]!
+      ingredients: [IngredientInput]!
+      servings: Int!
+      description: String!
+      images: [ImageInput]!
+      source: String!
+    ): [Receipe]!
+    editReceipe(
+      slug: String!
       name: String!
       categories: [String]!
       ingredients: [IngredientInput]!

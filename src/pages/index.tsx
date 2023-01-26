@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
-import Image from 'next/image';
 import {
   ShoppingCartIcon,
   XMarkIcon,
   ArrowUpOnSquareIcon,
   TrashIcon,
+  PencilIcon,
 } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
@@ -178,16 +178,26 @@ export default function Home({ posts, categories }) {
               {post.name}
             </Link>
             {user && (
-              <button
-                title="Rezept löschen"
-                type="button"
-                className="button is-white is-small"
-                onClick={() => deleteReceipe(post.id)}
-              >
-                <span className="icon is-medium">
-                  <TrashIcon />
-                </span>
-              </button>
+              <>
+                <Link
+                  className="button is-white is-small"
+                  href={`/rezept/bearbeiten/${post.slug}`}
+                >
+                  <span className="icon is-medium">
+                    <PencilIcon />
+                  </span>
+                </Link>
+                <button
+                  title="Rezept löschen"
+                  type="button"
+                  className="button is-white is-small"
+                  onClick={() => deleteReceipe(post.id)}
+                >
+                  <span className="icon is-medium">
+                    <TrashIcon />
+                  </span>
+                </button>
+              </>
             )}
             <button
               type="button"

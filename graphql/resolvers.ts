@@ -126,6 +126,59 @@ const resolvers = {
 
       return db.data.receipes;
     },
+    editReceipe: async (
+      _parent: unknown,
+      args: UploadReceipe,
+    ): Promise<Receipe[]> => {
+      await db.read();
+      for (const image of args.images) {
+        const fileExists = existsSync(`public/uploads/${image.name}`);
+        if (!fileExists && image.src) {
+          writeFileToDisc(image);
+        }
+      }
+
+      const editedReceipe = db.data.receipes.find(
+        (receipe) => receipe.slug === args.slug,
+      );
+
+      if (editedReceipe) {
+        const slug = slugify(args.name, {
+          replacement: `-`,
+          strict: true,
+          locale: `de`,
+        }).toLocaleLowerCase(`de`);
+
+        const receipe: Receipe = {
+          id: editedReceipe.id,
+          deleted: false,
+          name: args.name,
+          slug: slug,
+          categories: args.categories,
+          ingredients: args.ingredients,
+          servings: args.servings,
+          description: args.description,
+          images: args.images.map((image) => {
+            if (image.src) {
+              return {
+                name: image.name,
+                width: image.width,
+                height: image.height,
+                type: image.type,
+                size: image.size,
+              };
+            }
+          }),
+          source: args.source,
+        };
+
+        db.data.receipes[db.data.receipes.indexOf(editedReceipe)] = receipe;
+
+        db.write();
+      }
+
+      return db.data.receipes;
+    },
   },
 };
 
