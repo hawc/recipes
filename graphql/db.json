@@ -110,7 +110,7 @@
     },
     {
       "id": 2,
-      "deleted": false,
+      "deleted": true,
       "name": "hkkh",
       "slug": "hkkh",
       "categories": [
