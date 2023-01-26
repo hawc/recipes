@@ -182,7 +182,7 @@
     },
     {
       "id": 6,
-      "deleted": false,
+      "deleted": true,
       "name": "test",
       "slug": "test",
       "categories": [
