@@ -179,6 +179,26 @@
       "description": "test",
       "images": [],
       "source": "test"
+    },
+    {
+      "id": 6,
+      "deleted": false,
+      "name": "test",
+      "slug": "test",
+      "categories": [
+        "test"
+      ],
+      "ingredients": [
+        {
+          "name": "test",
+          "amount": 1,
+          "unit": "ml"
+        }
+      ],
+      "servings": 2,
+      "description": "test",
+      "images": [],
+      "source": "test"
     }
   ]
 }
