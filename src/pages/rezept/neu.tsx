@@ -8,7 +8,7 @@ import { IngredientList } from '@/components/IngredientList';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
-    ? `https://receipes.hawc.de/api/receipes`
+    ? `http://localhost:4005/api/receipes`
     : `http://localhost:3000/api/receipes`;
 
 const QUERY = gql`
