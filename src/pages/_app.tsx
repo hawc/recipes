@@ -5,8 +5,16 @@ import Head from 'next/head';
 import styles from '@/styles/App.module.scss';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import Profile from '@/components/profile';
+import { Desktop, Mobile } from '@/components/responsive';
+import { useEffect, useState } from 'react';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <UserProvider>
       <div className={styles.container}>
@@ -37,9 +45,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 </svg>
               </Link>
             </h1>
-            <div className="is-flex is-flex-direction-row">
-              <Profile />
-            </div>
+            {mounted && (
+              <>
+                <Desktop>
+                  <div className="is-flex is-flex-direction-row">
+                    <Profile />
+                  </div>
+                </Desktop>
+                <Mobile>
+                  <div className="is-flex is-flex-direction-column has-text-right">
+                    <Profile />
+                  </div>
+                </Mobile>
+              </>
+            )}
           </div>
         </section>
         <hr className="my-0"></hr>

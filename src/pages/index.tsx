@@ -191,7 +191,9 @@ export default function Home({ posts, categories }) {
             onBlur={() => setPreviewImage(null)}
             ref={postRefs[post.id]}
             className={
-              isFiltered ? `is-flex is-size-5` : `is-flex is-size-5 opacity-40`
+              isFiltered
+                ? `is-flex is-font-size-1-2`
+                : `is-flex is-font-size-1-2 opacity-40`
             }
           >
             <Link
@@ -243,7 +245,9 @@ export default function Home({ posts, categories }) {
           <div
             ref={postRefs[post.id]}
             className={
-              isFiltered ? `is-size-5 is-flex` : `is-size-5 is-flex opacity-40`
+              isFiltered
+                ? `is-font-size-1-2 is-flex`
+                : `is-font-size-1-2 is-flex opacity-40`
             }
           >
             <Link
@@ -253,14 +257,26 @@ export default function Home({ posts, categories }) {
               {post.name}
             </Link>
             {user && (
-              <button
-                title="Rezept löschen"
-                type="button"
-                className="button is-white is-small"
-                onClick={() => deleteReceipe(post.id)}
-              >
-                <TrashIcon />
-              </button>
+              <>
+                <Link
+                  className="button is-white is-small"
+                  href={`/rezept/bearbeiten/${post.slug}`}
+                >
+                  <span className="icon is-medium">
+                    <PencilIcon />
+                  </span>
+                </Link>
+                <button
+                  title="Rezept löschen"
+                  type="button"
+                  className="button is-white is-small"
+                  onClick={() => deleteReceipe(post.id)}
+                >
+                  <span className="icon is-medium">
+                    <TrashIcon />
+                  </span>
+                </button>
+              </>
             )}
             <button
               title="zur Einkaufsliste hinzufügen"

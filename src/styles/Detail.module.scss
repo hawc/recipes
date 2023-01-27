@@ -3,6 +3,7 @@
 .categories {
   display: flex;
   margin-bottom: 2rem;
+  overflow: auto;
 }
 .categories li {
   display: inline-block;
