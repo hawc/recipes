@@ -462,6 +462,11 @@
           "name": "Sesam-Öl",
           "amount": 1,
           "unit": "EL"
+        },
+        {
+          "name": "Erdnüsse ungesalzen ",
+          "amount": 50,
+          "unit": "g"
         }
       ],
       "servings": 2,
