@@ -385,6 +385,97 @@
         }
       ],
       "source": "https://www.chefkoch.de/rezepte/2801401432239694/Quiche-mit-Spinat-Feta-Tomaten-und-Pinienkernen.html"
+    },
+    {
+      "id": 4,
+      "deleted": false,
+      "name": "Miso-Ramen",
+      "slug": "miso-ramen",
+      "categories": [
+        "Japanisch",
+        "Asiatisch",
+        "Hauptgericht",
+        "Vegetarisch"
+      ],
+      "ingredients": [
+        {
+          "name": "Gemüsebrühe",
+          "amount": 500,
+          "unit": "ml"
+        },
+        {
+          "name": "Wasser",
+          "amount": 300,
+          "unit": "ml"
+        },
+        {
+          "name": "Ei(er)",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "Enoki-Pilze",
+          "amount": 100,
+          "unit": "g"
+        },
+        {
+          "name": "Shimeji-Pilze",
+          "amount": 100,
+          "unit": "g"
+        },
+        {
+          "name": "Ramen-Nudeln",
+          "amount": 400,
+          "unit": "g"
+        },
+        {
+          "name": "Helle Misopaste",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Hafermilch",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Frühlingszwiebeln",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "veganes Hack",
+          "amount": 300,
+          "unit": "g"
+        },
+        {
+          "name": "Sesam",
+          "amount": 2,
+          "unit": "TL"
+        },
+        {
+          "name": "Chili-Öl",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Sesam-Öl",
+          "amount": 1,
+          "unit": "EL"
+        }
+      ],
+      "servings": 2,
+      "description": "Gemüsebrühe und Wasser vermischen. Brühe aufkochen. In einem zweiten, kleinen Topf etwa 2 Liter Wasser zum Kochen bringen. Die Eier direkt aus dem Kühlschrank in das kochende Wasser geben dort für 7 Minuten garen. So werden sie perfekt gegart. Die Enoki- und Shimeji Pilze von der Wurzel befreien und in mundgerechte Portionen zerteilen. Pilze für etwa 2 Minuten in der heißen Brühe garen. Nachdem die Eier gegart sind die Nudeln nach Packungsanweisung in das kochende Wasser geben.\n\nDas Sesam-Öl in einer kleinen Pfanne erhitzen und das Hack darin knusprig anbraten.\n\nHelle Misopaste, Chili-Öl und Hafermilch in jeweils eine große Suppenschüssel geben. Mit etwas Brühe aufgießen und mit einem Schneebesen vermischen, dann die restliche Brühe gleichmäßig hinzugeben und auf die Schüsseln verteilen. Die gegarten Nudeln hinein legen, Pilze gleichmäßig aufteilen. Eier schälen, halbieren und ebenfalls zur Suppe geben. Das Hack und die Frühlingszwiebeln gleichmäßig auf beide Schüsseln aufteilen.\n\nDem Ramen mit Sesam und Chiliöl den letzten Schliff verpassen und sofort heiß servieren.",
+      "images": [
+        {
+          "name": "Spicy-Miso-Ramen-5.jpeg",
+          "width": 1080,
+          "height": 720,
+          "type": "image/jpeg",
+          "size": 113330
+        }
+      ],
+      "source": "https://heissehimbeeren.com/spicy-miso-ramen/"
     }
   ]
 }
