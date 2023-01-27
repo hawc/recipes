@@ -11,6 +11,7 @@ import { IngredientList } from '@/components/IngredientList';
 import { gql, GraphQLClient } from 'graphql-request';
 import { Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
+import useSWR from 'swr';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -25,6 +26,16 @@ const QUERY_RECEIPES = gql`
     }
   }
 `;
+
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  const data = await res.json();
+
+  if (res.status !== 200) {
+    throw new Error(data.message);
+  }
+  return data;
+};
 
 export async function getStaticPaths() {
   let paths = [];
@@ -53,10 +64,17 @@ export async function getStaticProps({ params }) {
 
 export default function Receipt({ post }) {
   const [mounted, setMounted] = useState(false);
+  const [image, setImage] = useState(``);
   const ingredientsRef = useRef(null);
   const postdata = post;
   const [servings, setServings] = useState(postdata.servings);
   const [isNativeShare, setNativeShare] = useState(false);
+
+  const { data } = useSWR(() => {
+    return postdata.images[0].name
+      ? `/api/image?name=${postdata.images[0].name}`
+      : null;
+  }, fetcher);
 
   useEffect(() => {
     if (navigator.share) {
@@ -64,6 +82,12 @@ export default function Receipt({ post }) {
     }
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setImage(data);
+    }
+  }, [data]);
 
   return (
     <section className="section pt-5">
@@ -76,12 +100,12 @@ export default function Receipt({ post }) {
             <li key={category}>{category}</li>
           ))}
         </ul>
-        {mounted && postdata.images?.length > 0 && (
+        {mounted && postdata.images?.length > 0 && image && (
           <Mobile>
             <div className="block px-0 pb-2">
               <img
                 className="box p-0"
-                src={`/uploads/${postdata.images[0].name}`}
+                src={`data:image/png;base64,${image}`}
                 alt="Rezeptbild"
                 width={postdata.images[0].width}
                 height={postdata.images[0].height}
@@ -170,12 +194,12 @@ export default function Receipt({ post }) {
                     ></IngredientList>
                   </div>
                 </div>
-                {mounted && postdata.images?.length > 0 && (
+                {mounted && postdata.images?.length > 0 && image && (
                   <Desktop>
                     <div className="column pl-5 is-relative">
                       <img
                         className="box p-0 t-5 is-sticky"
-                        src={`/uploads/${postdata.images[0].name}`}
+                        src={`data:image/png;base64,${image}`}
                         alt="Rezeptbild"
                         width={postdata.images[0].width}
                         height={postdata.images[0].height}

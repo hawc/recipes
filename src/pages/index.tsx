@@ -14,6 +14,7 @@ import { gql, GraphQLClient } from 'graphql-request';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Ingredient, Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
+import useSWR from 'swr';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -51,7 +52,7 @@ export async function getStaticProps() {
   return {
     props: {
       posts: receipes,
-      categories,
+      categories: Array.from(new Set(categories.flat())),
     },
     revalidate: 10,
   };
@@ -67,6 +68,7 @@ export default function Home({ posts, categories }) {
   const categorydata = categories;
   const [filteredPosts, setFilteredPosts] = useState(postdata);
   const [isNativeShare, setNativeShare] = useState(false);
+  const [image, setImage] = useState(``);
 
   const { user, error, isLoading } = useUser();
 
@@ -138,6 +140,28 @@ export default function Home({ posts, categories }) {
     }
   }
 
+  const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      throw new Error(data.message);
+    }
+    return data;
+  };
+
+  const { data } = useSWR(() => {
+    return previewImage.images[0].name
+      ? `/api/image?name=${previewImage.images[0].name}`
+      : null;
+  }, fetcher);
+
+  useEffect(() => {
+    if (data) {
+      setImage(data);
+    }
+  }, [data]);
+
   async function deleteReceipe(id: number): Promise<void> {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
@@ -157,6 +181,7 @@ export default function Home({ posts, categories }) {
       .map((filteredPost) => filteredPost.id)
       .includes(post.id);
     postRefs[post.id] = createRef();
+
     return (
       <div key={post.id}>
         <Desktop>
@@ -308,19 +333,19 @@ export default function Home({ posts, categories }) {
             </div>
             <Desktop>
               <div className="column">
-                {previewImage?.images.length > 0 && (
-                  <div>
+                <div>
+                  {previewImage?.images.length > 0 && image && (
                     <Link href={`/rezept/${previewImage?.slug}`}>
                       <img
-                        src={`/uploads/${previewImage?.images[0].name}`}
-                        className="box p-0"
+                        src={`data:image/png;base64,${image}`}
+                        className="box p-0 max-width-100"
                         alt="Rezeptvorschau"
                         width={previewImage?.images[0].width}
                         height={previewImage?.images[0].height}
                       />
                     </Link>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </Desktop>
           </div>

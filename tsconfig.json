@@ -20,6 +20,6 @@
       "@/public/*": ["./public/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.mts", "graphql/mutations.gql", "types"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.mts", "graphql/mutations.gql", "types", "src/pages/api/image.js"],
   "exclude": ["node_modules"]
 }

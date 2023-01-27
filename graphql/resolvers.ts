@@ -2,6 +2,7 @@ import { db } from './db';
 import { writeFileSync, existsSync } from 'fs';
 import slugify from 'slugify';
 import { Ingredient, Receipe } from 'types/receipe';
+import path from 'path';
 
 function generateId(type: string): number {
   return db.data[type].length;
@@ -32,6 +33,8 @@ function getAllUndeletedReceipes(): Receipe[] {
   return db.data.receipes.filter((receipe) => !receipe.deleted);
 }
 
+const imageDirectory = path.join(process.cwd(), `uploads`);
+
 function writeFileToDisc(image: UploadImage): void {
   const ext = image.src.substring(
     image.src.indexOf(`/`) + 1,
@@ -41,7 +44,7 @@ function writeFileToDisc(image: UploadImage): void {
   const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, `gi`);
   const base64Data = image.src.replace(regex, ``);
 
-  writeFileSync(`public/uploads/${image.name}`, base64Data, `base64`);
+  writeFileSync(`${imageDirectory}/${image.name}`, base64Data, `base64`);
 }
 
 const resolvers = {
@@ -88,7 +91,7 @@ const resolvers = {
     ): Promise<Receipe[]> => {
       await db.read();
       for (const image of args.images) {
-        const fileExists = existsSync(`public/uploads/${image.name}`);
+        const fileExists = existsSync(`${imageDirectory}/${image.name}`);
         if (!fileExists) {
           writeFileToDisc(image);
         }
@@ -132,7 +135,7 @@ const resolvers = {
     ): Promise<Receipe[]> => {
       await db.read();
       for (const image of args.images) {
-        const fileExists = existsSync(`public/uploads/${image.name}`);
+        const fileExists = existsSync(`${imageDirectory}/${image.name}`);
         if (!fileExists && image.src) {
           writeFileToDisc(image);
         }
