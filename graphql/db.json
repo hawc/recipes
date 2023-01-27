@@ -285,6 +285,106 @@
         }
       ],
       "source": "https://www.halfbakedharvest.com/honey-garlic-salmon-soba-noodle-bowls/"
+    },
+    {
+      "id": 3,
+      "deleted": false,
+      "name": "Quiche mit Spinat, Feta und Tomaten",
+      "slug": "quiche-mit-spinat-feta-und-tomaten",
+      "categories": [
+        "Vegetarisch",
+        "Mediterran",
+        "Hauptgericht"
+      ],
+      "ingredients": [
+        {
+          "name": "Mehl",
+          "amount": 200,
+          "unit": "g"
+        },
+        {
+          "name": "Butter",
+          "amount": 100,
+          "unit": "g"
+        },
+        {
+          "name": "Wasser",
+          "amount": 3,
+          "unit": "EL"
+        },
+        {
+          "name": "Salz",
+          "amount": 1,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Pfeffer",
+          "amount": 1,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Muskat",
+          "amount": 1,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Oliven-Öl",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Spinat (TK)",
+          "amount": 450,
+          "unit": "g"
+        },
+        {
+          "name": "Zwiebel(n)",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "Knoblauchzehe(n)",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "Pinienkerne",
+          "amount": 40,
+          "unit": "g"
+        },
+        {
+          "name": "Gouda (gerieben)",
+          "amount": 80,
+          "unit": "g"
+        },
+        {
+          "name": "Ei(er)",
+          "amount": 3,
+          "unit": "Stück"
+        },
+        {
+          "name": "Feta",
+          "amount": 200,
+          "unit": "g"
+        },
+        {
+          "name": "Cocktailtomaten",
+          "amount": 10,
+          "unit": "Stück"
+        }
+      ],
+      "servings": 4,
+      "description": "Mehl, Butter, Wasser und etwas Salz zu einem glatten Teig kneten und 30 Minuten in den Kühlschrank stellen. Alternativ kann auch fertiger Mürbe- oder Blätterteig aus dem Kühlregal genutzt werden.\n\nDen Backofen auf 180°C vorwärmen.\n\nIn der Zwischenzeit in einer Pfanne die Pinienkerne leicht anrösten und beiseite stellen. Danach die gewürfelte Zwiebel andünsten, den gehackten Spinat und Knoblauch hinzugeben und heiß werden lassen. Mit Salz, Pfeffer und Muskat abschmecken.\nDie Eier verquirlen, den Feta würfeln und mit dem geriebenen Käse und den Pinienkernen mischen. Ebenfalls mit Salz, Pfeffer und Muskat würzen.\n\nDen Teig ausrollen und in einer gefetteten Spring- oder Quicheform auslegen. Danach erst die Spinat-Masse gleichmäßig darin verteilen, anschließend die Eier-Feta-Masse darübergießen und glattstreichen. Zum Schluss die halbierten Cocktailtomaten mit der Schnittseite nach oben in die Masse drücken.\n\nIm Backofen auf der mittleren Schiene für 45 Minuten backen.",
+      "images": [
+        {
+          "name": "quiche-mit-spinat-feta-tomaten-und-pinienkernen.jpeg",
+          "width": 642,
+          "height": 428,
+          "type": "image/jpeg",
+          "size": 69402
+        }
+      ],
+      "source": "https://www.chefkoch.de/rezepte/2801401432239694/Quiche-mit-Spinat-Feta-Tomaten-und-Pinienkernen.html"
     }
   ]
 }
