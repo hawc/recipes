@@ -175,6 +175,116 @@
         }
       ],
       "source": "https://mariashriver.com/soba-noodle-salad-with-probiotic-peanut-miso-sauce/"
+    },
+    {
+      "id": 2,
+      "deleted": false,
+      "name": "Soba-Bowl mit Honig-Knoblauch-Lachs",
+      "slug": "soba-bowl-mit-honig-knoblauch-lachs",
+      "categories": [
+        "Asiatisch",
+        "Japanisch",
+        "Hauptgericht"
+      ],
+      "ingredients": [
+        {
+          "name": "Tamari-Sauce",
+          "amount": 8,
+          "unit": "EL"
+        },
+        {
+          "name": "Honig",
+          "amount": 4,
+          "unit": "EL"
+        },
+        {
+          "name": "Gochujang",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Ingwer",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Knoblauchzehe(n)",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "Lachsfilet(s)",
+          "amount": 4,
+          "unit": "Stück"
+        },
+        {
+          "name": "Oliven-Öl",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Brokkoli",
+          "amount": 300,
+          "unit": "g"
+        },
+        {
+          "name": "Salz",
+          "amount": 1,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Pfeffer",
+          "amount": 1,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Soba-Nudeln",
+          "amount": 260,
+          "unit": "g"
+        },
+        {
+          "name": "Tahini",
+          "amount": 4,
+          "unit": "EL"
+        },
+        {
+          "name": "Sesam-Öl",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Chili-Flocken",
+          "amount": 1,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Frühlingszwiebeln",
+          "amount": 4,
+          "unit": "Stück"
+        },
+        {
+          "name": "Sesam",
+          "amount": 4,
+          "unit": "TL"
+        },
+        {
+          "name": "eingelegter Ingwer",
+          "amount": 50,
+          "unit": "g"
+        }
+      ],
+      "servings": 4,
+      "description": "Backofen auf 200 °C vorheizen. In einer quadratischen Auflaufform die Hälfte der Tamari-Sauce, den Honig, Gochujang, Ingwer und Knoblauch verrühren. Den Lachs hinzufügen und ruhen lassen.\n\nAuf einem Backblech den geteilten Brokkoli, Oliven-Öl und je eine Prise Salz und Pfeffer vermischen. 20 Minuten backen, bis der Brokkoli braun wird.\n\nBringe in der Zwischenzeit einen Topf Wasser zum Kochen und schöpfe 1/4 Tasse heißes Wasser heraus und stelle es zur Seite. Die Nudeln nach Packungsanweisung kochen und anschließend abgießen.\n\nIn einem Messbecher Tamari, Tahini, Sesam-Öl, Chili, die Hälfte vom Ingwer und der 1/4 Tasse heißes Wasser verquirlen, bis alles gut vermischt ist. Die Nudeln anschließend unterheben.\n\nLege den Lachs in den Ofen und backe ihn 5-15 Minuten lang, bis er den gewünschten Gargrad erreicht hat. Danach das Gemüse herausnehmen und die Sauce in der Auflaufform mit dem Lachs über den Lachs löffeln. Schalte den Ofen dann auf \"Grill\" und backe den Lachs ein paar Minuten, bis er knusprig ist und die Sauce eindickt.\n\nDie Nudeln auf Schüsseln verteilen. Mit Lachs, Gemüse, Frühlingszwiebeln, eingelegtem Ingwer und Sesam garnieren. Die übrige Soße aus der Auflaufform über den Lachs geben.",
+      "images": [
+        {
+          "name": "Honey-Garlic-Salmon-Soba-Noodle-Bowls-5.jpeg",
+          "width": 1200,
+          "height": 1800,
+          "type": "image/jpeg",
+          "size": 181889
+        }
+      ],
+      "source": "https://www.halfbakedharvest.com/honey-garlic-salmon-soba-noodle-bowls/"
     }
   ]
 }
