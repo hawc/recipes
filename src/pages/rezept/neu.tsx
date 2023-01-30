@@ -530,7 +530,7 @@ export default function NewReceipt() {
           onClick={handleSubmit}
           className="button is-primary"
         >
-          Hochladen
+          Rezept speichern
         </button>
         {(submitDisabled && (
           <p className="mt-2">

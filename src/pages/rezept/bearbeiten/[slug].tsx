@@ -1,13 +1,22 @@
 import { gql, GraphQLClient } from 'graphql-request';
-import { createRef, useState, useEffect, useRef } from 'react';
+import {
+  createRef,
+  useState,
+  useEffect,
+  useRef,
+  KeyboardEvent,
+  MouseEvent,
+  FormEvent,
+} from 'react';
 import { arrayMoveImmutable } from 'array-move';
 import styles from '@/styles/Detail.module.scss';
 import { PlusIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 import { getStaticData } from 'graphql/build';
-import { Receipe } from 'types/receipe';
+import { Ingredient, Receipe } from 'types/receipe';
 import { useSWRConfig } from 'swr';
+import { useRouter } from 'next/navigation';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -106,6 +115,9 @@ export default function NewReceipt({ post }) {
   const nameInput = createRef<HTMLInputElement>();
   const categoryInput = createRef<HTMLInputElement>();
   const [submitDisabled, setSubmitDisabled] = useState(true);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const receipeFormData = new FormData(form.current);
@@ -130,7 +142,21 @@ export default function NewReceipt({ post }) {
     setSubmitDisabled(!isValid);
   }, [categories, ingredientList, images, name, description, source, slug]);
 
-  function handleSubmit() {
+  useEffect(() => {
+    if (descriptionRef.current) {
+      descriptionRef.current.style.setProperty(
+        `height`,
+        `${descriptionRef.current.scrollHeight}px`,
+        `important`,
+      );
+    }
+  }, [description, descriptionRef]);
+
+  function backHome(): void {
+    router.push(`/`);
+  }
+
+  function handleSubmit(): void {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
     client
       .request(QUERY, submitData)
@@ -138,18 +164,12 @@ export default function NewReceipt({ post }) {
         mutate(`/rezept/${slug}`);
         mutate(`/rezept/bearbeiten/${slug}`);
       })
-      .then(() => {
-        setName(``);
-        setDescription(``);
-        setSource(``);
-        setServings(2);
-        setCategories([]);
-        setImages([]);
-        setIngredientList([]);
+      .finally(() => {
+        backHome();
       });
   }
 
-  function addCategory() {
+  function addCategory(): void {
     if (
       categoryInput.current.value &&
       !categories.includes(categoryInput.current.value)
@@ -158,12 +178,16 @@ export default function NewReceipt({ post }) {
       categoryInput.current.value = ``;
     }
   }
-  function removeCategory(category: string) {
+
+  function removeCategory(category: string): void {
     if (category) {
       setCategories([...categories.filter((cat) => cat !== category)]);
     }
   }
-  function addIngredient(event) {
+
+  function addIngredient(
+    event: KeyboardEvent<HTMLTableRowElement> | MouseEvent<HTMLButtonElement>,
+  ): void {
     event.preventDefault();
     const ingredient = {
       amount: parseInt(ingredientAmount),
@@ -182,7 +206,7 @@ export default function NewReceipt({ post }) {
       }
     }
   }
-  function removeIngredient(ingredient) {
+  function removeIngredient(ingredient: Ingredient): void {
     if (ingredient) {
       setIngredientList([
         ...ingredientList.filter(
@@ -191,22 +215,16 @@ export default function NewReceipt({ post }) {
       ]);
     }
   }
-  function moveIngredientUp(ingredient) {
+  function moveIngredient(ingredient: Ingredient, direction: number): void {
     if (ingredient) {
       const pos = ingredientList.indexOf(ingredient);
-      const newList = arrayMoveImmutable(ingredientList, pos, pos - 1);
+      const newList = arrayMoveImmutable(ingredientList, pos, pos + direction);
       setIngredientList(newList);
     }
   }
-  function moveIngredientDown(ingredient) {
-    if (ingredient) {
-      const pos = ingredientList.indexOf(ingredient);
-      const newList = arrayMoveImmutable(ingredientList, pos, pos + 1);
-      setIngredientList(newList);
-    }
-  }
-  function updateImages(event) {
-    const imageFiles = event.target.files;
+
+  function updateImages(event: FormEvent<HTMLInputElement>): void {
+    const imageFiles = (event.target as HTMLInputElement).files;
     const filesLength = imageFiles.length;
 
     for (let i = 0; i < filesLength; i++) {
@@ -237,7 +255,8 @@ export default function NewReceipt({ post }) {
       reader.readAsDataURL(file);
     }
   }
-  function removeImage(imageName) {
+
+  function removeImage(imageName: string): void {
     if (imageName) {
       setImages([...images.filter((image) => image.name !== imageName)]);
     }
@@ -404,8 +423,8 @@ export default function NewReceipt({ post }) {
                 <IngredientList
                   ref={ingredientsRef}
                   list={ingredientList}
-                  upEvent={moveIngredientUp}
-                  downEvent={moveIngredientDown}
+                  upEvent={(ingredient) => moveIngredient(ingredient, -1)}
+                  downEvent={(ingredient) => moveIngredient(ingredient, 1)}
                   removeEvent={removeIngredient}
                 >
                   <tr
@@ -534,6 +553,7 @@ export default function NewReceipt({ post }) {
           <div className="field">
             <div className="control">
               <textarea
+                ref={descriptionRef}
                 name="description"
                 className="textarea input-faux"
                 placeholder="Beschreibung"
@@ -560,7 +580,7 @@ export default function NewReceipt({ post }) {
           onClick={handleSubmit}
           className="button is-primary"
         >
-          Hochladen
+          Änderungen speichern
         </button>
         {(submitDisabled && (
           <p className="mt-2">
