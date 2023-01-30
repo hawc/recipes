@@ -5,6 +5,7 @@ import {
   ArrowUpOnSquareIcon,
   PlusIcon,
   MinusIcon,
+  PencilIcon,
 } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
@@ -12,6 +13,8 @@ import { gql, GraphQLClient } from 'graphql-request';
 import { Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
 import useSWR from 'swr';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import Link from 'next/link';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -70,6 +73,8 @@ export default function Receipt({ post }) {
   const [servings, setServings] = useState(postdata.servings);
   const [isNativeShare, setNativeShare] = useState(false);
 
+  const { user, error, isLoading } = useUser();
+
   const { data } = useSWR(() => {
     return postdata.images[0].name
       ? `/api/image?name=${postdata.images[0].name}`
@@ -93,7 +98,19 @@ export default function Receipt({ post }) {
     <section className="section pt-5">
       <div className="container is-max-desktop">
         <h2 className="title is-2 is-size-3-mobile mb-1 mt-2">
-          {postdata.name}
+          <span className="pr-2">{postdata.name}</span>
+          {user && (
+            <>
+              <Link
+                className="button is-white is-vcentered"
+                href={`/rezept/bearbeiten/${postdata.slug}`}
+              >
+                <span className="icon is-medium">
+                  <PencilIcon />
+                </span>
+              </Link>
+            </>
+          )}
         </h2>
         <ul className={styles.categories}>
           {postdata.categories.map((category) => (

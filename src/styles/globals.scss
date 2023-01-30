@@ -152,3 +152,41 @@ a {
   }
 }
 
+.thumbnail {
+  position: absolute;
+  background-size: cover;
+  background-position: center center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 -80px 40px -40px rgba(0, 0, 0, 0.75) inset;
+}
+
+.thumbnailWrapper {
+  height: 100%;
+  overflow: hidden;
+  padding-top: 70%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.thumbnailDescription {
+  color: $white;
+  position: absolute;
+  bottom: 0;
+  padding: 10px 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-shadow: 1px 1px 2px black;
+}
+a.box {
+  transition: 0.3s transform;
+}
+a.box:hover, a.box:focus {
+  box-shadow: $box-shadow;
+  transform: scale(1.03);
+}
+.is-vcentered {
+  vertical-align: middle;
+}

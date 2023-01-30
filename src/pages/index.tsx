@@ -8,6 +8,8 @@ import {
   ArrowUpOnSquareIcon,
   TrashIcon,
   PencilIcon,
+  PhotoIcon,
+  ListBulletIcon,
 } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
@@ -15,6 +17,7 @@ import { gql, GraphQLClient } from 'graphql-request';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Ingredient, Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
+import { ThumbnailList } from '@/components/thumbnailList';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -60,6 +63,7 @@ export async function getStaticProps() {
 export default function Home({ posts, categories }) {
   const { mutate } = useSWRConfig();
 
+  const [viewThumbnails, setViewThumbnails] = useState(true);
   const [mounted, setMounted] = useState(false);
   const ingredientsRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -201,7 +205,7 @@ export default function Home({ posts, categories }) {
             <Link
               onFocus={() => post.images.length > 0 && setPreviewImage(post)}
               onBlur={() => setPreviewImage(null)}
-              className="has-text-primary is-flex-basis-100"
+              className="has-text-primary is-flex-basis-100 mb-1"
               href={`/rezept/${post.slug}`}
             >
               {post.name}
@@ -253,7 +257,7 @@ export default function Home({ posts, categories }) {
             }
           >
             <Link
-              className="has-text-primary is-flex-basis-100"
+              className="has-text-primary is-flex-basis-100 mb-2"
               href={`/rezept/${post.slug}`}
             >
               {post.name}
@@ -305,7 +309,7 @@ export default function Home({ posts, categories }) {
       <div className="container is-max-desktop">
         <h2 className="title is-3 is-size-4-mobile is-flex mb-3 mt-2 is-align-items-center">
           <div className="mr-4">Rezepte</div>
-          <div className="select is-inline-block is-size-6 is-rounded">
+          <div className="select is-inline-block is-size-6 is-rounded mr-2">
             <select
               aria-label="Kategorie auswählen"
               onChange={optionsChangeHandler}
@@ -318,56 +322,71 @@ export default function Home({ posts, categories }) {
               ))}
             </select>
           </div>
-        </h2>
-        {mounted && (
-          <div className="columns">
-            <div className="column">
-              {postListItems}
-              {buyList.length > 0 && (
-                <>
-                  <h2 className="title is-3 is-size-4-mobile mb-3 mt-6">
-                    Einkaufsliste
-                    {isNativeShare && (
-                      <button
-                        title="Einkaufsliste teilen"
-                        type="button"
-                        className="button is-white ml-1 is-va-baseline"
-                        onClick={() => ingredientsRef.current.shareList()}
-                      >
-                        <span className="icon is-medium">
-                          <ArrowUpOnSquareIcon />
-                        </span>
-                      </button>
-                    )}
-                  </h2>
-                  <div className="block">
-                    <IngredientList
-                      ref={ingredientsRef}
-                      list={buyList}
-                    ></IngredientList>
-                  </div>
-                </>
-              )}
-            </div>
-            <Desktop>
-              <div className="column">
-                <div>
-                  {previewImage?.images.length > 0 && image && (
-                    <Link href={`/rezept/${previewImage?.slug}`}>
-                      <Image
-                        src={`data:image/png;base64,${image}`}
-                        className="box p-0 max-width-100"
-                        alt="Rezeptvorschau"
-                        width={previewImage?.images[0].width}
-                        height={previewImage?.images[0].height}
-                      />
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </Desktop>
+          <div>
+            <button
+              title="Rezept löschen"
+              type="button"
+              className="button is-white"
+              onClick={() => setViewThumbnails(!viewThumbnails)}
+            >
+              <span className="icon is-medium">
+                {!viewThumbnails ? <PhotoIcon /> : <ListBulletIcon />}
+              </span>
+            </button>
           </div>
-        )}
+        </h2>
+        {mounted &&
+          (viewThumbnails ? (
+            <ThumbnailList receipes={posts}></ThumbnailList>
+          ) : (
+            <div className="columns">
+              <div className="column">
+                {postListItems}
+                {buyList.length > 0 && (
+                  <>
+                    <h2 className="title is-3 is-size-4-mobile mb-3 mt-6">
+                      Einkaufsliste
+                      {isNativeShare && (
+                        <button
+                          title="Einkaufsliste teilen"
+                          type="button"
+                          className="button is-white ml-1 is-va-baseline"
+                          onClick={() => ingredientsRef.current.shareList()}
+                        >
+                          <span className="icon is-medium">
+                            <ArrowUpOnSquareIcon />
+                          </span>
+                        </button>
+                      )}
+                    </h2>
+                    <div className="block">
+                      <IngredientList
+                        ref={ingredientsRef}
+                        list={buyList}
+                      ></IngredientList>
+                    </div>
+                  </>
+                )}
+              </div>
+              <Desktop>
+                <div className="column">
+                  <div>
+                    {previewImage?.images.length > 0 && image && (
+                      <Link href={`/rezept/${previewImage?.slug}`}>
+                        <Image
+                          src={`data:image/png;base64,${image}`}
+                          className="box p-0 max-width-100"
+                          alt="Rezeptvorschau"
+                          width={previewImage?.images[0].width}
+                          height={previewImage?.images[0].height}
+                        />
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </Desktop>
+            </div>
+          ))}
       </div>
     </section>
   );
