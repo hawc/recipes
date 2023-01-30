@@ -467,10 +467,15 @@
           "name": "Erdnüsse ungesalzen",
           "amount": 50,
           "unit": "g"
+        },
+        {
+          "name": "Bananen",
+          "amount": 45,
+          "unit": "Stück"
         }
       ],
       "servings": 2,
-      "description": "Gemüsebrühe und Wasser vermischen. Brühe aufkochen. In einem zweiten, kleinen Topf etwa 2 Liter Wasser zum Kochen bringen. Die Eier direkt aus dem Kühlschrank in das kochende Wasser geben dort für 7 Minuten garen. So werden sie perfekt gegart. Die Enoki- und Shimeji Pilze von der Wurzel befreien und in mundgerechte Portionen zerteilen. Pilze für etwa 2 Minuten in der heißen Brühe garen. Nachdem die Eier gegart sind die Nudeln nach Packungsanweisung in das kochende Wasser geben.\n\nDas Sesam-Öl in einer kleinen Pfanne erhitzen und das Hack darin knusprig anbraten.\n\nHelle Misopaste, Chili-Öl und Hafermilch in jeweils eine große Suppenschüssel geben. Mit etwas Brühe aufgießen und mit einem Schneebesen vermischen, dann die restliche Brühe gleichmäßig hinzugeben und auf die Schüsseln verteilen. Die gegarten Nudeln hinein legen, Pilze gleichmäßig aufteilen. Eier schälen, halbieren und ebenfalls zur Suppe geben. Das Hack und die Frühlingszwiebeln gleichmäßig auf beide Schüsseln aufteilen.\n\nDem Ramen mit Sesam und Chiliöl den letzten Schliff verpassen und sofort heiß servieren.",
+      "description": "Gemüsebrühe und Wasser vermischen. Brühe aufkochen. In einem zweiten, kleinen Topf etwa 2 Liter Wasser zum Kochen bringen. Die Eier direkt aus dem Kühlschrank in das kochende Wasser geben dort für 7 Minuten garen. So werden sie perfekt gegart. Die Enoki- und Shimeji Pilze von der Wurzel befreien und in mundgerechte Portionen zerteilen. Pilze für etwa 2 Minuten in der heißen Brühe garen. Nachdem die Eier gegart sind die Nudeln nach Packungsanweisung in das kochende Wasser geben.\n\nDas Sesam-Öl in einer kleinen Pfanne erhitzen und das Hack darin knusprig anbraten.\n\nHelle Misopaste, Chili-Öl und Hafermilch in jeweils eine große Suppenschüssel geben. Mit etwas Brühe aufgießen und mit einem Schneebesen vermischen, dann die restliche Brühe gleichmäßig hinzugeben und auf die Schüsseln verteilen. Die gegarten Nudeln hinein legen, Pilze gleichmäßig aufteilen. Eier schälen, halbieren und ebenfalls zur Suppe geben. Das Hack und die Frühlingszwiebeln gleichmäßig auf beide Schüsseln aufteilen.\n\nDem Ramen mit Sesam und Chiliöl den letzten Schliff verpassen, mit den Erdnüssen garnieren und sofort heiß servieren.",
       "images": [
         {
           "name": "Spicy-Miso-Ramen-5.jpeg",
