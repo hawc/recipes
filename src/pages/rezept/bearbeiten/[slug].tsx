@@ -7,6 +7,7 @@ import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 import { getStaticData } from 'graphql/build';
 import { Receipe } from 'types/receipe';
+import { useSWRConfig } from 'swr';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -86,6 +87,7 @@ export async function getStaticProps({ params }) {
 }
 
 export default function NewReceipt({ post }) {
+  const { mutate } = useSWRConfig();
   const form = useRef(null);
   const [mounted, setMounted] = useState(false);
   const [slug] = useState(post.slug);
@@ -130,15 +132,18 @@ export default function NewReceipt({ post }) {
 
   function handleSubmit() {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
-    client.request(QUERY, submitData).then(() => {
-      setName(``);
-      setDescription(``);
-      setSource(``);
-      setServings(2);
-      setCategories([]);
-      setImages([]);
-      setIngredientList([]);
-    });
+    client
+      .request(QUERY, submitData)
+      .then(() => mutate(`/rezept/${slug}`))
+      .then(() => {
+        setName(``);
+        setDescription(``);
+        setSource(``);
+        setServings(2);
+        setCategories([]);
+        setImages([]);
+        setIngredientList([]);
+      });
   }
 
   function addCategory() {

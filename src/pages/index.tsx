@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
@@ -58,6 +58,8 @@ export async function getStaticProps() {
 }
 
 export default function Home({ posts, categories }) {
+  const { mutate } = useSWRConfig();
+
   const [mounted, setMounted] = useState(false);
   const ingredientsRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -165,6 +167,7 @@ export default function Home({ posts, categories }) {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
 
     const receipes = await client.request(QUERY_DELETE_RECEIPE, { id });
+    mutate(`/`);
     if (receipes) {
       setPostdata(receipes.deleteReceipe);
     }

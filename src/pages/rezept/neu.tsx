@@ -5,6 +5,8 @@ import styles from '@/styles/Detail.module.scss';
 import { PlusIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
+import slugify from 'slugify';
+import { useSWRConfig } from 'swr';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -48,6 +50,8 @@ const REQUIRED_FIELDS = [
 ];
 
 export default function NewReceipt() {
+  const { mutate } = useSWRConfig();
+
   const form = useRef(null);
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState(``);
@@ -90,15 +94,29 @@ export default function NewReceipt() {
 
   function handleSubmit() {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
-    client.request(QUERY, submitData).then(() => {
-      setName(``);
-      setDescription(``);
-      setSource(``);
-      setServings(2);
-      setCategories([]);
-      setImages([]);
-      setIngredientList([]);
-    });
+    client
+      .request(QUERY, submitData)
+      .then(() =>
+        mutate(
+          `/rezept/${
+            (slugify(name.trim()),
+            {
+              replacement: `-`,
+              strict: true,
+              locale: `de`,
+            })
+          }`,
+        ),
+      )
+      .then(() => {
+        setName(``);
+        setDescription(``);
+        setSource(``);
+        setServings(2);
+        setCategories([]);
+        setImages([]);
+        setIngredientList([]);
+      });
   }
 
   function addCategory() {
