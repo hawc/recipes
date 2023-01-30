@@ -467,11 +467,6 @@
           "name": "Erdnüsse ungesalzen",
           "amount": 50,
           "unit": "g"
-        },
-        {
-          "name": "test",
-          "amount": 1,
-          "unit": "Stück"
         }
       ],
       "servings": 2,
