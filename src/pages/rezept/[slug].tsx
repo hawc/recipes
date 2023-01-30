@@ -73,7 +73,7 @@ export default function Receipt({ post }) {
   const [servings, setServings] = useState(postdata.servings);
   const [isNativeShare, setNativeShare] = useState(false);
 
-  const { user, error, isLoading } = useUser();
+  const { user } = useUser();
 
   const { data } = useSWR(() => {
     return postdata.images[0].name

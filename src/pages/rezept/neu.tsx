@@ -69,6 +69,17 @@ export default function NewReceipt() {
   const nameInput = createRef<HTMLInputElement>();
   const categoryInput = createRef<HTMLInputElement>();
   const [submitDisabled, setSubmitDisabled] = useState(true);
+  const descriptionRef = useRef<HTMLTextAreaElement>();
+
+  useEffect(() => {
+    if (descriptionRef.current) {
+      descriptionRef.current.style.setProperty(
+        `height`,
+        `${descriptionRef.current.scrollHeight}px`,
+        `important`,
+      );
+    }
+  }, [description, descriptionRef]);
 
   useEffect(() => {
     const receipeFormData = new FormData(form.current);
@@ -504,6 +515,7 @@ export default function NewReceipt() {
           <div className="field">
             <div className="control">
               <textarea
+                ref={descriptionRef}
                 name="description"
                 className="textarea input-faux"
                 placeholder="Beschreibung"

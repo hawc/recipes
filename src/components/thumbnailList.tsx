@@ -28,7 +28,7 @@ export function ThumbnailList({
                   : `opacity-40`
               }`}
             >
-              {receipe.images[0] && <Thumbnail receipe={receipe} />}
+              <Thumbnail receipe={receipe} />
               <div className="thumbnailDescription">{receipe.name}</div>
             </Link>
           </div>
