@@ -195,6 +195,7 @@ const resolvers = {
         db.write();
 
         revalidate(`/rezept/${slug}`);
+        revalidate(`/rezept/bearbeiten/${slug}`);
       }
 
       return db.data.receipes;

@@ -134,7 +134,10 @@ export default function NewReceipt({ post }) {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
     client
       .request(QUERY, submitData)
-      .then(() => mutate(`/rezept/${slug}`))
+      .then(() => {
+        mutate(`/rezept/${slug}`);
+        mutate(`/rezept/bearbeiten/${slug}`);
+      })
       .then(() => {
         setName(``);
         setDescription(``);
