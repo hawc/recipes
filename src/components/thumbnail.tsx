@@ -1,6 +1,5 @@
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 
 export function Thumbnail({ receipe }): JSX.Element {
   const [image, setImage] = useState(``);

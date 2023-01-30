@@ -9,6 +9,7 @@ $size-3: 2.5rem;
 $size-4: 2rem;
 $size-5: 1.5rem;
 $size-6: 1rem;
+
 @import '~bulma/bulma';
 @import '~bulma/sass/utilities/functions';
 @import './fonts.scss';
@@ -85,6 +86,14 @@ a {
     transition: fill 0.3s ease, stroke 0.3s ease;
   }
 }
+@include mobile {
+  .section {
+    padding: $size-6;
+  }
+  .is-flex-grow-1-mobile {
+    flex-grow: 1;
+  }
+}
 @include tablet {
   .button-strike {
     opacity: 0;
@@ -151,7 +160,9 @@ a {
     height: $size-4;
   }
 }
-
+.receipeListItem {
+  transition: opacity 0.3s;
+}
 .thumbnail {
   position: absolute;
   background-size: cover;
@@ -162,15 +173,14 @@ a {
   height: 100%;
   box-shadow: 0 -80px 40px -40px rgba(0, 0, 0, 0.75) inset;
 }
-
 .thumbnailWrapper {
   height: 100%;
   overflow: hidden;
   padding-top: 70%;
   padding-left: 0;
   padding-right: 0;
+  transition: opacity 0.3s, transform 0.3s !important;
 }
-
 .thumbnailDescription {
   color: $white;
   position: absolute;
@@ -181,7 +191,7 @@ a {
   text-shadow: 1px 1px 2px black;
 }
 a.box {
-  transition: 0.3s transform;
+  transition: transform 0.3s;
 }
 a.box:hover, a.box:focus {
   box-shadow: $box-shadow;

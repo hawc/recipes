@@ -70,12 +70,13 @@ export default function Home({ posts, categories }) {
   const [selectedReceipes, setSelectedReceipes] = useState([]);
   const [buyList, setBuyList] = useState([]);
   const [postdata, setPostdata] = useState(posts);
-  const categorydata = categories;
-  const [filteredPosts, setFilteredPosts] = useState(postdata);
+  const [filteredReceipes, setFilteredReceipes] = useState(postdata);
   const [isNativeShare, setNativeShare] = useState(false);
   const [image, setImage] = useState(``);
 
   const { user, error, isLoading } = useUser();
+
+  const categorydata = categories;
 
   useEffect(() => {
     if (navigator.share) {
@@ -141,7 +142,7 @@ export default function Home({ posts, categories }) {
         });
       }
 
-      setFilteredPosts(filteredPostdata);
+      setFilteredReceipes(filteredPostdata);
     }
   }
 
@@ -180,13 +181,13 @@ export default function Home({ posts, categories }) {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
-  const postRefs = {};
+  const receipeRefs = {};
 
   const postListItems = postdata.map((post: Receipe) => {
-    const isFiltered = filteredPosts
+    const isFiltered = filteredReceipes
       .map((filteredPost) => filteredPost.id)
       .includes(post.id);
-    postRefs[post.id] = createRef();
+    receipeRefs[post.id] = createRef();
 
     return (
       <div key={post.id}>
@@ -195,7 +196,7 @@ export default function Home({ posts, categories }) {
             onMouseEnter={() => post.images.length > 0 && setPreviewImage(post)}
             onMouseLeave={() => setPreviewImage(null)}
             onBlur={() => setPreviewImage(null)}
-            ref={postRefs[post.id]}
+            ref={receipeRefs[post.id]}
             className={
               isFiltered
                 ? `is-flex is-font-size-1-2`
@@ -249,12 +250,10 @@ export default function Home({ posts, categories }) {
         </Desktop>
         <Mobile>
           <div
-            ref={postRefs[post.id]}
-            className={
-              isFiltered
-                ? `is-font-size-1-2 is-flex`
-                : `is-font-size-1-2 is-flex opacity-40`
-            }
+            ref={receipeRefs[post.id]}
+            className={`is-font-size-1-2 is-flex receipeListItem ${
+              isFiltered ? `` : `opacity-40`
+            }`}
           >
             <Link
               className="has-text-primary is-flex-basis-100 mb-2"
@@ -308,7 +307,7 @@ export default function Home({ posts, categories }) {
     <section className="section pt-5">
       <div className="container is-max-desktop">
         <h2 className="title is-3 is-size-4-mobile is-flex mb-3 mt-2 is-align-items-center">
-          <div className="mr-4">Rezepte</div>
+          <div className="mr-4 is-flex-grow-1-mobile">Rezepte</div>
           <div className="select is-inline-block is-size-6 is-rounded mr-2">
             <select
               aria-label="Kategorie auswählen"
@@ -337,7 +336,10 @@ export default function Home({ posts, categories }) {
         </h2>
         {mounted &&
           (viewThumbnails ? (
-            <ThumbnailList receipes={posts}></ThumbnailList>
+            <ThumbnailList
+              receipes={posts}
+              filteredReceipes={filteredReceipes}
+            ></ThumbnailList>
           ) : (
             <div className="columns">
               <div className="column">
