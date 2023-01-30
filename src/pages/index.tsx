@@ -1,4 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
+import useSWR from 'swr';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ChangeEvent, useState, useEffect, useRef, createRef } from 'react';
 import {
@@ -14,7 +15,6 @@ import { gql, GraphQLClient } from 'graphql-request';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Ingredient, Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
-import useSWR from 'swr';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -54,7 +54,6 @@ export async function getStaticProps() {
       posts: receipes,
       categories: Array.from(new Set(categories.flat())),
     },
-    revalidate: 10,
   };
 }
 
@@ -129,14 +128,14 @@ export default function Home({ posts, categories }) {
 
   function optionsChangeHandler(event: ChangeEvent<HTMLSelectElement>): void {
     if (event.currentTarget) {
-      let f = postdata;
+      let filteredPostdata = postdata;
       if (event.currentTarget.value !== ``) {
-        f = postdata.filter((post) => {
+        filteredPostdata = postdata.filter((post) => {
           return post.categories.includes(event.currentTarget.value);
         });
       }
 
-      setFilteredPosts(f);
+      setFilteredPosts(filteredPostdata);
     }
   }
 
@@ -352,7 +351,7 @@ export default function Home({ posts, categories }) {
                 <div>
                   {previewImage?.images.length > 0 && image && (
                     <Link href={`/rezept/${previewImage?.slug}`}>
-                      <img
+                      <Image
                         src={`data:image/png;base64,${image}`}
                         className="box p-0 max-width-100"
                         alt="Rezeptvorschau"

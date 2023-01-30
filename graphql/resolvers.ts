@@ -3,6 +3,19 @@ import { writeFileSync, existsSync } from 'fs';
 import slugify from 'slugify';
 import { Ingredient, Receipe } from 'types/receipe';
 import path from 'path';
+import { revalidate } from '@/lib/revalidate';
+
+function trimListNames(list) {
+  list.map((element) => (element.name = element.name.trim()));
+
+  return list;
+}
+
+function trimList(list) {
+  list.map((element) => (element = element.trim()));
+
+  return list;
+}
 
 function generateId(type: string): number {
   return db.data[type].length;
@@ -83,6 +96,8 @@ const resolvers = {
 
       db.write();
 
+      revalidate(`/`);
+
       return getAllUndeletedReceipes();
     },
     addReceipe: async (
@@ -106,12 +121,12 @@ const resolvers = {
       const receipe: Receipe = {
         id: generateId(`receipes`),
         deleted: false,
-        name: args.name,
+        name: args.name.trim(),
         slug: slug,
-        categories: args.categories,
-        ingredients: args.ingredients,
+        categories: trimList(args.categories),
+        ingredients: trimListNames(args.ingredients),
         servings: args.servings,
-        description: args.description,
+        description: args.description.trim(),
         images: args.images.map((image) => {
           return {
             name: image.name,
@@ -121,11 +136,13 @@ const resolvers = {
             size: image.size,
           };
         }),
-        source: args.source,
+        source: args.source.trim(),
       };
 
       db.data.receipes.push(receipe);
       db.write();
+
+      revalidate(`/`);
 
       return db.data.receipes;
     },
@@ -146,7 +163,7 @@ const resolvers = {
       );
 
       if (editedReceipe) {
-        const slug = slugify(args.name, {
+        const slug = slugify(args.name.trim(), {
           replacement: `-`,
           strict: true,
           locale: `de`,
@@ -155,12 +172,12 @@ const resolvers = {
         const receipe: Receipe = {
           id: editedReceipe.id,
           deleted: false,
-          name: args.name,
+          name: args.name.trim(),
           slug: slug,
-          categories: args.categories,
-          ingredients: args.ingredients,
+          categories: trimList(args.categories),
+          ingredients: trimListNames(args.ingredients),
           servings: args.servings,
-          description: args.description,
+          description: args.description.trim(),
           images: args.images.map((image) => {
             return {
               name: image.name,
@@ -170,12 +187,14 @@ const resolvers = {
               size: image.size,
             };
           }),
-          source: args.source,
+          source: args.source.trim(),
         };
 
         db.data.receipes[db.data.receipes.indexOf(editedReceipe)] = receipe;
 
         db.write();
+
+        revalidate(`/rezept/${slug}`);
       }
 
       return db.data.receipes;

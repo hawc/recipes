@@ -84,6 +84,7 @@ export async function getStaticProps({ params }) {
     },
   };
 }
+
 export default function NewReceipt({ post }) {
   const form = useRef(null);
   const [mounted, setMounted] = useState(false);
