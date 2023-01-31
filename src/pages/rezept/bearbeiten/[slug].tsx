@@ -184,6 +184,7 @@ export default function NewReceipt({
     client
       .request(QUERY, submitData)
       .then(() => {
+        mutate(`/`);
         mutate(`/rezept/${slug}`);
         mutate(`/rezept/bearbeiten/${slug}`);
       })

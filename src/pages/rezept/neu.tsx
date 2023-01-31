@@ -112,7 +112,8 @@ export default function NewReceipt() {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
     client
       .request(QUERY, submitData)
-      .then(() =>
+      .then(() => {
+        mutate(`/`);
         mutate(
           `/rezept/${
             (slugify(name.trim()),
@@ -122,8 +123,8 @@ export default function NewReceipt() {
               locale: `de`,
             })
           }`,
-        ),
-      )
+        );
+      })
       .then(() => {
         setName(``);
         setDescription(``);
