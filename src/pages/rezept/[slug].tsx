@@ -249,7 +249,7 @@ export default function Receipt({
           {postdata.description}
         </div>
         {postdata.source?.length && (
-          <div className="block pt-2">
+          <div className="block pt-2 is-overflow-wrap-anywhere">
             Quelle:{` `}
             <a
               className="has-text-primary"

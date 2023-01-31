@@ -4,6 +4,9 @@
   display: flex;
   margin-bottom: 2rem;
   overflow: auto;
+  input {
+    min-width: 75px;
+  }
 }
 .categories li {
   display: inline-block;

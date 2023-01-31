@@ -339,7 +339,7 @@ export default function NewReceipt() {
         <h3 className="title is-3 is-size-4-mobile mb-3">Zutaten</h3>
         <div className="block mb-5 pb-2">
           <div className="columns">
-            <div className="column is-6 is-relative">
+            <div className="column is-6 is-relative is-overflow-auto">
               <div className="t-5 is-sticky">
                 <div className="field is-flex is-align-items-center">
                   <div className="field-label is-normal is-flex-grow-0 mr-3 mb-0 pt-0">
@@ -490,7 +490,7 @@ export default function NewReceipt() {
                                 key={image.name}
                                 className="file-name is-flex"
                               >
-                                <div className="is-flex-grow-1">
+                                <div className="is-flex-grow-1 is-overflow-ellipsis">
                                   {image.name}
                                 </div>
                                 <button
