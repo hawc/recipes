@@ -481,6 +481,97 @@
         }
       ],
       "source": "https://heissehimbeeren.com/spicy-miso-ramen/"
+    },
+    {
+      "id": 5,
+      "deleted": false,
+      "name": "Gochujang-Chili-Nudeln",
+      "slug": "gochujang-chili-nudeln",
+      "categories": [
+        "Koreanisch",
+        "Asiatisch",
+        "Vegetarisch",
+        "Hauptgericht"
+      ],
+      "ingredients": [
+        {
+          "name": "Knoblauchzehe(n)",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "Frühlingszwiebel(n)",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "Chilipulver (Gochugaru)",
+          "amount": 2,
+          "unit": "TL"
+        },
+        {
+          "name": "Sesam",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Sesamöl",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Zucker",
+          "amount": 2,
+          "unit": "TL"
+        },
+        {
+          "name": "Nudeln",
+          "amount": 130,
+          "unit": "g"
+        },
+        {
+          "name": "Gochujang",
+          "amount": 2,
+          "unit": "TL"
+        },
+        {
+          "name": "Erdnussbutter",
+          "amount": 2,
+          "unit": "TL"
+        },
+        {
+          "name": "Miso-Paste",
+          "amount": 1,
+          "unit": "TL"
+        },
+        {
+          "name": "Sojasauce",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Reisweinessing",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Limettensaft",
+          "amount": 1,
+          "unit": "EL"
+        }
+      ],
+      "servings": 1,
+      "description": "Schneide die Knoblauchzehe(n) klein und die Frühlingszwiebeln in Ringe. Nimm eine hitzefeste Schüssel und mische darin anschließend beides mit dem Chilipulver und dem Sesam.\n\nKoche die Nudeln (z.B. Udon oder Ramen-Nudeln), und stelle einen Schuss von dem Nudelwasser zur Seite.\n\nErhitze in einer kleinen Pfanne das Sesamöl und gibt es zum Chili-Mix, sobald es heiß ist. Lasse die Sauce dann ein paar Sekunden ziehen. Mische anschließend die übrigen Zutaten unter und verlängere die fertige Sauce nach belieben mit dem Nudelwasser.\n\nHebe die fertig gekochten Nudeln unter und garniere das Gericht mit Sesamsamen.",
+      "images": [
+        {
+          "name": "Spicy-Gochujang-Noodles-Noodle-pull-scaled.jpeg",
+          "width": 1368,
+          "height": 2048,
+          "type": "image/jpeg",
+          "size": 204821
+        }
+      ],
+      "source": "https://cjeatsrecipes.com/spicy-gochujang-noodles/"
     }
   ]
 }
