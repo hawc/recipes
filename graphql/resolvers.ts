@@ -194,6 +194,7 @@ const resolvers = {
 
         db.write();
 
+        revalidate(`/`);
         revalidate(`/rezept/${slug}`);
         revalidate(`/rezept/bearbeiten/${slug}`);
       }
