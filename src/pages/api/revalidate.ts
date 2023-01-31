@@ -1,4 +1,9 @@
-export default async function handler(req, res) {
+import { NextApiRequest, NextApiResponse } from 'next';
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+): Promise<void> {
   if (req.query.secret !== process.env.REVALIDATION_TOKEN) {
     return res.status(401).json({ message: `Invalid token` });
   }
@@ -7,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    await res.revalidate(req.query.url);
+    await res.revalidate(req.query.url as string);
     console.log(`Revalidated ${req.query.url}`);
 
     return res.json({ revalidated: true });

@@ -5,7 +5,7 @@
 
 interface Ingredient {
   name: string;
-  amount: string;
+  amount: number;
   unit: string;
 }
 
@@ -25,8 +25,9 @@ interface ReceipeIngredient {
 interface Image {
   name: string;
   type: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
+  size?: number;
   src?: string;
 }
 

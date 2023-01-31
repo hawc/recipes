@@ -21,22 +21,22 @@ function generateId(type: string): number {
   return db.data[type].length;
 }
 
-interface UploadImage {
+export interface UploadImage {
   name: string;
   type: string;
-  size: string;
-  height: string;
-  width: string;
-  src: string;
+  size: number;
+  height: number;
+  width: number;
+  src?: string;
 }
 
-interface UploadReceipe {
+export interface UploadReceipe {
   id: number;
   name: string;
   slug: string;
   categories: string[];
   ingredients: Ingredient[];
-  servings: number;
+  servings: number | string;
   description: string;
   images: UploadImage[];
   source: string;
@@ -125,7 +125,7 @@ const resolvers = {
         slug: slug,
         categories: trimList(args.categories),
         ingredients: trimListNames(args.ingredients),
-        servings: args.servings,
+        servings: args.servings as number,
         description: args.description.trim(),
         images: args.images.map((image) => {
           return {
@@ -176,9 +176,9 @@ const resolvers = {
           slug: slug,
           categories: trimList(args.categories),
           ingredients: trimListNames(args.ingredients),
-          servings: args.servings,
+          servings: args.servings as number,
           description: args.description.trim(),
-          images: args.images.map((image) => {
+          images: args.images.map((image: UploadImage) => {
             return {
               name: image.name,
               width: image.width,

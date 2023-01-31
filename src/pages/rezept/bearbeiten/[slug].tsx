@@ -14,9 +14,16 @@ import { PlusIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 import { getStaticData } from 'graphql/build';
-import { Ingredient, Receipe } from 'types/receipe';
+import { Image, Ingredient, Receipe } from 'types/receipe';
 import { useSWRConfig } from 'swr';
 import { useRouter } from 'next/navigation';
+import {
+  GetStaticPathsResult,
+  GetStaticPropsResult,
+  InferGetStaticPropsType,
+} from 'next';
+import { UploadImage, UploadReceipe } from 'graphql/resolvers';
+import { RequestData } from 'next/dist/server/web/types';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -71,7 +78,7 @@ const REQUIRED_FIELDS = [
   `categories`,
 ];
 
-export async function getStaticPaths() {
+export async function getStaticPaths(): Promise<GetStaticPathsResult> {
   let paths = [];
   try {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
@@ -85,33 +92,47 @@ export async function getStaticPaths() {
 
   return { paths, fallback: `blocking` };
 }
-export async function getStaticProps({ params }) {
+
+interface DetailProps {
+  receipe: Receipe;
+}
+
+export async function getStaticProps({
+  params,
+}): Promise<GetStaticPropsResult<DetailProps>> {
   // can't use graphql here, because API doesn't exist when getStaticProps runs
-  const receipe = await getStaticData(`receipe`, { slug: params.slug });
+  const receipe = (await getStaticData(`receipe`, {
+    slug: params.slug,
+  })) as Receipe;
+
   return {
     props: {
-      post: receipe,
+      receipe,
     },
   };
 }
 
-export default function NewReceipt({ post }) {
+export default function NewReceipt({
+  receipe,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const { mutate } = useSWRConfig();
   const form = useRef(null);
-  const [mounted, setMounted] = useState(false);
-  const [slug] = useState(post.slug);
-  const [name, setName] = useState(post.name);
-  const [description, setDescription] = useState(post.description);
-  const [source, setSource] = useState(post.source);
-  const [servings, setServings] = useState(post.servings);
-  const [categories, setCategories] = useState(post.categories);
-  const [images, setImages] = useState(post.images);
-  const [ingredientList, setIngredientList] = useState(post.ingredients);
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [slug] = useState<string>(receipe.slug);
+  const [name, setName] = useState<string>(receipe.name);
+  const [description, setDescription] = useState<string>(receipe.description);
+  const [source, setSource] = useState<string>(receipe.source);
+  const [servings, setServings] = useState<number>(receipe.servings);
+  const [categories, setCategories] = useState<string[]>(receipe.categories);
+  const [images, setImages] = useState<UploadImage[] | Image[]>(receipe.images);
+  const [ingredientList, setIngredientList] = useState<Ingredient[]>(
+    receipe.ingredients,
+  );
   const ingredientsRef = useRef(null);
-  const [ingredientAmount, setIngredientAmount] = useState(``);
-  const [ingredientUnit, setIngredientUnit] = useState(``);
-  const [ingredientName, setIngredientName] = useState(``);
-  const [submitData, setSubmitData] = useState({});
+  const [ingredientAmount, setIngredientAmount] = useState<string>(``);
+  const [ingredientUnit, setIngredientUnit] = useState<string>(``);
+  const [ingredientName, setIngredientName] = useState<string>(``);
+  const [submitData, setSubmitData] = useState<UploadReceipe>(null);
   const nameInput = createRef<HTMLInputElement>();
   const categoryInput = createRef<HTMLInputElement>();
   const [submitDisabled, setSubmitDisabled] = useState(true);
@@ -120,13 +141,15 @@ export default function NewReceipt({ post }) {
   const router = useRouter();
 
   useEffect(() => {
-    const receipeFormData = new FormData(form.current);
-    const submitFormData: any = Object.fromEntries(receipeFormData);
+    const receipeFormData = new FormData(form.current) as unknown as Iterable<
+      [RequestData, FormDataEntryValue]
+    >;
+    const submitFormData = Object.fromEntries(receipeFormData) as UploadReceipe;
     submitFormData.slug = slug;
-    submitFormData.servings = parseInt(submitFormData.servings);
+    submitFormData.servings = parseInt(submitFormData.servings as string);
     submitFormData.categories = categories;
     submitFormData.ingredients = ingredientList;
-    submitFormData.images = images;
+    submitFormData.images = images as UploadImage[];
 
     setSubmitData(submitFormData);
 
@@ -237,13 +260,13 @@ export default function NewReceipt({ post }) {
           tempImage.src = reader.result as string;
 
           tempImage.onload = function () {
-            const dbImage = {
+            const dbImage: Image = {
               name: file.name,
               type: file.type,
               size: file.size,
               width: tempImage.width,
               height: tempImage.height,
-              src: reader.result,
+              src: reader.result as string,
             };
             if (!images.map((image) => image.name).includes(dbImage.name)) {
               // setImages([...images, image]);
@@ -258,7 +281,11 @@ export default function NewReceipt({ post }) {
 
   function removeImage(imageName: string): void {
     if (imageName) {
-      setImages([...images.filter((image) => image.name !== imageName)]);
+      setImages([
+        ...(images as Array<any>).filter(
+          (image: UploadImage | Image) => image.name !== imageName,
+        ),
+      ]);
     }
   }
 

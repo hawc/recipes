@@ -14,12 +14,7 @@ import {
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
-
-interface Ingredient {
-  readonly amount: string;
-  readonly unit: string;
-  readonly name: string;
-}
+import { Ingredient } from 'types/receipe';
 
 const IngredientList = forwardRef(
   (

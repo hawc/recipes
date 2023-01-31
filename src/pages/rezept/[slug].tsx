@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import styles from '@/styles/Detail.module.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import {
   ArrowUpOnSquareIcon,
   PlusIcon,
@@ -15,6 +15,12 @@ import { getStaticData } from 'graphql/build';
 import useSWR from 'swr';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
+import {
+  GetStaticPathsResult,
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+  InferGetStaticPropsType,
+} from 'next';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -30,7 +36,7 @@ const QUERY_RECEIPES = gql`
   }
 `;
 
-const fetcher = async (url: string) => {
+const fetcher = async (url: string): Promise<string> => {
   const res = await fetch(url);
   const data = await res.json();
 
@@ -40,7 +46,7 @@ const fetcher = async (url: string) => {
   return data;
 };
 
-export async function getStaticPaths() {
+export async function getStaticPaths(): Promise<GetStaticPathsResult> {
   let paths = [];
   try {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
@@ -55,22 +61,33 @@ export async function getStaticPaths() {
   return { paths, fallback: `blocking` };
 }
 
-export async function getStaticProps({ params }) {
+interface DetailProps {
+  receipe: Receipe;
+}
+
+export async function getStaticProps({
+  params,
+}: GetStaticPropsContext): Promise<GetStaticPropsResult<DetailProps>> {
   // can't use graphql here, because API doesn't exist when getStaticProps runs
-  const receipe = await getStaticData(`receipe`, { slug: params.slug });
+  const receipe = (await getStaticData(`receipe`, {
+    slug: params.slug,
+  })) as Receipe;
+
   return {
     props: {
-      post: receipe,
+      receipe,
     },
   };
 }
 
-export default function Receipt({ post }) {
-  const [mounted, setMounted] = useState(false);
-  const [image, setImage] = useState(``);
+export default function Receipt({
+  receipe,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [image, setImage] = useState<string>(``);
   const ingredientsRef = useRef(null);
-  const postdata = post;
-  const [servings, setServings] = useState(postdata.servings);
+  const postdata = receipe;
+  const [servings, setServings] = useState<number>(postdata.servings);
   const [isNativeShare, setNativeShare] = useState(false);
 
   const { user } = useUser();
@@ -180,8 +197,8 @@ export default function Receipt({ post }) {
                             value={servings}
                             min="1"
                             placeholder="Portionen"
-                            onChange={(event) =>
-                              setServings(event.target.value)
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                              setServings(parseInt(event.target.value))
                             }
                           />
                         </div>
@@ -202,9 +219,8 @@ export default function Receipt({ post }) {
                     <IngredientList
                       ref={ingredientsRef}
                       list={postdata.ingredients?.map((ingredient) => ({
-                        amount: ingredient.absolute
-                          ? ingredient.amount
-                          : (ingredient.amount / postdata.servings) * servings,
+                        amount:
+                          (ingredient.amount / postdata.servings) * servings,
                         unit: ingredient.unit,
                         name: ingredient.name,
                       }))}

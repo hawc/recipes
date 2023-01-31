@@ -7,6 +7,7 @@ import { Desktop, Mobile } from '@/components/responsive';
 import { IngredientList } from '@/components/IngredientList';
 import slugify from 'slugify';
 import { useSWRConfig } from 'swr';
+import router from 'next/router';
 
 const ENDPOINT =
   process.env.NODE_ENV === `production`
@@ -103,7 +104,11 @@ export default function NewReceipt() {
     setSubmitDisabled(!isValid);
   }, [categories, ingredientList, images, name, description, source]);
 
-  function handleSubmit() {
+  function backHome(): void {
+    router.push(`/`);
+  }
+
+  function handleSubmit(): void {
     const client = new GraphQLClient(ENDPOINT, { headers: {} });
     client
       .request(QUERY, submitData)
@@ -127,6 +132,9 @@ export default function NewReceipt() {
         setCategories([]);
         setImages([]);
         setIngredientList([]);
+      })
+      .finally(() => {
+        backHome();
       });
   }
 
