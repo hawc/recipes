@@ -98,21 +98,6 @@
           "unit": "g"
         },
         {
-          "name": "Karotten",
-          "amount": 400,
-          "unit": "g"
-        },
-        {
-          "name": "Edamame",
-          "amount": 400,
-          "unit": "g"
-        },
-        {
-          "name": "Frühlingszwiebeln",
-          "amount": 4,
-          "unit": "Stück"
-        },
-        {
           "name": "Sesam-Öl",
           "amount": 4,
           "unit": "EL"
@@ -153,14 +138,29 @@
           "unit": "Stück"
         },
         {
-          "name": "Sesam",
+          "name": "Frühlingszwiebeln",
           "amount": 4,
-          "unit": "TL"
+          "unit": "Stück"
+        },
+        {
+          "name": "Karotten",
+          "amount": 100,
+          "unit": "g"
+        },
+        {
+          "name": "Edamame",
+          "amount": 100,
+          "unit": "g"
         },
         {
           "name": "Erdnüsse (ungesalzen)",
           "amount": 4,
           "unit": "EL"
+        },
+        {
+          "name": "Sesam",
+          "amount": 4,
+          "unit": "TL"
         }
       ],
       "servings": 2,
