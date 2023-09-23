@@ -23,8 +23,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="robots" content="noindex, nofollow" />
         </Head>
-        <section className="section py-5">
-          <div className="container is-max-desktop is-flex is-justify-content-space-between">
+        <header className="section header py-5 has-text-white has-background-black">
+          <div className="container is-max-widescreen is-flex is-justify-content-space-between">
             <h1 className="title is-4 m-0 is-flex">
               <Link href="/" className="is-align-self-center">
                 <svg
@@ -60,7 +60,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               </>
             )}
           </div>
-        </section>
+        </header>
         <hr className="my-0"></hr>
         <Component {...pageProps} />
       </div>

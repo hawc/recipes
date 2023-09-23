@@ -53,7 +53,7 @@
           "unit": "g"
         },
         {
-          "name": "Oliven-Öl",
+          "name": "Olivenöl",
           "amount": 2,
           "unit": "EL"
         },
@@ -220,7 +220,7 @@
           "unit": "Stück"
         },
         {
-          "name": "Oliven-Öl",
+          "name": "Olivenöl",
           "amount": 2,
           "unit": "EL"
         },
@@ -276,7 +276,7 @@
         }
       ],
       "servings": 4,
-      "description": "Backofen auf 200 °C vorheizen. In einer quadratischen Auflaufform die Hälfte der Tamari-Sauce, den Honig, Gochujang, Ingwer und Knoblauch verrühren. Den Lachs hinzufügen und ruhen lassen.\n\nAuf einem Backblech den geteilten Brokkoli, Oliven-Öl und je eine Prise Salz und Pfeffer vermischen. 20 Minuten backen, bis der Brokkoli braun wird.\n\nBringe in der Zwischenzeit einen Topf Wasser zum Kochen und schöpfe 1/4 Tasse heißes Wasser heraus und stelle es zur Seite. Die Nudeln nach Packungsanweisung kochen und anschließend abgießen.\n\nIn einem Messbecher Tamari, Tahini, Sesam-Öl, Chili, die Hälfte vom Ingwer und der 1/4 Tasse heißes Wasser verquirlen, bis alles gut vermischt ist. Die Nudeln anschließend unterheben.\n\nLege den Lachs in den Ofen und backe ihn 5-15 Minuten lang, bis er den gewünschten Gargrad erreicht hat. Danach das Gemüse herausnehmen und die Sauce in der Auflaufform mit dem Lachs über den Lachs löffeln. Schalte den Ofen dann auf \"Grill\" und backe den Lachs ein paar Minuten, bis er knusprig ist und die Sauce eindickt.\n\nDie Nudeln auf Schüsseln verteilen. Mit Lachs, Gemüse, Frühlingszwiebeln, eingelegtem Ingwer und Sesam garnieren. Die übrige Soße aus der Auflaufform über den Lachs geben.",
+      "description": "Backofen auf 200 °C vorheizen. In einer quadratischen Auflaufform die Hälfte der Tamari-Sauce, den Honig, Gochujang, Ingwer und Knoblauch verrühren. Den Lachs hinzufügen und ruhen lassen.\n\nAuf einem Backblech den geteilten Brokkoli, Olivenöl und je eine Prise Salz und Pfeffer vermischen. 20 Minuten backen, bis der Brokkoli braun wird.\n\nBringe in der Zwischenzeit einen Topf Wasser zum Kochen und schöpfe 1/4 Tasse heißes Wasser heraus und stelle es zur Seite. Die Nudeln nach Packungsanweisung kochen und anschließend abgießen.\n\nIn einem Messbecher Tamari, Tahini, Sesam-Öl, Chili, die Hälfte vom Ingwer und der 1/4 Tasse heißes Wasser verquirlen, bis alles gut vermischt ist. Die Nudeln anschließend unterheben.\n\nLege den Lachs in den Ofen und backe ihn 5-15 Minuten lang, bis er den gewünschten Gargrad erreicht hat. Danach das Gemüse herausnehmen und die Sauce in der Auflaufform mit dem Lachs über den Lachs löffeln. Schalte den Ofen dann auf \"Grill\" und backe den Lachs ein paar Minuten, bis er knusprig ist und die Sauce eindickt.\n\nDie Nudeln auf Schüsseln verteilen. Mit Lachs, Gemüse, Frühlingszwiebeln, eingelegtem Ingwer und Sesam garnieren. Die übrige Soße aus der Auflaufform über den Lachs geben.",
       "images": [
         {
           "name": "Honey-Garlic-Salmon-Soba-Noodle-Bowls-5.jpeg",
@@ -330,7 +330,7 @@
           "unit": "Prise(n)"
         },
         {
-          "name": "Oliven-Öl",
+          "name": "Olivenöl",
           "amount": 1,
           "unit": "EL"
         },
@@ -503,7 +503,7 @@
           "unit": "Stück"
         },
         {
-          "name": "Frühlingszwiebel(n)",
+          "name": "Frühlingszwiebeln",
           "amount": 2,
           "unit": "Stück"
         },
@@ -711,7 +711,7 @@
           "unit": "Stück"
         },
         {
-          "name": "Zwiebel (rot)",
+          "name": "Zwiebel(n) (rot)",
           "amount": 1,
           "unit": "Stück"
         },
@@ -726,7 +726,7 @@
           "unit": "Stück"
         },
         {
-          "name": "Limette",
+          "name": "Limette(n)",
           "amount": 1,
           "unit": "Stück"
         },

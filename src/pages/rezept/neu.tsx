@@ -242,7 +242,7 @@ export default function NewReceipt() {
       <form
         onSubmit={(e) => e.preventDefault()}
         ref={form}
-        className="container is-max-desktop"
+        className="container is-max-widescreens"
       >
         <input
           placeholder="Rezeptname"

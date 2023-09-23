@@ -14,6 +14,7 @@ import { Receipe } from 'types/receipe';
 import { getStaticData } from 'graphql/build';
 import useSWR from 'swr';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   GetStaticPathsResult,
@@ -84,19 +85,12 @@ export default function Receipt({
   receipe,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const [mounted, setMounted] = useState<boolean>(false);
-  const [image, setImage] = useState<string>(``);
   const ingredientsRef = useRef(null);
   const postdata = receipe;
   const [servings, setServings] = useState<number>(postdata.servings);
   const [isNativeShare, setNativeShare] = useState(false);
 
   const { user } = useUser();
-
-  const { data } = useSWR(() => {
-    return postdata.images[0].name
-      ? `/api/image?name=${postdata.images[0].name}`
-      : null;
-  }, fetcher);
 
   useEffect(() => {
     if (navigator.share) {
@@ -105,15 +99,9 @@ export default function Receipt({
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (data) {
-      setImage(data);
-    }
-  }, [data]);
-
   return (
     <section className="section pt-5">
-      <div className="container is-max-desktop">
+      <div className="container is-max-widescreen">
         <h2 className="title is-2 is-size-3-mobile mb-1 mt-2">
           <span className="pr-2">{postdata.name}</span>
           {user && (
@@ -134,12 +122,14 @@ export default function Receipt({
             <li key={category}>{category}</li>
           ))}
         </ul>
-        {mounted && postdata.images?.length > 0 && image && (
+        {mounted && postdata.images?.length > 0 && (
           <Mobile>
             <div className="block px-0 pb-2">
               <img
                 className="box p-0"
-                src={`data:image/png;base64,${image}`}
+                src={`/uploads/${
+                  postdata.images[0].name ?? `/uploads/blank.png`
+                }`}
                 alt="Rezeptbild"
                 width={postdata.images[0].width}
                 height={postdata.images[0].height}
@@ -227,12 +217,14 @@ export default function Receipt({
                     ></IngredientList>
                   </div>
                 </div>
-                {mounted && postdata.images?.length > 0 && image && (
+                {mounted && postdata.images?.length > 0 && (
                   <Desktop>
                     <div className="column pl-5 is-relative">
-                      <img
+                      <Image
                         className="box p-0 t-5 is-sticky"
-                        src={`data:image/png;base64,${image}`}
+                        src={`/uploads/${
+                          postdata.images[0].name ?? `/uploads/blank.png`
+                        }`}
                         alt="Rezeptbild"
                         width={postdata.images[0].width}
                         height={postdata.images[0].height}
@@ -252,7 +244,7 @@ export default function Receipt({
           <div className="block pt-2 is-overflow-wrap-anywhere">
             Quelle:{` `}
             <a
-              className="has-text-primary"
+              className="has-text-black"
               target="_blank"
               rel="noreferrer noopener"
               href={postdata.source}
