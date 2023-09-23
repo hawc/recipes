@@ -901,6 +901,127 @@
         }
       ],
       "source": "https://www.instagram.com/p/CxDD1MePJLd/"
+    },
+    {
+      "id": 10,
+      "deleted": false,
+      "name": "Mafa-Erdnusseintopf mit Fufu",
+      "slug": "mafa-erdnusseintopf-mit-fufu",
+      "categories": [
+        "Afrikanisch",
+        "Hauptgericht",
+        "Vegetarisch",
+        "Vegan"
+      ],
+      "ingredients": [
+        {
+          "name": "Kokosöl",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Zwiebel",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "Knoblauchzehe(n)",
+          "amount": 3,
+          "unit": "Stück"
+        },
+        {
+          "name": "Ingwer",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Chilischote (rot)",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "Cayennepfeffer",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Paprikapulver (scharf)",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Koriander (gemahlen)",
+          "amount": 1,
+          "unit": "EL"
+        },
+        {
+          "name": "Süßkartoffel",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "Tomatenmark",
+          "amount": 2,
+          "unit": "TL"
+        },
+        {
+          "name": "gehackte Tomaten",
+          "amount": 400,
+          "unit": "g"
+        },
+        {
+          "name": "Kohlblätter nach Wahl",
+          "amount": 300,
+          "unit": "g"
+        },
+        {
+          "name": "Erdnusspaste",
+          "amount": 150,
+          "unit": "g"
+        },
+        {
+          "name": "Gemüsebrühe",
+          "amount": 200,
+          "unit": "ml"
+        },
+        {
+          "name": "Lorbeerblätter",
+          "amount": 3,
+          "unit": "Stück"
+        },
+        {
+          "name": "Thymianzweige (frisch)",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "Salz",
+          "amount": 2,
+          "unit": "TL"
+        },
+        {
+          "name": "Petersilie\t(frisch)",
+          "amount": 3,
+          "unit": "EL"
+        },
+        {
+          "name": "Fufu-Pulver",
+          "amount": 400,
+          "unit": "g"
+        }
+      ],
+      "servings": 4,
+      "description": "Zwiebel, Knoblauch, Chili und Ingwer fein würfeln. In einem großen Topf das Kokosöl erhitzen und alles darin glasig andünsten.\n\nPfeffer, Paprikapulver und Koriander hinzufügen und 1 weitere Minute unter Rühren rösten. Die Süßkartoffel schälen und würfeln. Zusammen mit den Tomaten und dem Tomatenmark in den Topf geben und 5 Minuten köcheln lassen.\n\nDie Kohlblätter in feine Streifen schneiden. Die Erdnusscreme und die Brühe in den Topf geben und den Eintopf wieder zum Kochen bringen. \n\nDie Hitze reduzieren, Lorbeer, die Blättchen vom Thymian sowie die Kohlblätter hinzufügen, mit dem Salz abschmecken und zugedeckt ca. 20 Minuten bei niedriger Hitze garen. \n\nDas Fufu nach Packungsanleitung zubereiten, alternativ kann auch frisches Fufu gekocht werden.\n\nDen Mafa-Eintopf mit der gehackten Petersilie garnieren und servieren. Das Fufu wird als Beilage dazu gereicht.",
+      "images": [
+        {
+          "name": "mafa-fufu.jpeg",
+          "width": 1280,
+          "height": 853,
+          "type": "image/jpeg",
+          "size": 350274
+        }
+      ],
+      "source": "https://www.gewuerze-der-welt.net/rezepte/hauptgang/erdnusseintopf"
     }
   ]
 }
