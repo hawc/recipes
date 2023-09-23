@@ -743,7 +743,15 @@
       ],
       "servings": 4,
       "description": "Entkerne die Avocado und nimm das Fruchtfleisch aus der Schale. Presse eine Hälfte der Limette aus und verdrücke die Avocado damit bis eine feine Masse entsteht.\n\nEntferne das Kerngehäuse aus der Tomate und schneide sie in feine Würfel. Gib die fein gewürfelte Zwiebel und den gehackten Koriander dazu. Optional kannst du noch gehackte Jalapeño dazugeben. Gib das Gemisch zu dem Avocado-Mus und presse die Knoblauchzehe sowie die zweite Limettenhälfte darüber aus. Nun das Ganze vermengen und mit Salz und Pfeffer abschmecken.\n\nAnschließend kann die Guacamole, z.B. garniert mit ein paar Korianderblättern, serviert werden.",
-      "images": [],
+      "images": [
+        {
+          "name": "1280px-Guacamole_in_Square_Bowl.jpg",
+          "width": 1280,
+          "height": 853,
+          "type": "image/jpeg",
+          "size": 266702
+        }
+      ],
       "source": "https://emmikochteinfach.de/original-guacamole-einfach-selber-machen/"
     },
     {
