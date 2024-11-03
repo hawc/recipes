@@ -3,11 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['localhost', 'receipes.hawc.de'],
+    domains: ['localhost', 'recipes.hawc.de'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'receipes.hawc.de',
+        hostname: 'recipes.hawc.de',
         port: '',
         pathname: '/**',
       },
