@@ -1022,6 +1022,47 @@
         }
       ],
       "source": "https://www.gewuerze-der-welt.net/rezepte/hauptgang/erdnusseintopf"
+    },
+    {
+      "id": 11,
+      "deleted": false,
+      "name": "Szechuan Chiliöl",
+      "slug": "szechuan-chilioel",
+      "categories": [
+        "Chinesisch",
+        "Beilage"
+      ],
+      "ingredients": [
+        {
+          "name": "Szechuan-Pfefferkörner",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Zimtstange",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "Sternanis",
+          "amount": 2,
+          "unit": "Stück"
+        },
+        {
+          "name": "Erdnussöl",
+          "amount": 250,
+          "unit": "ml"
+        },
+        {
+          "name": "Chiliflocken",
+          "amount": 50,
+          "unit": "g"
+        }
+      ],
+      "servings": 1,
+      "description": "Die Pfefferkörner, Zimtstange(n) und Anis mit dem Erdnussöl in einen kleinen Topf geben. Auf mittlerer Stufe auf etwa 160°C erhitzen. Anschließend vom Herd nehmen. Nach ca. 7 Minuten durch ein Sieb in ein hitzebeständiges Gefäß abgießen, sodass nur das Öl übrig ist. Dann die Chiliflocken dazugeben, umrühren und etwas abkühlen lassen. Das Chiliöl kann dann in ein Einmachglas umgefüllt werden. Gekühlt lagern.",
+      "images": [],
+      "source": "https://thewoksoflife.com/dan-dan-noodles/"
     }
   ]
 }
