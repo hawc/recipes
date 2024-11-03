@@ -1061,7 +1061,15 @@
       ],
       "servings": 1,
       "description": "Die Pfefferkörner, Zimtstange(n) und Anis mit dem Erdnussöl in einen kleinen Topf geben. Auf mittlerer Stufe auf etwa 160°C erhitzen. Anschließend vom Herd nehmen. Nach ca. 7 Minuten durch ein Sieb in ein hitzebeständiges Gefäß abgießen, sodass nur das Öl übrig ist. Dann die Chiliflocken dazugeben, umrühren und etwas abkühlen lassen. Das Chiliöl kann dann in ein Einmachglas umgefüllt werden. Gekühlt lagern.",
-      "images": [],
+      "images": [
+        {
+          "name": "chilioel-1.png",
+          "width": 1196,
+          "height": 1596,
+          "type": "image/png",
+          "size": 663467
+        }
+      ],
       "source": "https://thewoksoflife.com/dan-dan-noodles/"
     }
   ]
