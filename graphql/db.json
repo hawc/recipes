@@ -1026,7 +1026,7 @@
     {
       "id": 11,
       "deleted": false,
-      "name": "Szechuan Chiliöl",
+      "name": "Szechuan-Chiliöl",
       "slug": "szechuan-chilioel",
       "categories": [
         "Chinesisch",
@@ -1040,7 +1040,7 @@
           "unit": "EL"
         },
         {
-          "name": "Zimtstange",
+          "name": "Zimtstange(n)",
           "amount": 1,
           "unit": "Stück"
         },
@@ -1072,6 +1072,114 @@
         }
       ],
       "source": "https://thewoksoflife.com/dan-dan-noodles/"
+    },
+    {
+      "id": 12,
+      "deleted": false,
+      "name": "Dan-Dan-Nudeln",
+      "slug": "dan-dan-nudeln",
+      "categories": [
+        "Asiatisch",
+        "Chinesisch",
+        "Hauptgericht",
+        "Vegetarisch"
+      ],
+      "ingredients": [
+        {
+          "name": "Erdnuss-Öl",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Hackfleisch (vegetarisch oder Schwein)",
+          "amount": 100,
+          "unit": "g"
+        },
+        {
+          "name": "Hoisin-Sauce",
+          "amount": 1,
+          "unit": "TL"
+        },
+        {
+          "name": "Shaoxing-Wein",
+          "amount": 1,
+          "unit": "TL"
+        },
+        {
+          "name": "dunkle Sojasauce",
+          "amount": 1,
+          "unit": "TL"
+        },
+        {
+          "name": "eingelegte Senfblätter (Sui Mi Ya Cai)",
+          "amount": 50,
+          "unit": "g"
+        },
+        {
+          "name": "Fünf-Gewürz-Pulver",
+          "amount": 2,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Sesampaste",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Sojasauce",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Zucker",
+          "amount": 2,
+          "unit": "TL"
+        },
+        {
+          "name": "Sichuan-Pfeffer (gemahlen)",
+          "amount": 1,
+          "unit": "Prise(n)"
+        },
+        {
+          "name": "Sichuan-Chiliöl",
+          "amount": 4,
+          "unit": "EL"
+        },
+        {
+          "name": "Knoblauchzehe",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "Nudelwasser",
+          "amount": 3,
+          "unit": "EL"
+        },
+        {
+          "name": "chinesische Weizenudeln (getrocknet)",
+          "amount": 200,
+          "unit": "g"
+        },
+        {
+          "name": "Pak Choi",
+          "amount": 1,
+          "unit": "Stück"
+        },
+        {
+          "name": "Erdnüsse (gehackt)",
+          "amount": 2,
+          "unit": "EL"
+        },
+        {
+          "name": "Frühlingszwiebeln (gehackt)",
+          "amount": 2,
+          "unit": "EL"
+        }
+      ],
+      "servings": 2,
+      "description": "In einem Wok etwas Öl bei mittlerer Hitze erhitzen und das Hackfleisch anbraten. Dann süße Bohnensauce, Shaoxing-Wein, dunkle Sojasauce und eine Prise Fünf-Gewürze-Pulver hinzufügen. Braten, bis die Flüssigkeit vollständig verdampft ist, dann beiseitestellen. Die eingelegten Senfblätter (Sui Mi Ya Cai) hacken, erneut etwas Öl im Wok erhitzen und darin kurz anbraten, anschließend ebenfalls beiseitestellen.\n\nDie Nudeln nach Packungsanweisung kochen, das Blattgemüse im Nudelwasser blanchieren. Währenddessen die Sauce aus Fünf-Gewürz-Pulver, Sesampaste, Sojasauce, Zucker, Sichuan-Pfeffer und der gehackten Knoblauchzehe anrühren. Mit etwas heißem Nudelwasser verdünnen.\n\nZum Servieren die Nudeln und Gemüse auf zwei Schüsseln verteilen, Sauce daraufgeben, dann mit dem gebratenen Hackfleisch und den eingelegten Gemüsen toppen. Nach Belieben mit gehackten Erdnüssen und Frühlingszwiebeln garnieren. Gut vermengen und genießen!",
+      "images": [],
+      "source": "https://thewoksoflife.com/dan-dan-noodles/#recipe"
     }
   ]
 }
