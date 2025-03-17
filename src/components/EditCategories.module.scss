@@ -1,0 +1,21 @@
+@import "~bulma/sass/utilities/derived-variables.sass";
+
+.categories {
+  display: flex;
+  margin-bottom: 2rem;
+  overflow: auto;
+  
+  input {
+    min-width: 75px;
+  }
+}
+
+.categories li {
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: $text-light;
+
+  &::before {
+    content: '#';
+  }
+}

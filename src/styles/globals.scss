@@ -260,15 +260,6 @@ a {
   box-shadow: 0 -90px 40px -40px rgba(0, 0, 0, 0.75) inset;
 }
 
-.thumbnailWrapper {
-  height: 100%;
-  overflow: hidden;
-  padding-top: 100%;
-  padding-left: 0;
-  padding-right: 0;
-  transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s !important;
-}
-
 .thumbnailDescription {
   color: $white;
   position: absolute;

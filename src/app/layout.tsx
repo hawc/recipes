@@ -1,0 +1,37 @@
+import { Header } from "@/components/Header";
+import { auth0 } from "@/lib/auth0";
+import "@/styles/globals.scss";
+import type {
+  Metadata, Viewport,
+} from "next";
+
+export const metadata: Metadata = {
+  title: "Das Kochbuch",
+  description: "test",
+  robots: "noindex, nofollow",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default async function RootLayout({
+  children, 
+}: { children: React.ReactNode; }) {
+  const session = await auth0.getSession();
+
+  return (
+    <html lang="en">
+      <body>
+        <div>
+          <header className="section header py-5 has-text-white has-background-black">
+            <Header session={session} />
+          </header>
+          <hr className="my-0" />
+          {children}
+        </div>
+      </body>
+    </html>
+  );
+}

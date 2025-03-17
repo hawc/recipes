@@ -1,9 +1,14 @@
-import { db } from './db';
-import { writeFileSync, existsSync } from 'fs';
-import slugify from 'slugify';
-import { Ingredient, Receipe } from 'types/receipe';
-import path from 'path';
-import { revalidate } from '@/lib/revalidate';
+import { revalidate } from "@/lib/revalidate";
+import {
+  existsSync, writeFileSync,
+} from "fs";
+import path from "path";
+import slugify from "slugify";
+import { Data } from "types/model";
+import {
+  Ingredient, Receipe,
+} from "types/receipe";
+import { db } from "./db";
 
 function trimListNames(list) {
   list.map((element) => (element.name = element.name.trim()));
@@ -18,7 +23,7 @@ function trimList(list) {
 }
 
 function generateId(type: string): number {
-  return db.data[type].length;
+  return db.data?.[type].length;
 }
 
 export interface UploadImage {
@@ -42,40 +47,55 @@ export interface UploadReceipe {
   source: string;
 }
 
-function getAllUndeletedReceipes(): Receipe[] {
-  return db.data.receipes.filter((receipe) => !receipe.deleted);
+function getAllUndeletedReceipes(data: Data): Receipe[] {
+  return data.receipes.filter((receipe) => !receipe.deleted);
 }
 
-const imageDirectory = path.join(process.cwd(), `uploads`);
+const imageDirectory = path.join(process.cwd(), "uploads");
 
 function writeFileToDisc(image: UploadImage): void {
-  const ext = image.src.substring(
-    image.src.indexOf(`/`) + 1,
-    image.src.indexOf(`;base64`),
-  );
-  const fileType = image.src.substring(`data:`.length, image.src.indexOf(`/`));
-  const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, `gi`);
-  const base64Data = image.src.replace(regex, ``);
+  if (!image.src) {
+    console.warn("No file src found.");
 
-  writeFileSync(`${imageDirectory}/${image.name}`, base64Data, `base64`);
+    return;
+  }
+
+  const ext = image.src.substring(
+    image.src.indexOf("/") + 1,
+    image.src.indexOf(";base64"),
+  );
+  const fileType = image.src.substring("data:".length, image.src.indexOf("/"));
+  const regex = new RegExp(`^data:${fileType}/${ext};base64,`, "gi");
+  const base64Data = image.src.replace(regex, "");
+
+  writeFileSync(`${imageDirectory}/${image.name}`, base64Data, "base64");
 }
 
 const resolvers = {
   Query: {
-    info: () => `Die Kochbuch-API`,
+    info: () => "Die Kochbuch-API",
     Receipes: async () => {
       await db.read();
-      return getAllUndeletedReceipes();
+
+      if (!db.data) {
+        return;
+      }
+
+      return getAllUndeletedReceipes(db.data);
     },
     Receipe: async (_parent: unknown, args: { slug: string }) => {
       await db.read();
+
+      if (!db.data) {
+        return;
+      }
 
       const receipes = db.data.receipes.filter(
         (receipe) => receipe.slug.toLowerCase() === args.slug.toLowerCase(),
       );
 
       if (receipes.length < 1) {
-        throw new Error(`no matching receipes`);
+        throw new Error("no matching receipes");
       } else {
         return receipes[0];
       }
@@ -84,6 +104,10 @@ const resolvers = {
   Mutation: {
     deleteReceipe: async (_parent: unknown, args: { id: number }) => {
       await db.read();
+
+      if (!db.data) {
+        return;
+      }
 
       const filteredReceipe = db.data.receipes.find(
         (receipe) => receipe.id === args.id,
@@ -96,15 +120,16 @@ const resolvers = {
 
       db.write();
 
-      revalidate(`/`);
+      revalidate("/");
 
-      return getAllUndeletedReceipes();
+      return getAllUndeletedReceipes(db.data);
     },
     addReceipe: async (
       _parent: unknown,
       args: UploadReceipe,
     ): Promise<Receipe[]> => {
       await db.read();
+
       for (const image of args.images) {
         const fileExists = existsSync(`${imageDirectory}/${image.name}`);
         if (!fileExists) {
@@ -113,13 +138,13 @@ const resolvers = {
       }
 
       const slug = slugify(args.name, {
-        replacement: `-`,
+        replacement: "-",
         strict: true,
-        locale: `de`,
-      }).toLocaleLowerCase(`de`);
+        locale: "de",
+      }).toLocaleLowerCase("de");
 
       const receipe: Receipe = {
-        id: generateId(`receipes`),
+        id: generateId("receipes"),
         deleted: false,
         name: args.name.trim(),
         slug: slug,
@@ -139,12 +164,12 @@ const resolvers = {
         source: args.source.trim(),
       };
 
-      db.data.receipes.push(receipe);
+      db.data?.receipes.push(receipe);
       db.write();
 
-      revalidate(`/`);
+      revalidate("/");
 
-      return db.data.receipes;
+      return db.data?.receipes ?? [];
     },
     editReceipe: async (
       _parent: unknown,
@@ -158,16 +183,16 @@ const resolvers = {
         }
       }
 
-      const editedReceipe = db.data.receipes.find(
+      const editedReceipe = db.data?.receipes.find(
         (receipe) => receipe.slug === args.slug,
       );
 
       if (editedReceipe) {
         const slug = slugify(args.name.trim(), {
-          replacement: `-`,
+          replacement: "-",
           strict: true,
-          locale: `de`,
-        }).toLocaleLowerCase(`de`);
+          locale: "de",
+        }).toLocaleLowerCase("de");
 
         const receipe: Receipe = {
           id: editedReceipe.id,
@@ -190,16 +215,20 @@ const resolvers = {
           source: args.source.trim(),
         };
 
+        if (!db.data) {
+          return [];
+        }
+
         db.data.receipes[db.data.receipes.indexOf(editedReceipe)] = receipe;
 
         db.write();
 
-        revalidate(`/`);
+        revalidate("/");
         revalidate(`/rezept/${slug}`);
         revalidate(`/rezept/bearbeiten/${slug}`);
       }
 
-      return db.data.receipes;
+      return db.data?.receipes ?? [];
     },
   },
 };

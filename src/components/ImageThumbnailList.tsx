@@ -1,15 +1,17 @@
-import { Thumbnail } from './thumbnail';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { Receipe } from 'types/receipe';
+import Link from "next/link";
+import { Receipe } from "types/receipe";
+import { ImageThumbnail } from "./ImageThumbnail";
+import styles from "./ImageThumbnailList.module.scss";
 
-export function ThumbnailList({
-  receipes,
-  filteredReceipes,
-}: {
+interface ImageThumbnailListProps {
   receipes: Receipe[];
   filteredReceipes: number[];
-}): JSX.Element {
+}
+
+export function ImageThumbnailList({
+  receipes,
+  filteredReceipes,
+}: ImageThumbnailListProps) {
   return (
     <div>
       <div className="columns is-variable is-2 is-mobile is-multiline mt-3">
@@ -20,11 +22,10 @@ export function ThumbnailList({
           >
             <Link
               href={`/rezept/${receipe.slug}`}
-              className={`box is-relative thumbnailWrapper ${
-                filteredReceipes.includes(receipe.id) ? `` : `opacity-40`
+              className={`box is-relative ${styles.thumbnailWrapper} ${receipe.id && filteredReceipes.includes(receipe.id) ? "" : "opacity-40"
               }`}
             >
-              <Thumbnail image={receipe.images[0]} />
+              <ImageThumbnail image={receipe.images[0]} />
               <div className="thumbnailDescription">{receipe.name}</div>
             </Link>
           </div>

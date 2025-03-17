@@ -1,15 +1,15 @@
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { Low, JSONFile } from 'lowdb';
-import { readFileSync } from 'node:fs';
-import { Data } from 'types/model';
+import { JSONFile, Low } from "lowdb";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { Data } from "types/model";
 
 let db: Low<Data>;
 
 function initDb(): void {
   if (!db) {
     const __dirname = dirname(fileURLToPath(import.meta.url));
-    const file = join(__dirname, `db.json`);
+    const file = join(__dirname, "db.json");
 
     let data = {
       categories: [],
@@ -23,7 +23,7 @@ function initDb(): void {
       const rawdata = readFileSync(file);
       data = JSON.parse(rawdata.toString());
     } catch (error) {
-      console.warn(`Create new db file.`);
+      console.warn("Create new db file.");
     }
 
     // Configure lowdb to write to JSONFile
@@ -35,4 +35,4 @@ function initDb(): void {
   }
 }
 
-export { initDb, db };
+export { db, initDb };

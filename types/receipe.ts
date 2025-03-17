@@ -32,8 +32,8 @@ interface Image {
 }
 
 interface Receipe {
-  id: number;
-  deleted: boolean;
+  id?: number;
+  deleted?: boolean;
   name: string;
   slug: string;
   categories: string[];
@@ -48,4 +48,5 @@ interface Receipes {
   receipes: Receipe[];
 }
 
-export type { Ingredient, Image, Receipe, ReceipeIngredient, Receipes, Unit };
+export type { Image, Ingredient, Receipe, ReceipeIngredient, Receipes, Unit };
+

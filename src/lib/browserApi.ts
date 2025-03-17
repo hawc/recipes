@@ -4,8 +4,9 @@ export function share(content) {
       text: content,
     })
     .catch((error) => {
-      if (error.name === `AbortError`) {
-        console.log(`Sharing aborted.`);
+      if (error.name === "AbortError") {
+        console.log("Sharing aborted.");
+
         return;
       }
 
