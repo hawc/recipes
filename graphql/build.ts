@@ -1,25 +1,20 @@
+import { getRecipeData } from "@/schema/base/resolvers/Query/getRecipe";
+import { getRecipesData } from "@/schema/base/resolvers/Query/getRecipes";
 import { Recipe } from "types/recipe";
 import { initDb } from "./db";
-import { resolvers } from "./resolvers";
 
-export async function getStaticData(
-  type: string,
-  args?: { slug: string; },
-): Promise<Recipe | Recipe[] | undefined> {
+export async function getStaticRecipeData(
+  args: { slug: string; },
+): Promise<Recipe | undefined> {
   initDb();
-  if (type === "recipe") {
-    if (!args) {
-      return [];
-    }
-    const recipe = await resolvers.Query.Recipe(null, args);
+  const recipe = getRecipeData(args.slug);
 
-    return recipe;
-  }
-  if (type === "recipes") {
-    const recipes = await resolvers.Query.Recipes();
+  return recipe;
+}
 
-    return recipes;
-  }
+export async function getStaticRecipesData() {
+  initDb();
+  const recipes = await getRecipesData();
 
-  return;
+  return recipes;
 }

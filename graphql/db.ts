@@ -1,9 +1,9 @@
 import {
-  JSONFile, Low, 
+  JSONFile, Low,
 } from "lowdb";
 import { readFileSync } from "node:fs";
 import {
-  dirname, join, 
+  dirname, join,
 } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Data } from "types/model";

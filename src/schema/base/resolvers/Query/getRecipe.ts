@@ -1,7 +1,7 @@
 import { db } from "graphql/db";
 import type { QueryResolvers } from "./../../../types.generated";
 
-export const getRecipe: NonNullable<QueryResolvers["getRecipe"]> = async (_parent, args) => {
+export async function getRecipeData(slug: string) {
   await db.read();
 
   if (!db.data) {
@@ -9,7 +9,7 @@ export const getRecipe: NonNullable<QueryResolvers["getRecipe"]> = async (_paren
   }
 
   const recipes = db.data.recipes.filter(
-    (recipe) => recipe.slug.toLowerCase() === args.slug.toLowerCase(),
+    (recipe) => recipe.slug.toLowerCase() === slug.toLowerCase(),
   );
 
   if (recipes.length < 1) {
@@ -17,4 +17,8 @@ export const getRecipe: NonNullable<QueryResolvers["getRecipe"]> = async (_paren
   }
 
   return recipes[0];
+}
+
+export const getRecipe: NonNullable<QueryResolvers["getRecipe"]> = async (_parent, args) => {
+  return getRecipeData(args.slug);
 };

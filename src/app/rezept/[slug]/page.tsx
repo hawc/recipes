@@ -9,29 +9,15 @@ import { BuyListContextProvider } from "@/context/BuyListContext";
 import { RecipeContextProvider } from "@/context/RecipeContext";
 import { auth0 } from "@/lib/auth0";
 import { PencilIcon } from "@heroicons/react/24/outline";
-import { gql } from "graphql-request";
-import { getStaticData } from "graphql/build";
-import { getClient } from "graphql/client";
+import {
+  getStaticRecipeData, getStaticRecipesData,
+} from "graphql/build";
 import Image from "next/image";
 import Link from "next/link";
 import type { Recipe } from "types/recipe";
 
-const QUERY_RECIPES = gql`
-  query Recipes {
-    Recipes {
-      name
-      slug
-    }
-  }
-`;
-
 export async function generateStaticParams() {
-  const client = getClient();
-  const {
-    Recipes, 
-  }: {
-    Recipes: Recipe[];
-  } = await client.request(QUERY_RECIPES);
+  const Recipes: Recipe[] = await getStaticRecipesData();
 
   return Recipes.map((recipe: Recipe) => ({
     slug: recipe.slug,
@@ -47,9 +33,21 @@ export default async function Page({
 }: RecipeProps) {
   const slug = (await params).slug;
 
-  const recipe = (await getStaticData("recipe", {
+  const recipe = (await getStaticRecipeData({
     slug,
-  })) as Recipe;
+  }));
+
+  if (!recipe) {
+    return (
+      <section className="section pt-5">
+        <div className="container is-max-widescreen">
+          <h2 className="title is-2 is-size-3-mobile mb-1 mt-2">
+            Rezept nicht gefunden
+          </h2>
+        </div>
+      </section>
+    );
+  }
 
   const session = await auth0.getSession();
 
