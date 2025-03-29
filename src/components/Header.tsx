@@ -1,7 +1,7 @@
 import { SessionData } from "@auth0/nextjs-auth0/types";
 import Link from "next/link";
 import { Logo } from "./Logo";
-import Profile from "./Profile";
+import Profile from "./profile";
 
 export function Header({
   session, 
