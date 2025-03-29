@@ -6,17 +6,17 @@ import {
 import {
   ChangeEvent, useState,
 } from "react";
-import type { Receipe } from "types/receipe";
+import type { Recipe } from "types/recipe";
 import { IngredientList } from "./IngredientList";
 
 interface PortionedIngredientsProps {
-  receipe: Receipe;
+  recipe: Recipe;
 }
 
 export function PortionedIngredients({
-  receipe, 
+  recipe, 
 }: PortionedIngredientsProps) {
-  const [servings, setServings] = useState<number>(receipe.servings);
+  const [servings, setServings] = useState<number>(recipe.servings);
 
   return (
     <>
@@ -61,7 +61,7 @@ export function PortionedIngredients({
           </div>
         </div>
       </div>
-      <IngredientList servings={servings} />
+      <IngredientList list={recipe.ingredients} servings={servings} recipeServings={recipe.servings} />
     </>
   );
 }

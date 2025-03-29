@@ -15,7 +15,7 @@ export default async function handler(
 
   try {
     await res.revalidate(req.query.url as string);
-    console.log(`Revalidated ${req.query.url}`);
+    console.log(`Revalidated ${String(req.query.url)}`);
 
     return res.json({ revalidated: true });
   } catch (err) {

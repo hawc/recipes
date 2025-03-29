@@ -38,6 +38,7 @@
     "**/*.mts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.graphql",
     "graphql/mutations.gql",
     "next-env.d.ts",
     "src/pages/api/image.js",

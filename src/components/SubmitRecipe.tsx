@@ -2,10 +2,9 @@
 
 import { useRecipeContext } from "@/context/RecipeContext";
 import { useMemo } from "react";
-import { Receipe } from "types/receipe";
+import { Recipe } from "types/recipe";
 
-const REQUIRED_FIELDS: (keyof Receipe)[] = [
-  "slug",
+const REQUIRED_FIELDS: (keyof Recipe)[] = [
   "name",
   "servings",
   "description",
@@ -14,7 +13,7 @@ const REQUIRED_FIELDS: (keyof Receipe)[] = [
   "categories",
 ];
 
-function validateProps(recipe: Partial<Receipe>) {
+function validateProps(recipe: Partial<Recipe>) {
   return REQUIRED_FIELDS.every((fieldName) => {
     const field = recipe[fieldName];
     if (!field || (Array.isArray(field) && field.length === 0)) {

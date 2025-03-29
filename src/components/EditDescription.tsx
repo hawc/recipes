@@ -25,7 +25,7 @@ export function EditDescription() {
     }
   }, [currentDescription, descriptionRef]);
 
-  function setDescription(description) {
+  function setDescription(description: string) {
     setCurrentDescription(description);
     setRecipe({
       ...recipe,

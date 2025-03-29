@@ -1,22 +1,24 @@
-import { Receipe } from "types/receipe";
+import { Recipe } from "types/recipe";
 import { initDb } from "./db";
 import { resolvers } from "./resolvers";
 
 export async function getStaticData(
   type: string,
   args?: { slug: string; },
-): Promise<Receipe | Receipe[] | undefined> {
+): Promise<Recipe | Recipe[] | undefined> {
   initDb();
-  if (type === "receipe") {
+  if (type === "recipe") {
     if (!args) {
       return [];
     }
-    const receipe = await resolvers.Query.Receipe(null, args);
-    return receipe;
+    const recipe = await resolvers.Query.Recipe(null, args);
+
+    return recipe;
   }
-  if (type === "receipes") {
-    const receipes = await resolvers.Query.Receipes();
-    return receipes;
+  if (type === "recipes") {
+    const recipes = await resolvers.Query.Recipes();
+
+    return recipes;
   }
 
   return;

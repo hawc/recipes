@@ -1,32 +1,18 @@
 "use client";
 
+import { useBuyListContext } from "@/context/BuyListContext";
 import { share } from "@/lib/browserApi";
 import { ArrowUpOnSquareIcon } from "@heroicons/react/24/outline";
 import {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useEffect, useState,
 } from "react";
 
-export function ShareIngredients({
-  ingredients, 
-}) {
+export function ShareIngredients() {
   const [isNativeShare, setNativeShare] = useState(false);
-  const strikedRows = []; // todo: implement
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const shareData = useMemo(() => {
-    // const data = Array.from(ingredients.current.children)
-    //   .filter(
-    //     (child: HTMLElement) => !strikedRows.includes(child.dataset.name),
-    //   )
-    //   .map((child: HTMLElement) => child.innerText.slice(0, -1));
-    // const formattedData = data.join(`\n`);
-
-    const formattedData = "";
-
-    return formattedData;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strikedRows, ingredients]);
-
+  const {
+    exportList,
+  } = useBuyListContext();
+   
   useEffect(() => {
     if ("share" in navigator) {
       setNativeShare(true);
@@ -34,11 +20,21 @@ export function ShareIngredients({
   }, []);
 
   const handleShare = useCallback(() => {
-    share(ingredients);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!exportList?.current) {
+      return;
+    }
 
-  if (!isNativeShare || !ingredients) {
+    const data = Array.from(exportList.current.children)
+      .filter(
+        (child: HTMLElement) => child.dataset.striked === "false",
+      )
+      .map((child: HTMLElement) => child.innerText.slice(0, -1));
+    const formattedData = data.join("\n");
+
+    share(formattedData || "You already have everything you need! :)");
+  }, [exportList]);
+
+  if (!isNativeShare || !exportList) {
     return;
   }
 

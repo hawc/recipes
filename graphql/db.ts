@@ -1,6 +1,10 @@
-import { JSONFile, Low } from "lowdb";
+import {
+  JSONFile, Low, 
+} from "lowdb";
 import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import {
+  dirname, join, 
+} from "node:path";
 import { fileURLToPath } from "node:url";
 import { Data } from "types/model";
 
@@ -15,8 +19,8 @@ function initDb(): void {
       categories: [],
       images: [],
       ingredients: [],
-      receipes: [],
-      receipeIngredients: [],
+      recipes: [],
+      recipeIngredients: [],
       units: [],
     };
     try {

@@ -11,7 +11,7 @@ export function EditSource() {
   const source = recipe?.source ?? "";
   const [currentSource, setCurrentSource] = useState<string>(source);
 
-  function setSource(source) {
+  function setSource(source: string) {
     setCurrentSource(source);
     setRecipe({
       ...recipe,

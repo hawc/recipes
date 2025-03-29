@@ -1,9 +1,9 @@
-export function share(content) {
+export function share(content: string) {
   navigator
     .share({
       text: content,
     })
-    .catch((error) => {
+    .catch((error: Error) => {
       if (error.name === "AbortError") {
         console.log("Sharing aborted.");
 

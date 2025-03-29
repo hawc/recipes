@@ -3,7 +3,7 @@
 import { useRecipeContext } from "@/context/RecipeContext";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import type { Image } from "types/receipe";
+import type { Image } from "types/recipe";
 
 export function ImageUpload() {
   const {
@@ -12,14 +12,18 @@ export function ImageUpload() {
   const images = recipe?.images ?? [];
   const [currentImages, setCurrentImages] = useState<Image[]>(images);
 
-  function updateImages(images) {
+  function updateImages(images: Image[]) {
     setCurrentImages(images);
     // todo: save images in DB
   }
 
-  function addImages(event) {
+  function addImages(event: React.ChangeEvent<HTMLInputElement>) {
     const imageFiles = event.target.files;
-    const filesLength = imageFiles.length;
+    const filesLength = imageFiles?.length;
+
+    if (!filesLength) {
+      return;
+    }
 
     for (let i = 0; i < filesLength; i++) {
       const reader = new FileReader();
@@ -37,7 +41,7 @@ export function ImageUpload() {
               size: file.size,
               width: tempImage.width,
               height: tempImage.height,
-              src: reader.result,
+              src: reader.result as string,
             };
             if (!images.map((image) => image.name).includes(dbImage.name)) {
               // setCurrentImages([...images, image]);
@@ -50,7 +54,7 @@ export function ImageUpload() {
     }
   }
 
-  function removeImage(imageName) {
+  function removeImage(imageName: string) {
     if (imageName) {
       updateImages([...images.filter((image) => image.name !== imageName)]);
     }

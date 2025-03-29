@@ -14,7 +14,7 @@ interface Unit {
   name: string;
 }
 
-interface ReceipeIngredient {
+interface RecipeIngredient {
   id: number;
   ingredient: number;
   amount: number;
@@ -31,8 +31,8 @@ interface Image {
   src?: string;
 }
 
-interface Receipe {
-  id?: number;
+interface Recipe {
+  id: string;
   deleted?: boolean;
   name: string;
   slug: string;
@@ -44,9 +44,9 @@ interface Receipe {
   source: string;
 }
 
-interface Receipes {
-  receipes: Receipe[];
+interface Recipes {
+  recipes: Recipe[];
 }
 
-export type { Image, Ingredient, Receipe, ReceipeIngredient, Receipes, Unit };
+export type { Image, Ingredient, Recipe, RecipeIngredient, Recipes, Unit };
 

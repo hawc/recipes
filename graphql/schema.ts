@@ -1,10 +1,10 @@
-import { gql } from 'graphql-request';
+import { gql } from "graphql-request";
 
 const typeDefinitions = gql`
   type Query {
     info: String!
-    Receipe(slug: String): Receipe!
-    Receipes: [Receipe]!
+    Recipe(slug: String): Recipe!
+    Recipes: [Recipe]!
   }
 
   type Ingredient {
@@ -38,8 +38,8 @@ const typeDefinitions = gql`
 
   type Mutation {
     addIngredient(name: String!): [Ingredient]!
-    deleteReceipe(id: Int!): [Receipe]!
-    addReceipe(
+    deleteRecipe(id: Int!): [Recipe]!
+    addRecipe(
       name: String!
       categories: [String]!
       ingredients: [IngredientInput]!
@@ -47,8 +47,8 @@ const typeDefinitions = gql`
       description: String!
       images: [ImageInput]!
       source: String!
-    ): [Receipe]!
-    editReceipe(
+    ): [Recipe]!
+    editRecipe(
       slug: String!
       name: String!
       categories: [String]!
@@ -57,10 +57,10 @@ const typeDefinitions = gql`
       description: String!
       images: [ImageInput]!
       source: String!
-    ): [Receipe]!
+    ): [Recipe]!
   }
 
-  type Receipe {
+  type Recipe {
     id: Int!
     name: String!
     slug: String!
@@ -72,7 +72,7 @@ const typeDefinitions = gql`
     source: String
   }
 
-  type ReceipeIngredient {
+  type RecipeIngredient {
     id: Int!
     ingredient: Ingredient!
     amount: Int!

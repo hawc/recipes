@@ -11,13 +11,14 @@ import { arrayMoveImmutable } from "array-move";
 import {
   useRef, useState,
 } from "react";
-import { Ingredient } from "types/receipe";
+import { Ingredient } from "types/recipe";
 
 const UNITS = ["Stück", "ml", "l", "g", "kg", "TL", "EL", "Prise(n)"];
 
 export function EditIngredientList() {
   const {
-    recipe, 
+    recipe,
+    setRecipe,
   } = useRecipeContext();
   const list = recipe?.ingredients ?? [];
   const [ingredientList, setIngredientList] = useState<Ingredient[]>(list);
@@ -32,6 +33,7 @@ export function EditIngredientList() {
       unit: ingredientUnit,
       name: ingredientName,
     };
+
     if (ingredient.amount && ingredient.unit && ingredient.name) {
       if (
         !ingredientList.includes(ingredient) &&
@@ -41,17 +43,26 @@ export function EditIngredientList() {
         setIngredientAmount("");
         setIngredientUnit("");
         setIngredientName("");
+        setRecipe({
+          ...recipe,
+          ingredients: ingredientList,
+        });
       }
     }
   }
 
   function removeIngredient(ingredient: Ingredient): void {
     if (ingredient) {
-      setIngredientList([
+      const newIngredients = [
         ...ingredientList.filter(
           (ingredientFromList) => ingredientFromList !== ingredient,
         ),
-      ]);
+      ];
+      setIngredientList(newIngredients);
+      setRecipe({
+        ...recipe,
+        ingredients: newIngredients,
+      });
     }
   }
 
@@ -60,16 +71,25 @@ export function EditIngredientList() {
       const pos = ingredientList.indexOf(ingredient);
       const newList = arrayMoveImmutable(ingredientList, pos, pos + direction);
       setIngredientList(newList);
+      setRecipe({
+        ...recipe,
+        ingredients: newList,
+      });
     }
   }
 
-  function moveIngredientUp(ingredient) {
+  function moveIngredientUp(ingredient: Ingredient) {
     moveIngredient(ingredient, -1);
   }
 
-  function moveIngredientDown(ingredient) {
+  function moveIngredientDown(ingredient: Ingredient) {
     moveIngredient(ingredient, 1);
   }
+
+  const disabled = !ingredientAmount ||
+    !ingredientUnit ||
+    !ingredientName ||
+    ingredientList.map((ingredient) => ingredient.name).includes(ingredientName);
 
   return (
     <table className="table is-fullwidth">
@@ -81,7 +101,7 @@ export function EditIngredientList() {
         </tr>
       </thead>
       <tbody ref={ingredients}>
-        {list.map((ingredient, index) => (
+        {ingredientList.map((ingredient, index) => (
           <tr
             data-name={`${ingredient.name}-${ingredient.unit}`}
             key={`${ingredient.name}-${ingredient.unit}`}
@@ -179,14 +199,7 @@ export function EditIngredientList() {
                 type="button"
                 title="Zutat hinzufügen"
                 className="button is-small is-height-5 is-primary"
-                disabled={
-                  !ingredientAmount ||
-                  !ingredientUnit ||
-                  !ingredientName ||
-                  ingredientList
-                    .map((ingredient) => ingredient.name)
-                    .includes(ingredientName)
-                }
+                disabled={disabled}
                 onClick={() => {
                   addIngredient();
                 }}

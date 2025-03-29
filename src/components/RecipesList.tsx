@@ -1,6 +1,6 @@
 "use client";
 
-import { getReceipeIds } from "@/utils/getReceipeIds";
+import { getRecipeIds } from "@/utils/getRecipeIds";
 import { mergeIngredientLists } from "@/utils/mergeIngredientLists";
 import { SessionData } from "@auth0/nextjs-auth0/types";
 import {
@@ -9,7 +9,9 @@ import {
 import {
   useMemo, useState,
 } from "react";
-import type { Receipe } from "types/receipe";
+import type {
+  Ingredient, Recipe,
+} from "types/recipe";
 import { BuyList } from "./BuyList";
 import { ImageThumbnailList } from "./ImageThumbnailList";
 import { ListItem } from "./ListItem";
@@ -18,45 +20,49 @@ import { Desktop } from "./responsive";
 
 interface RecipesListProps {
   categories: string[];
-  receipes: Receipe[];
+  recipes: Recipe[];
   session: SessionData | null;
 }
 
 export function RecipesList({
-  categories, receipes, session, 
+  categories, recipes, session, 
 }: RecipesListProps) {
-  const [selectedReceipe, setSelectedReceipe] = useState<Receipe | null>(null);
-  const [selectedReceipes, setSelectedReceipes] = useState<Receipe[]>([]);
-  const [filteredReceipes, setFilteredReceipes] = useState<number[]>(() => getReceipeIds(receipes));
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
+  const [filteredRecipes, setFilteredRecipes] = useState<string[]>(( )=> getRecipeIds(recipes));
   const [viewThumbnails, setViewThumbnails] = useState(true);
 
   const buyList = useMemo(() => {
-    const arr = mergeIngredientLists([...selectedReceipes].map((receipe) => receipe.ingredients));
+    const arr = mergeIngredientLists([...selectedRecipes].map((recipe) => recipe.ingredients));
     const res = Array.from(
       arr
         .reduce((acc, {
           amount, ...r 
         }) => {
           const key = JSON.stringify(r);
-          const current = acc.get(key) || { ...r,
-            amount: 0 };
+          const current = acc.get(key) as Ingredient || { 
+            ...r,
+            amount: 0,
+          } as Ingredient;
 
-          return acc.set(key, { ...current,
-            amount: current.amount + amount });
+          return acc.set(key, {
+            ...current,
+            amount: current.amount + amount,
+          });
         }, new Map())
         .values(),
     );
 
-    return res;
-  }, [selectedReceipes]);
+    return res as Ingredient[];
+  }, [selectedRecipes]);
 
   function optionsChangeHandler(selectedOption: string): void {
-    let filteredPostdata = receipes;
+    let filteredPostdata = recipes;
     if (selectedOption !== "") {
-      filteredPostdata = receipes.filter((receipe) => receipe.categories.includes(selectedOption));
+      filteredPostdata = recipes.filter((recipe) => recipe.categories.includes(selectedOption));
     }
 
-    setFilteredReceipes(filteredPostdata.map((post) => post.id ?? 0));
+    setFilteredRecipes(filteredPostdata.map((post) => post.id));
   }
 
   return (
@@ -80,27 +86,27 @@ export function RecipesList({
         </div>
       </h2>
       {(viewThumbnails ? (
-        <ImageThumbnailList receipes={receipes} filteredReceipes={filteredReceipes} />
+        <ImageThumbnailList recipes={recipes} filteredRecipes={filteredRecipes} />
       ) : (
         <div className="columns">
           <div className="column">
-            {receipes.map((post: Receipe) => (
+            {recipes.map((recipe: Recipe) => (
               <ListItem
-                key={post.id}
+                key={recipe.id}
                 session={session}
-                isFiltered={!!post.id && filteredReceipes.includes(post.id)}
-                post={post}
-                selectedReceipes={selectedReceipes}
-                setSelectedReceipes={setSelectedReceipes}
-                setSelectedReceipe={setSelectedReceipe}
+                isFiltered={!!recipe.id && filteredRecipes.includes(recipe.id)}
+                post={recipe}
+                selectedRecipes={selectedRecipes}
+                setSelectedRecipes={setSelectedRecipes}
+                setSelectedRecipe={setSelectedRecipe}
               />
             ))}
             {buyList.length > 0 && <BuyList buyList={buyList} />}
           </div>
           <Desktop>
             <div className="column">
-              {selectedReceipe && (
-                <PreviewImage slug={selectedReceipe.slug} image={selectedReceipe.images[0]} />
+              {selectedRecipe && (
+                <PreviewImage slug={selectedRecipe.slug} image={selectedRecipe.images[0]} />
               )}
             </div>
           </Desktop>

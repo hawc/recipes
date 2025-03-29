@@ -4,11 +4,12 @@ import { gql } from "graphql-request";
 import { getClient } from "graphql/client";
 import router from "next/router";
 import {
-  createContext, PropsWithChildren, useContext, useState,
+  createContext, PropsWithChildren,
+  useContext, useState,
 } from "react";
 import slugify from "slugify";
 import { mutate } from "swr";
-import type { Receipe } from "types/receipe";
+import type { Recipe } from "types/recipe";
 
 function getSlug(name: string) {
   return slugify(
@@ -22,7 +23,7 @@ function getSlug(name: string) {
 }
 
 const EDIT_RECIPE_QUERY = gql`
-  mutation editReceipe(
+  mutation editRecipe(
     $slug: String!
     $name: String!
     $categories: [String]!
@@ -32,7 +33,7 @@ const EDIT_RECIPE_QUERY = gql`
     $images: [ImageInput]!
     $source: String!
   ) {
-    editReceipe(
+    editRecipe(
       slug: $slug
       name: $name
       categories: $categories
@@ -50,7 +51,7 @@ const EDIT_RECIPE_QUERY = gql`
 `;
 
 const ADD_RECIPE_QUERY = gql`
-  mutation addReceipe(
+  mutation addRecipe(
     $name: String!
     $categories: [String]!
     $ingredients: [IngredientInput]!
@@ -59,7 +60,7 @@ const ADD_RECIPE_QUERY = gql`
     $images: [ImageInput]!
     $source: String!
   ) {
-    addReceipe(
+    addRecipe(
       name: $name
       categories: $categories
       ingredients: $ingredients
@@ -76,77 +77,63 @@ const ADD_RECIPE_QUERY = gql`
 `;
 
 interface RecipeContextProps {
-  recipe: Receipe;
-  setRecipe: (recipe: Receipe) => void;
-  addRecipe: (recipe: Receipe) => void;
-  updateRecipe: (recipe: Receipe) => void;
+  recipe: Recipe;
+  setRecipe: (recipe: Recipe) => void;
+  addRecipe: (recipe: Recipe) => void;
+  updateRecipe: (recipe: Recipe) => void;
 }
 
 export const RecipeContext = createContext({} as RecipeContextProps);
 
-const EMPTY_RECIPE: Receipe = {
-  id: undefined,
-  name: "",
+const EMPTY_RECIPE = {
+  id: "",
   slug: "",
+  name: "",
   categories: [],
   ingredients: [],
   servings: 0,
   description: "",
   images: [],
   source: "",
-};
+} as Recipe;
 
 export function RecipeContextProvider({
   recipe: initRecipe,
   children, 
-}: PropsWithChildren<{ recipe?: Receipe }>) {
-  const [recipe, setRecipe] = useState<Receipe>(initRecipe ?? EMPTY_RECIPE);
+}: PropsWithChildren<{ recipe?: Recipe }>) {
+  const [recipe, setRecipe] = useState<Recipe>(initRecipe ?? EMPTY_RECIPE);
 
-  function addRecipe(recipe) {
+  async function addRecipe(recipe: Recipe) {
     if (!recipe) {
       return;
     }
 
     const client = getClient();
-    client
-      .request(ADD_RECIPE_QUERY, recipe)
-      .then(() => {
-        mutate("/");
-        mutate(`/rezept/${getSlug(recipe.name)}`);
-        setRecipe(EMPTY_RECIPE);
-      })
-      .finally(() => {
-        router.push(`/rezept/${getSlug(recipe.name)}`);
-      });
+    await client.request(ADD_RECIPE_QUERY, recipe);
+    await mutate("/");
+    await mutate(`/rezept/${getSlug(recipe.name)}`);
+    setRecipe(EMPTY_RECIPE);
+    await router.push(`/rezept/${getSlug(recipe.name)}`);
   }
 
-  function updateRecipe(update: Partial<Receipe>) {
+  async function updateRecipe(update: Partial<Recipe>) {
     if (!recipe) {
       return;
     }
 
     const client = getClient();
-    client
+    await client
       .request(EDIT_RECIPE_QUERY, {
         ...recipe,
         ...update,
-      })
-      .then(() => {
-        mutate("/");
-        mutate(`/rezept/${getSlug(recipe.name)}`);
-      })
-      // .then(() => {
-      //   setName("");
-      //   setDescription("");
-      //   setSource("");
-      //   setServings(2);
-      //   setCategories([]);
-      //   setImages([]);
-      //   setIngredientList([]);
-      // })
-      .finally(() => {
-        router.push(`/rezept/${getSlug(recipe.name)}`);
       });
+      
+    await mutate("/");
+    await mutate(`/rezept/${getSlug(recipe.name)}`);
+
+    setRecipe(EMPTY_RECIPE);
+
+    await router.push(`/rezept/${getSlug(recipe.name)}`);
   }
 
   const value = {
@@ -155,8 +142,6 @@ export function RecipeContextProvider({
     addRecipe,
     updateRecipe,
   };
-
-  console.log(recipe);
 
   return (
     <RecipeContext.Provider value={value}>

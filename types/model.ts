@@ -1,10 +1,12 @@
-import { Ingredient, Receipe, Unit } from './receipe';
+import {
+  Ingredient, Recipe, Unit,
+} from "./recipe";
 
 interface Data {
   categories: string[];
   images: string[];
   ingredients: Ingredient[];
-  receipes: Receipe[];
+  recipes: Recipe[];
   units: Unit[];
 }
 

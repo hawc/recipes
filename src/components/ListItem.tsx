@@ -11,14 +11,14 @@ import { gql } from "graphql-request";
 import { getClient } from "graphql/client";
 import Link from "next/link";
 import { useSWRConfig } from "swr";
-import type { Receipe } from "types/receipe";
+import type { Recipe } from "types/recipe";
 import {
   Desktop, Mobile,
 } from "./responsive";
 
-const QUERY_DELETE_RECEIPE = gql`
-  mutation deleteReceipe($id: Int!) {
-    deleteReceipe(id: $id) {
+const QUERY_DELETE_RECIPE = gql`
+  mutation deleteRecipe($id: Int!) {
+    deleteRecipe(id: $id) {
       id
       categories
       name
@@ -39,58 +39,59 @@ const QUERY_DELETE_RECEIPE = gql`
 
 interface ListItemProps {
   session: SessionData | null;
-  post: Receipe;
+  post: Recipe;
   isFiltered: boolean;
-  setSelectedReceipe: (receipe: Receipe | null) => void;
-  selectedReceipes: Receipe[];
-  setSelectedReceipes: (receipes: Receipe[]) => void;
+  setSelectedRecipe: (recipe: Recipe | null) => void;
+  selectedRecipes: Recipe[];
+  setSelectedRecipes: (recipes: Recipe[]) => void;
 }
 
 export function ListItem({
   session,
   post,
   isFiltered,
-  setSelectedReceipe,
-  selectedReceipes,
-  setSelectedReceipes,
+  setSelectedRecipe,
+  selectedRecipes,
+  setSelectedRecipes,
 }: ListItemProps) {
   const {
     mutate, 
   } = useSWRConfig();
 
-  function isInSelectedReceipes(receipe: Receipe): boolean {
-    const isInSelectedReceipes = selectedReceipes.find(
-      (selectedReceipe) => selectedReceipe.id === receipe.id,
+  function isInSelectedRecipes(recipe: Recipe): boolean {
+    const isInSelectedRecipes = selectedRecipes.find(
+      (selectedRecipe) => selectedRecipe.id === recipe.id,
     );
 
-    return new Boolean(isInSelectedReceipes).valueOf();
+    return new Boolean(isInSelectedRecipes).valueOf();
   }
 
-  function addToList(receipe: Receipe): void {
-    if (isInSelectedReceipes(receipe)) {
-      setSelectedReceipes(
-        selectedReceipes.filter(
-          (selectedReceipe) => selectedReceipe.id !== receipe.id,
+  function addToList(recipe: Recipe): void {
+    if (isInSelectedRecipes(recipe)) {
+      setSelectedRecipes(
+        selectedRecipes.filter(
+          (selectedRecipe) => selectedRecipe.id !== recipe.id,
         ),
       );
     } else {
-      setSelectedReceipes([...selectedReceipes, receipe]);
+      setSelectedRecipes([...selectedRecipes, recipe]);
     }
   }
 
-  async function deleteReceipe(id?: number): Promise<void> {
-    if (!id) {
+  async function deleteRecipe(): Promise<void> {
+    if (!post.id) {
       return;
     }
+    
     const client = getClient();
 
-    const receipes: { deleteReceipe: Receipe[] } = await client.request(
-      QUERY_DELETE_RECEIPE,
-      { id },
+    const recipes: { deleteRecipe: Recipe[] } = await client.request(
+      QUERY_DELETE_RECIPE,
+      { id: post.id },
     );
-    mutate("/");
+    await mutate("/");
 
-    console.log(receipes);
+    console.log(recipes);
     // todo: refetch
   }
 
@@ -99,17 +100,17 @@ export function ListItem({
       <Desktop>
         <div
           onMouseEnter={() =>
-            post.images.length > 0 && setSelectedReceipe(post)
+            post.images.length > 0 && setSelectedRecipe(post)
           }
-          onMouseLeave={() => setSelectedReceipe(null)}
-          onBlur={() => setSelectedReceipe(null)}
+          onMouseLeave={() => setSelectedRecipe(null)}
+          onBlur={() => setSelectedRecipe(null)}
           className={`is-flex is-font-size-1-2 ${
             isFiltered ? "" : "opacity-40"
           }`}
         >
           <Link
-            onFocus={() => post.images.length > 0 && setSelectedReceipe(post)}
-            onBlur={() => setSelectedReceipe(null)}
+            onFocus={() => post.images.length > 0 && setSelectedRecipe(post)}
+            onBlur={() => setSelectedRecipe(null)}
             className="has-text-black is-flex-basis-100 mb-1"
             href={`/rezept/${post.slug}`}
           >
@@ -129,7 +130,7 @@ export function ListItem({
                 title="Rezept löschen"
                 type="button"
                 className="button is-white is-small"
-                onClick={() => deleteReceipe(post.id)}
+                onClick={void deleteRecipe}
               >
                 <span className="icon is-medium">
                   <TrashIcon />
@@ -143,7 +144,7 @@ export function ListItem({
             onClick={() => addToList(post)}
           >
             <span className="icon is-medium">
-              {isInSelectedReceipes(post) ? (
+              {isInSelectedRecipes(post) ? (
                 <XMarkIcon />
               ) : (
                 <ShoppingCartIcon />
@@ -154,7 +155,7 @@ export function ListItem({
       </Desktop>
       <Mobile>
         <div
-          className={`is-font-size-1-2 is-flex receipeListItem ${
+          className={`is-font-size-1-2 is-flex recipeListItem ${
             isFiltered ? "" : "opacity-40"
           }`}
         >
@@ -178,7 +179,7 @@ export function ListItem({
                 title="Rezept löschen"
                 type="button"
                 className="button is-white is-small"
-                onClick={() => deleteReceipe(post.id)}
+                onClick={void deleteRecipe}
               >
                 <span className="icon is-medium">
                   <TrashIcon />
@@ -193,7 +194,7 @@ export function ListItem({
             onClick={() => addToList(post)}
           >
             <span className="icon is-medium">
-              {isInSelectedReceipes(post) ? (
+              {isInSelectedRecipes(post) ? (
                 <XMarkIcon />
               ) : (
                 <ShoppingCartIcon />

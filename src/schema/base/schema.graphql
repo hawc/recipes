@@ -1,0 +1,48 @@
+type Query {
+  info: String!
+  getRecipe(slug: String!): Recipe!
+  getRecipes: [Recipe!]!
+}
+ 
+type Mutation {
+  editRecipe(id: String!, slug: String!, name: String!, categories: [String]!, ingredients: [IngredientInput]!, servings: Int!, description: String!, images: [ImageInput]!, source: String!): [Recipe]!
+  addRecipe(name: String!, categories: [String]!, ingredients: [IngredientInput]!, servings: Int!, description: String!, images: [ImageInput]!, source: String!): [Recipe]!
+  deleteRecipe(id: String!): [Recipe]!
+}
+
+type Recipe {
+  id: String!
+  name: String!
+  slug: String!
+  categories: [String]!
+  ingredients: [Ingredient]!
+}
+
+type Ingredient {
+  name: String!
+  amount: Int!
+  unit: String!
+}
+
+type Image {
+  name: String!
+  width: Int!
+  height: Int!
+  type: String!
+  size: Int!
+}
+
+input IngredientInput {
+  name: String!
+  amount: Int!
+  unit: String!
+}
+
+input ImageInput {
+  name: String!
+  src: String
+  type: String!
+  size: Int!
+  width: Int!
+  height: Int!
+}

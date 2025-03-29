@@ -12,7 +12,7 @@ export function EditName() {
 
   const [currentName, setCurrentName] = useState<string>(name);
 
-  function setName(name) {
+  function setName(name: string) {
     setCurrentName(name);
     setRecipe({
       ...recipe,

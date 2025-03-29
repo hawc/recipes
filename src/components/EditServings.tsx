@@ -14,7 +14,7 @@ export function EditServings() {
   const servings = recipe?.servings ?? 1;
   const [currentServings, setCurrentServings] = useState<number>(servings);
 
-  function setServings(servings) {
+  function setServings(servings: number) {
     if (servings !== currentServings) {
       setCurrentServings(servings);
       setRecipe({

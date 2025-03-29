@@ -1,10 +1,13 @@
 "use client";
 
 import { useDesktopMediaQuery } from "@/lib/mediaQuery";
+import { SessionData } from "@auth0/nextjs-auth0/types";
 import Link from "next/link";
 
 export default function Profile({
   session, 
+}: {
+  session: SessionData | null
 }) {
   const isDesktop = useDesktopMediaQuery();
   

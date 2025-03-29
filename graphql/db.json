@@ -1,7 +1,7 @@
 {
-  "receipes": [
+  "recipes": [
     {
-      "id": 0,
+      "id": "907a25c0-03d5-484c-ac83-e87f4855d529",
       "deleted": false,
       "name": "Auberginen-Kokos-Curry",
       "slug": "auberginen-kokos-curry",
@@ -82,7 +82,7 @@
       "source": "https://www.eatbetter.de/rezepte/auberginen-curry-saftig-einfach-schnell"
     },
     {
-      "id": 1,
+      "id": "8520a602-609b-4c34-a10f-cd34991b370d",
       "deleted": false,
       "name": "Soba-Nudeln mit Erdnuss-Miso-Sauce",
       "slug": "soba-nudeln-mit-erdnuss-miso-sauce",
@@ -100,7 +100,7 @@
           "unit": "g"
         },
         {
-          "name": "Sesam-Öl",
+          "name": "Sesamöl",
           "amount": 4,
           "unit": "EL"
         },
@@ -179,7 +179,7 @@
       "source": "https://mariashriver.com/soba-noodle-salad-with-probiotic-peanut-miso-sauce/"
     },
     {
-      "id": 2,
+      "id": "28fe99e7-413f-48f1-851b-b12cedbc0485",
       "deleted": false,
       "name": "Soba-Bowl mit Honig-Knoblauch-Lachs",
       "slug": "soba-bowl-mit-honig-knoblauch-lachs",
@@ -250,7 +250,7 @@
           "unit": "EL"
         },
         {
-          "name": "Sesam-Öl",
+          "name": "Sesamöl",
           "amount": 2,
           "unit": "EL"
         },
@@ -289,7 +289,7 @@
       "source": "https://www.halfbakedharvest.com/honey-garlic-salmon-soba-noodle-bowls/"
     },
     {
-      "id": 3,
+      "id": "16fe168e-9e7b-4f8d-8449-0616c52cf525",
       "deleted": false,
       "name": "Quiche mit Spinat, Feta und Tomaten",
       "slug": "quiche-mit-spinat-feta-und-tomaten",
@@ -389,7 +389,7 @@
       "source": "https://www.chefkoch.de/rezepte/2801401432239694/Quiche-mit-Spinat-Feta-Tomaten-und-Pinienkernen.html"
     },
     {
-      "id": 4,
+      "id": "4b31aafa-9b28-4024-a639-61f03ee91689",
       "deleted": false,
       "name": "Miso-Ramen",
       "slug": "miso-ramen",
@@ -461,7 +461,7 @@
           "unit": "EL"
         },
         {
-          "name": "Sesam-Öl",
+          "name": "Sesamöl",
           "amount": 1,
           "unit": "EL"
         },
@@ -485,7 +485,7 @@
       "source": "https://heissehimbeeren.com/spicy-miso-ramen/"
     },
     {
-      "id": 5,
+      "id": "accbcabf-8ccd-44a7-bdc2-af83ef6fd8aa",
       "deleted": false,
       "name": "Scharfe Gochujang-Erdnuss-Nudeln",
       "slug": "scharfe-gochujang-erdnuss-nudeln",
@@ -577,7 +577,7 @@
       "source": "https://cjeatsrecipes.com/spicy-gochujang-noodles/"
     },
     {
-      "id": 6,
+      "id": "08244968-48cb-444f-b2f7-67774e542656",
       "deleted": false,
       "name": "Veganes Butter-Chicken mit Blumenkohl",
       "slug": "veganes-butter-chicken-mit-blumenkohl",
@@ -689,7 +689,7 @@
       "source": "https://shibaskitchen.de/vegan-butter-chicken/"
     },
     {
-      "id": 7,
+      "id": "ec4c47f0-ab58-4289-bd6b-20f978a72a98",
       "deleted": false,
       "name": "Guacamole",
       "slug": "guacamole",
@@ -755,7 +755,7 @@
       "source": "https://emmikochteinfach.de/original-guacamole-einfach-selber-machen/"
     },
     {
-      "id": 8,
+      "id": "26520b88-46a4-4ad8-ab08-7e0db72682a0",
       "deleted": false,
       "name": "Crispy Thai Tofu",
       "slug": "crispy-thai-tofu",
@@ -836,7 +836,7 @@
       "source": "https://carolefood.com/recipe/thai-tofu#recipe-card"
     },
     {
-      "id": 9,
+      "id": "8952e920-12b8-4bfa-acfb-1f34e06e3395",
       "deleted": false,
       "name": "Miso-Butter-Kimchi-Udon",
       "slug": "miso-butter-kimchi-udon",
@@ -903,7 +903,7 @@
       "source": "https://www.instagram.com/p/CxDD1MePJLd/"
     },
     {
-      "id": 10,
+      "id": "045e7b1f-b012-4cb3-aa76-5338fbe4fa14",
       "deleted": false,
       "name": "Mafa-Erdnusseintopf mit Fufu",
       "slug": "mafa-erdnusseintopf-mit-fufu",
@@ -1024,7 +1024,7 @@
       "source": "https://www.gewuerze-der-welt.net/rezepte/hauptgang/erdnusseintopf"
     },
     {
-      "id": 11,
+      "id": "c1ac0faa-cbb8-42bb-a1e7-6bff7134df1e",
       "deleted": false,
       "name": "Szechuan-Chiliöl",
       "slug": "szechuan-chilioel",
@@ -1074,7 +1074,7 @@
       "source": "https://thewoksoflife.com/dan-dan-noodles/"
     },
     {
-      "id": 12,
+      "id": "07d57fa3-36e6-4c4c-8a24-710d02ac5e6e",
       "deleted": false,
       "name": "Dan-Dan-Nudeln",
       "slug": "dan-dan-nudeln",

@@ -1,4 +1,4 @@
-import { Ingredient } from "types/receipe";
+import { Ingredient } from "types/recipe";
 
 export function mergeIngredientLists(ingredientArrays: Ingredient[][]): Ingredient[] {
   let finalList: Ingredient[] = [];

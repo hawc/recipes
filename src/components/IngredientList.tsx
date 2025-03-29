@@ -1,22 +1,27 @@
 "use client";
 
-import { useRecipeContext } from "@/context/RecipeContext";
+import { useBuyListContext } from "@/context/BuyListContext";
 import {
   EyeIcon, EyeSlashIcon,
 } from "@heroicons/react/24/outline";
-import {
-  useRef, useState,
-} from "react";
+import { useState } from "react";
+import { Ingredient } from "types/recipe";
+
+interface IngredientListProps {
+  list: Ingredient[];
+  servings?: number;
+  recipeServings?: number;
+}
 
 export function IngredientList({
+  list,
   servings, 
-}: { servings?: number }) {
-  const {
-    recipe, 
-  } = useRecipeContext();
-  const list = recipe?.ingredients ?? [];
+  recipeServings,
+}: IngredientListProps) {
   const [strikedRows, setStrikedRows] = useState<string[]>([]);
-  const ingredients = useRef(null);
+  const {
+    exportList,
+  } = useBuyListContext();
 
   function strikeRow(ingredientID: string): void {
     const rows = [...strikedRows];
@@ -37,11 +42,12 @@ export function IngredientList({
           <th></th>
         </tr>
       </thead>
-      <tbody ref={ingredients}>
+      <tbody ref={exportList}>
         {list.map((ingredient) => (
           <tr
             data-name={`${ingredient.name}-${ingredient.unit}`}
             key={`${ingredient.name}-${ingredient.unit}`}
+            data-striked={strikedRows.includes(`${ingredient.name}-${ingredient.unit}`)}
             className={
               strikedRows.includes(`${ingredient.name}-${ingredient.unit}`)
                 ? "is-line-through"
@@ -49,7 +55,7 @@ export function IngredientList({
             }
           >
             <td>
-              {(ingredient.amount / recipe.servings) * (servings || recipe.servings)}
+              {recipeServings && servings ? (ingredient.amount / recipeServings) * (servings ?? recipeServings) : ingredient.amount}
               {" "}
               {ingredient.unit !== "Stück" && ingredient.unit}
             </td>

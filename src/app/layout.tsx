@@ -4,10 +4,10 @@ import "@/styles/globals.scss";
 import type {
   Metadata, Viewport,
 } from "next";
+import { PropsWithChildren } from "react";
 
 export const metadata: Metadata = {
   title: "Das Kochbuch",
-  description: "test",
   robots: "noindex, nofollow",
 };
 
@@ -16,9 +16,9 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default async function RootLayout({
-  children, 
-}: { children: React.ReactNode; }) {
+export default async function Layout({
+  children,
+}: PropsWithChildren) {
   const session = await auth0.getSession();
 
   return (

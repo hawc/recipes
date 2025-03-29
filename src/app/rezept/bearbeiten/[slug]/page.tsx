@@ -11,11 +11,11 @@ import { RecipeContextProvider } from "@/context/RecipeContext";
 import { gql } from "graphql-request";
 import { getStaticData } from "graphql/build";
 import { getClient } from "graphql/client";
-import type { Receipe } from "types/receipe";
+import type { Recipe } from "types/recipe";
 
-const QUERY_RECEIPES = gql`
-  query getReceipes {
-    Receipes {
+const QUERY_RECIPES = gql`
+  query Recipes {
+    Recipes {
       name
       slug
     }
@@ -25,24 +25,30 @@ const QUERY_RECEIPES = gql`
 export async function generateStaticParams() {
   const client = getClient();
   const {
-    Receipes, 
-  } = await client.request(QUERY_RECEIPES) as { Receipes: Receipe[] };
+    Recipes, 
+  }: {
+    Recipes: Recipe[];
+  } = await client.request(QUERY_RECIPES);
 
-  return Receipes.map((receipe: Receipe) => ({
-    slug: receipe.slug, 
+  return Recipes.map((recipe: Recipe) => ({
+    slug: recipe.slug, 
   }));
 }
 
-export default async function EditRecipe({
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function Page({
   params, 
-}) {
+}: PageProps) {
   const slug = (await params).slug;
-  const receipe = (await getStaticData("receipe", {
+  const recipe = (await getStaticData("recipe", {
     slug,
-  })) as Receipe;
+  })) as Recipe;
 
   return (
-    <RecipeContextProvider recipe={receipe}>
+    <RecipeContextProvider recipe={recipe}>
       <section className='section pt-5'>
         <form className="container is-max-widescreens">
           <EditName />

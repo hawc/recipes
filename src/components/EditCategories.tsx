@@ -1,32 +1,37 @@
 "use client";
 
 import { useRecipeContext } from "@/context/RecipeContext";
-import {
-  PlusIcon, XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import styles from "./Categories.module.scss";
 import { NewCategory } from "./NewCategory";
 
 export function EditCategories() {
   const {
-    recipe, 
+    recipe,
+    setRecipe,
   } = useRecipeContext();
   const categories = recipe?.categories ?? [];
 
   const [currentCategories, setCurrentCategories] = useState<string[]>(categories);
 
-  function addCategory(category) {
+  function addCategory(category: string) {
     if (category && !categories.includes(category)) {
       setCurrentCategories([...categories, category]);
-      // todo: save in db
+      setRecipe({
+        ...recipe,
+        categories: currentCategories,
+      });
     }
   }
 
   function removeCategory(category: string) {
     if (category) {
       setCurrentCategories([...categories.filter((existingCategories) => existingCategories !== category)]);
-      // todo: save in db
+      setRecipe({
+        ...recipe,
+        categories: currentCategories,
+      });
     }
   }
 
@@ -51,14 +56,6 @@ export function EditCategories() {
       ))}
       <li className="is-flex is-alignItems-center">
         <NewCategory categories={categories} addCategory={addCategory} />
-        <button
-          type="button"
-          className="button is-small is-primary ml-1 py-0 is-height-5 is-va-baseline"
-        >
-          <span className="icon is-medium">
-            <PlusIcon onClick={addCategory} />
-          </span>
-        </button>
       </li>
     </ul>
   );

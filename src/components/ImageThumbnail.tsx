@@ -1,4 +1,4 @@
-import { Image } from "types/receipe";
+import { Image } from "types/recipe";
 
 interface ImageThumbnailProps {
   image?: Image

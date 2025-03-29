@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Image as ImageType } from "types/receipe";
+import type { Image as ImageType } from "types/recipe";
 
 export function PreviewImage({
   slug, image, 
